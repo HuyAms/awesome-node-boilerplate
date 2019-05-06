@@ -1,3 +1,2 @@
-const {start} = require('./server')
-
+import { start } from './server'
 start()
