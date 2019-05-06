@@ -26,6 +26,7 @@ build/Release
 
 # Build
 build
+dist
 testresults
 swagger.json
 
