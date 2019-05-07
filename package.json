@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/index.js"
+    "build": "babel src --out-dir dist --extensions .ts",
+    "dev": "nodemon --exec npm restart",
+    "restart": "rimraf dist && npm run build && npm start",
+    "start": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +16,14 @@
     "express": "4.16.4"
   },
   "devDependencies": {
-    "nodemon": "1.19.0"
+    "@babel/cli": "7.4.4",
+    "@babel/core": "7.4.4",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "7.4.4",
+    "@babel/preset-typescript": "7.3.3",
+    "dotenv": "8.0.0",
+    "nodemon": "1.19.0",
+    "rimraf": "2.6.3"
   }
 }
