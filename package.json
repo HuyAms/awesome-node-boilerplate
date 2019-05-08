@@ -11,7 +11,7 @@
 		"types-check": "tsc",
 		"lint": "tslint --project tsconfig.json",
 		"lint:fix": "tslint --fix --project tsconfig.json",
-		"format": "prettier \"**/*.+(js|json|ts|css|scss|md|mdx|graphql)\" --write"
+		"format": "prettier \"**/*.+(js|json|ts|md|mdx|graphql)\" --write"
 	},
 	"husky": {
 		"hooks": {
@@ -20,7 +20,7 @@
 	},
 	"lint-staged": {
 		"src/*.ts": "npm run lint",
-		"**/*.+(js|json|ts|css|scss|md|mdx|graphql)": [
+		"**/*.+(js|json|ts|md|mdx|graphql)": [
 			"npm run format",
 			"git add"
 		]
