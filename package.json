@@ -1,32 +1,53 @@
 {
-  "name": "awesome-node-boilerplate",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "babel src --out-dir dist --extensions .ts",
-    "dev": "nodemon --exec npm restart",
-    "restart": "rimraf dist && npm run build && npm start",
-    "start": "node dist/index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "1.19.0",
-    "cors": "2.8.5",
-    "express": "4.16.4",
-    "morgan": "1.9.1"
-  },
-  "devDependencies": {
-    "@babel/cli": "7.4.4",
-    "@babel/core": "7.4.4",
-    "@babel/plugin-proposal-class-properties": "^7.4.4",
-    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
-    "@babel/preset-env": "7.4.4",
-    "@babel/preset-typescript": "7.3.3",
-    "dotenv": "8.0.0",
-    "nodemon": "1.19.0",
-    "rimraf": "2.6.3"
-  }
+	"name": "awesome-node-boilerplate",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "babel src --out-dir dist --extensions .ts",
+		"dev": "nodemon --exec npm restart",
+		"restart": "rimraf dist && npm run build && npm start",
+		"start": "node dist/index.js",
+		"types-check": "tsc",
+		"lint": "tslint --project tsconfig.json",
+		"lint:fix": "tslint --fix --project tsconfig.json",
+		"format": "prettier \"**/*.+(js|json|ts|md|mdx|graphql)\" --write"
+	},
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged & npm run types-check"
+		}
+	},
+	"lint-staged": {
+		"src/*.ts": "npm run lint",
+		"**/*.+(js|json|ts|md|mdx|graphql)": [
+			"npm run format",
+			"git add"
+		]
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"body-parser": "1.19.0",
+		"cors": "2.8.5",
+		"express": "4.16.4",
+		"morgan": "1.9.1"
+	},
+	"devDependencies": {
+		"@babel/cli": "7.4.4",
+		"@babel/core": "7.4.4",
+		"@babel/plugin-proposal-class-properties": "^7.4.4",
+		"@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+		"@babel/preset-env": "7.4.4",
+		"@babel/preset-typescript": "7.3.3",
+		"dotenv": "8.0.0",
+		"husky": "2.2.0",
+		"lint-staged": "8.1.6",
+		"nodemon": "1.19.0",
+		"prettier": "1.17.0",
+		"rimraf": "2.6.3",
+		"tslint": "5.16.0",
+		"tslint-plugin-prettier": "2.0.1"
+	}
 }

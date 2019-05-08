@@ -1,23 +1,15 @@
 {
-  "restartable": "rs",
-  "ignore": [
-    ".git",
-    "node_modules/**/node_modules",
-    "dist"
-  ],
-  "verbose": true,
-  "execMap": {
-    "js": "node"
-  },
+	"restartable": "rs",
+	"ignore": [".git", "node_modules/**/node_modules", "dist"],
+	"verbose": true,
+	"execMap": {
+		"js": "node"
+	},
 
-  "runOnChangeOnly": false,
-  "watch": [
-    "src/**/*.ts",
-    "src/**/*.graphql",
-    "src/**/*.gql"
-  ],
-  "env": {
-    "NODE_ENV": "development"
-  },
-  "ext": "ts,json,graphql"
+	"runOnChangeOnly": false,
+	"watch": ["src/**/*.ts", "src/**/*.graphql", "src/**/*.gql"],
+	"env": {
+		"NODE_ENV": "development"
+	},
+	"ext": "ts,json,graphql"
 }
