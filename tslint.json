@@ -12,7 +12,8 @@
 		"no-console": false,
 		"prefer-const": false,
 		"no-unused-variable": true,
-		"no-shadowed-variable": false
+		"no-shadowed-variable": false,
+		"quotemark": false
 	},
 	"linterOptions": {
 		"exclude": ["node_modules/**/*.ts"]
