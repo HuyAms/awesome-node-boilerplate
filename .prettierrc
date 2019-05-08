@@ -1,7 +1,6 @@
 {
 	"arrowParens": "avoid",
 	"bracketSpacing": false,
-	"htmlWhitespaceSensitivity": "css",
 	"insertPragma": false,
 	"printWidth": 80,
 	"proseWrap": "preserve",
