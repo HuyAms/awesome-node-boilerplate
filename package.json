@@ -37,8 +37,8 @@
 	"devDependencies": {
 		"@babel/cli": "7.4.4",
 		"@babel/core": "7.4.4",
-		"@babel/plugin-proposal-class-properties": "^7.4.4",
-		"@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+		"@babel/plugin-proposal-class-properties": "7.4.4",
+		"@babel/plugin-proposal-object-rest-spread": "7.4.4",
 		"@babel/preset-env": "7.4.4",
 		"@babel/preset-typescript": "7.3.3",
 		"dotenv": "8.0.0",
@@ -48,6 +48,7 @@
 		"prettier": "1.17.0",
 		"rimraf": "2.6.3",
 		"tslint": "5.16.0",
-		"tslint-plugin-prettier": "2.0.1"
+		"tslint-plugin-prettier": "2.0.1",
+		"typescript": "3.4.5"
 	}
 }
