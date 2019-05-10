@@ -3,10 +3,7 @@ import * as userController from './user.controller'
 
 const router = Router()
 
-router
-	.route('/')
-	.get(userController.getMany)
-	.post(userController.createOne)
+router.route('/').get(userController.getMany)
 
 router
 	.route('/:id')
