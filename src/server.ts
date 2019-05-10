@@ -3,6 +3,9 @@ import {json, urlencoded} from 'body-parser'
 import morgan from 'morgan'
 import cors from 'cors'
 
+// Router
+import userRouter from './resources/user/user.router'
+
 export const app = express()
 
 // Global middlewares
@@ -10,6 +13,9 @@ app.use(cors())
 app.use(json())
 app.use(urlencoded({extended: true}))
 app.use(morgan('dev'))
+
+// Resource routers
+app.use('/api/users', userRouter)
 
 app.get('/', (req, res, next) => {
 	res.json('Welcome to Awesome Node Boilerplate')
