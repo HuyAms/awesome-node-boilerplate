@@ -5,6 +5,7 @@ import cors from 'cors'
 
 // Router
 import userRouter from './resources/user/user.router'
+import authRouter from './resources/auth/auth.router'
 
 export const app = express()
 
@@ -15,11 +16,9 @@ app.use(urlencoded({extended: true}))
 app.use(morgan('dev'))
 
 // Resource routers
-app.use('/api/users', userRouter)
+app.use('/auth', authRouter)
 
-app.get('/', (req, res, next) => {
-	res.json('Welcome to Awesome Node Boilerplate')
-})
+app.use('/api/users', userRouter)
 
 export const start = () => {
 	try {
