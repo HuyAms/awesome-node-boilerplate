@@ -1,7 +1,7 @@
-import expressJwt from 'express-jwt'
 import jwt from 'jsonwebtoken'
 import {config} from '../config/config'
 import UserModel from '../resources/user/user.model'
+import {findUserWithId} from '../mockDB/db'
 
 export const newToken = (user: UserModel) => {
 	const {secret} = config
@@ -40,16 +40,25 @@ const getTokenFromHeader = req => {
 	return null
 }
 
-const protect = {
-	required: expressJwt({
-		secret: config.secret.jwt,
-		getToken: getTokenFromHeader,
-	}),
-	optional: expressJwt({
-		secret: config.secret.jwt,
-		credentialsRequired: false,
-		getToken: getTokenFromHeader,
-	}),
+const protect = async (req, res, next) => {
+	const token = getTokenFromHeader(req)
+
+	let payload
+	try {
+		payload = await verifyToken(token)
+	} catch (e) {
+		return res.status(401).end()
+	}
+
+	const user = await findUserWithId(payload.id)
+
+	if (!user) {
+		return res.status(401).end()
+	}
+
+	req.user = user
+
+	next()
 }
 
 export default protect

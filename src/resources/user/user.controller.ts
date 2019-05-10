@@ -1,7 +1,6 @@
 import {findAllUser, findUserWithId} from '../../mockDB/db'
 
 export const getMany = (req, res, next) => {
-	console.log('REQ USER: ', req.user)
 	findAllUser()
 		.then(users => res.status(200).json(users))
 		.catch(next)
