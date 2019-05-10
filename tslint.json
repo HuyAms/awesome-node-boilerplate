@@ -13,7 +13,8 @@
 		"prefer-const": false,
 		"no-unused-variable": true,
 		"no-shadowed-variable": false,
-		"quotemark": false
+		"quotemark": false,
+		"semicolon": false
 	},
 	"linterOptions": {
 		"exclude": ["node_modules/**/*.ts"]
