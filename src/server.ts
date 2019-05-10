@@ -16,9 +16,9 @@ app.use(urlencoded({extended: true}))
 app.use(morgan('dev'))
 
 // Routers
-app.use('/auth', protect.optional, authRouter)
+app.use('/auth', authRouter)
 
-app.use('/api/users', protect.required, userRouter)
+app.use('/api/users', protect, userRouter)
 
 // Error handling
 app.use((err, req, res, next) => {
