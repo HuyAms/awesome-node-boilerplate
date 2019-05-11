@@ -5,6 +5,9 @@ import cors from 'cors'
 import protect from './utils/auth'
 import dotenv from 'dotenv'
 
+// Config
+import config from './config'
+
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
 
@@ -29,10 +32,11 @@ app.use((err, req, res, next) => {
 	res.json({error: err.message})
 })
 
+const port = config.port
 export const start = () => {
 	try {
-		app.listen(3000, () => {
-			console.log(`REST API on http://localhost:3000`)
+		app.listen(port, () => {
+			console.log(`REST API on port ${port}`)
 		})
 	} catch (e) {
 		console.error(e)
