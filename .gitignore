@@ -41,3 +41,6 @@ npm-debug.log
 .idea
 .tscache
 .vscode
+
+# Env
+.env
