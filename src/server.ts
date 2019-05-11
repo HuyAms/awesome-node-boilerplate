@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
 /**
  * Start Express server
  */
-const port = config.port
+const port = {config}
 
 export const start = () => {
 	try {
