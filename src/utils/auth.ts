@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import {config} from '../config/config'
+import config from '../config'
 import UserModel from '../resources/user/user.model'
 
 /**
@@ -8,10 +8,10 @@ import UserModel from '../resources/user/user.model'
  * @param user
  */
 export const newToken = (user: UserModel) => {
-	const {secret} = config
+	const {secrets} = config
 
-	return jwt.sign({id: user.id}, secret.jwt, {
-		expiresIn: secret.jwtExp,
+	return jwt.sign({id: user.id}, secrets.jwt, {
+		expiresIn: secrets.jwtExp,
 	})
 }
 
@@ -22,7 +22,7 @@ export const newToken = (user: UserModel) => {
  */
 export const verifyToken = token =>
 	new Promise((resolve, reject) => {
-		jwt.verify(token, config.secret.jwt, (err, payload) => {
+		jwt.verify(token, config.secrets.jwt, (err, payload) => {
 			if (err) {
 				return reject(err)
 			}
