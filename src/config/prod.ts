@@ -1,7 +1,3 @@
-const config = {
-	secrets: {
-		jwt: 'jwtprod',
-	},
-}
+const config = {}
 
 export default config
