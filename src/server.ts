@@ -5,19 +5,28 @@ import authRouter from './resources/auth/auth.router'
 
 export const app = express()
 
-// Global Middlewares
+/**
+ * Global middlewares
+ */
 app.use(middlewares)
 
-// Routers
+/**
+ * Routers
+ */
 app.use('/auth', authRouter)
 
 app.use('/api/users', userRouter)
 
-// Error handling
+/**
+ * Error Handler
+ */
 app.use((err, req, res, next) => {
 	res.json({error: err.message})
 })
 
+/**
+ * Start Express server
+ */
 export const start = () => {
 	try {
 		app.listen(3000, () => {

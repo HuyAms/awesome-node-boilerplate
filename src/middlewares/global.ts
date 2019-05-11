@@ -5,6 +5,9 @@ import cors from 'cors'
 
 const router = Router()
 
+/**
+ * Global middlewares
+ */
 router.use(cors())
 router.use(json())
 router.use(urlencoded({extended: true}))

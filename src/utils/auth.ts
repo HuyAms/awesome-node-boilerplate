@@ -2,6 +2,11 @@ import jwt from 'jsonwebtoken'
 import {config} from '../config/config'
 import UserModel from '../resources/user/user.model'
 
+/**
+ * Generate new token with user id
+ *
+ * @param user
+ */
 export const newToken = (user: UserModel) => {
 	const {secret} = config
 
@@ -10,6 +15,11 @@ export const newToken = (user: UserModel) => {
 	})
 }
 
+/**
+ * Validate token
+ *
+ * @param token
+ */
 export const verifyToken = token =>
 	new Promise((resolve, reject) => {
 		jwt.verify(token, config.secret.jwt, (err, payload) => {
@@ -20,7 +30,14 @@ export const verifyToken = token =>
 		})
 	})
 
-export const getTokenFromHeader = req => {
+/**
+ * Get token from request
+ *
+ * If find token in query then place it in the header
+ *
+ * @param req
+ */
+export const getTokenFromRequest = req => {
 	let formattedToken: string
 
 	// If found token in query then place it in the header

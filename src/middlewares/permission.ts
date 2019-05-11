@@ -2,6 +2,9 @@ import * as _ from 'lodash'
 import {checkToken} from './auth'
 import {UserRole} from '../resources/user/user.model'
 
+/**
+ * Declare user's permissions
+ */
 export enum Permission {
 	UserRead = 'user:read',
 	UserWrite = 'user:write',
@@ -12,6 +15,11 @@ const permissionRole = {
 	[UserRole.User]: [Permission.UserRead],
 }
 
+/**
+ * Middleware to check user's permissions
+ *
+ * @param permissions
+ */
 const checkPermission = (permissions?: [Permission]) => {
 	return (req, res, next) => {
 		const {user} = req
@@ -32,6 +40,11 @@ const checkPermission = (permissions?: [Permission]) => {
 	}
 }
 
+/**
+ * Middleware to check user's token then permissions
+ *
+ * @param permissions
+ */
 export const protect = (permissions: [Permission]) => {
 	return [checkToken, checkPermission(permissions)]
 }

@@ -1,8 +1,18 @@
 import {findUserWithId} from '../mockDB/db'
-import {getTokenFromHeader, verifyToken} from '../utils/auth'
+import {getTokenFromRequest, verifyToken} from '../utils/auth'
 
+/**
+ * Middleware to check user's token
+ *
+ * - User has valid permission
+ *   - Find user from database and attach to req.user
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 export const checkToken = async (req, res, next) => {
-	const token = getTokenFromHeader(req)
+	const token = getTokenFromRequest(req)
 
 	let payload
 
