@@ -27,7 +27,7 @@ const getTokenFromHeader = req => {
 	// If found token in query then place it in the header
 
 	if (req.query && req.query.hasOwnProperty('token')) {
-		formattedToken = 'Bearer ' + req.query.access_token
+		formattedToken = 'Bearer ' + req.query.token
 		req.headers.authorization = formattedToken
 	}
 
@@ -44,6 +44,7 @@ const protect = async (req, res, next) => {
 	const token = getTokenFromHeader(req)
 
 	let payload
+
 	try {
 		payload = await verifyToken(token)
 	} catch (e) {
