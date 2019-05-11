@@ -17,7 +17,7 @@ export const signup = (req, res, next) => {
 
 export const signin = (req, res, next) => {
 	const {email, password} = req.body
-	if (!req.body.email || !req.body.password) {
+	if (!email || !password) {
 		return res.status(400).send({message: 'need email and password'})
 	}
 
