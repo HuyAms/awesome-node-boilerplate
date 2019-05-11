@@ -32,7 +32,7 @@ const checkPermission = (permissions?: [Permission]) => {
 		const hasPermission =
 			_.difference(permissions, userPermissions).length === 0
 
-		if (!permissions || hasPermission) {
+		if (hasPermission) {
 			next()
 		} else {
 			return res.status(401).send({message: 'Unauthorized'})
