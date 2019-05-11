@@ -1,6 +1,6 @@
 import {Router} from 'express'
 import * as userController from './user.controller'
-import {Permission, protect} from '../../utils/permission'
+import {Permission, protect} from '../../middlewares/permission'
 
 const router = Router()
 

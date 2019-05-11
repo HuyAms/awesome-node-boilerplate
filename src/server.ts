@@ -1,12 +1,12 @@
 import express from 'express'
-import globalMiddlewares from './middlewares/globalMiddlewares'
+import middlewares from './middlewares/global'
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
 
 export const app = express()
 
 // Global Middlewares
-app.use(globalMiddlewares)
+app.use(middlewares)
 
 // Routers
 app.use('/auth', authRouter)

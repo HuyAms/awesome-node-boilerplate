@@ -1,6 +1,6 @@
-import {UserRole} from '../resources/user/user.model'
-import {checkToken} from './auth'
 import * as _ from 'lodash'
+import {checkToken} from './auth'
+import {UserRole} from '../resources/user/user.model'
 
 export enum Permission {
 	UserRead = 'user:read',
@@ -12,10 +12,6 @@ const permissionRole = {
 	[UserRole.User]: [Permission.UserRead],
 }
 
-export const getPermission = (userRole: UserRole) => {
-	return permissionRole[userRole]
-}
-
 const checkPermission = (permissions?: [Permission]) => {
 	return (req, res, next) => {
 		const {user} = req
@@ -24,7 +20,7 @@ const checkPermission = (permissions?: [Permission]) => {
 			return res.status(401).send({message: 'Unauthorized'})
 		}
 
-		const userPermissions = getPermission(user.role)
+		const userPermissions = permissionRole[user.role]
 		const hasPermission =
 			_.difference(permissions, userPermissions).length === 0
 
