@@ -1,19 +1,21 @@
-export const getMany = (req, res) => {
-	res.json('GET ALL USER')
+import {findAllUser, findUserWithId} from '../../mockDB/db'
+
+export const getMany = (req, res, next) => {
+	findAllUser()
+		.then(users => res.status(200).json(users))
+		.catch(next)
 }
 
-export const getOne = (req, res) => {
-	res.json(`GET USER WITH ID ${req.params.id}`)
-}
-
-export const createOne = (req, res) => {
-	res.json('CREATE USER')
+export const getOne = (req, res, next) => {
+	findUserWithId(req.id)
+		.then(user => res.status(200).json(user))
+		.catch(next)
 }
 
 export const updateOne = (req, res) => {
-	res.json(`UPDATE USER WITH ID ${req.params.id}`)
+	res.status(200).json(`UPDATE USER WITH ID ${req.params.id}`)
 }
 
 export const deleteOne = (req, res) => {
-	res.json(`UPDATE USER WITH ID ${req.params.id}`)
+	res.status(200).json(`UPDATE USER WITH ID ${req.params.id}`)
 }
