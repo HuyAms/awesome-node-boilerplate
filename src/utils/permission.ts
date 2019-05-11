@@ -16,14 +16,19 @@ export const getPermission = (userRole: UserRole) => {
 	return permissionRole[userRole]
 }
 
-const checkPermission = (permissions: [Permission]) => {
+const checkPermission = (permissions?: [Permission]) => {
 	return (req, res, next) => {
-		const {role} = req.user
-		const userPermissions = getPermission(role)
+		const {user} = req
+
+		if (!user) {
+			return res.status(401).send({message: 'Unauthorized'})
+		}
+
+		const userPermissions = getPermission(user.role)
 		const hasPermission =
 			_.difference(permissions, userPermissions).length === 0
 
-		if (hasPermission) {
+		if (!permissions || hasPermission) {
 			next()
 		} else {
 			return res.status(401).send({message: 'Unauthorized'})
