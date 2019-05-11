@@ -2,6 +2,7 @@ import express from 'express'
 import middlewares from './middlewares/global'
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
+import logger from './utils/logger'
 
 export const app = express()
 
@@ -30,9 +31,9 @@ app.use((err, req, res, next) => {
 export const start = () => {
 	try {
 		app.listen(3000, () => {
-			console.log(`REST API on http://localhost:3000`)
+			logger.info(`REST API on http://localhost:3000`)
 		})
 	} catch (e) {
-		console.error(e)
+		logger.error(e.message)
 	}
 }
