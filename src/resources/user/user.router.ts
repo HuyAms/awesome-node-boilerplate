@@ -1,14 +1,18 @@
 import {Router} from 'express'
 import * as userController from './user.controller'
+import {Permission, protect} from '../../middlewares/permission'
 
 const router = Router()
 
-router.route('/').get(userController.getMany)
+const writeUser = protect([Permission.UserWrite])
+const readUser = protect([Permission.UserRead])
+
+router.route('/').get(readUser, userController.getMany)
 
 router
 	.route('/:id')
-	.get(userController.getOne)
-	.put(userController.updateOne)
-	.delete(userController.deleteOne)
+	.get(readUser, userController.getOne)
+	.put(writeUser, userController.updateOne)
+	.delete(writeUser, userController.deleteOne)
 
 export default router

@@ -1,6 +1,9 @@
 import {newToken} from '../../utils/auth'
 import {createUser, findUserWithEmail} from '../../mockDB/db'
 
+/**
+ * Sign up new user
+ */
 export const signup = (req, res, next) => {
 	const {email, password} = req.body
 	if (!email || !password) {
@@ -15,6 +18,9 @@ export const signup = (req, res, next) => {
 		.catch(next)
 }
 
+/**
+ * Sign in user
+ */
 export const signin = (req, res, next) => {
 	const {email, password} = req.body
 	if (!email || !password) {

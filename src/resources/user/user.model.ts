@@ -4,4 +4,10 @@ export default interface UserModel {
 	lastName: string
 	email: string
 	password: string
+	role: UserRole
+}
+
+export enum UserRole {
+	Admin = 'admin',
+	User = 'user',
 }

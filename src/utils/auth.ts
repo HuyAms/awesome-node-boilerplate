@@ -1,8 +1,12 @@
 import jwt from 'jsonwebtoken'
 import config from '../config'
 import UserModel from '../resources/user/user.model'
-import {findUserWithId} from '../mockDB/db'
 
+/**
+ * Generate new token with user id
+ *
+ * @param user
+ */
 export const newToken = (user: UserModel) => {
 	const {secrets} = config
 
@@ -11,6 +15,11 @@ export const newToken = (user: UserModel) => {
 	})
 }
 
+/**
+ * Validate token
+ *
+ * @param token
+ */
 export const verifyToken = token =>
 	new Promise((resolve, reject) => {
 		jwt.verify(token, config.secrets.jwt, (err, payload) => {
@@ -21,7 +30,14 @@ export const verifyToken = token =>
 		})
 	})
 
-const getTokenFromHeader = req => {
+/**
+ * Get token from request
+ *
+ * If find token in query then place it in the header
+ *
+ * @param req
+ */
+export const getTokenFromRequest = req => {
 	let formattedToken: string
 
 	// If found token in query then place it in the header
@@ -39,27 +55,3 @@ const getTokenFromHeader = req => {
 
 	return null
 }
-
-const protect = async (req, res, next) => {
-	const token = getTokenFromHeader(req)
-
-	let payload
-
-	try {
-		payload = await verifyToken(token)
-	} catch (e) {
-		return res.status(401).end()
-	}
-
-	const user = await findUserWithId(payload.id)
-
-	if (!user) {
-		return res.status(401).end()
-	}
-
-	req.user = user
-
-	next()
-}
-
-export default protect
