@@ -1,18 +1,12 @@
 import express from 'express'
-import {json, urlencoded} from 'body-parser'
-import morgan from 'morgan'
-import cors from 'cors'
-
+import globalMiddlewares from './middlewares/globalMiddlewares'
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
 
 export const app = express()
 
 // Global Middlewares
-app.use(cors())
-app.use(json())
-app.use(urlencoded({extended: true}))
-app.use(morgan('dev'))
+app.use(globalMiddlewares)
 
 // Routers
 app.use('/auth', authRouter)
