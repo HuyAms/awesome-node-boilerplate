@@ -2,7 +2,6 @@ import express from 'express'
 import {json, urlencoded} from 'body-parser'
 import morgan from 'morgan'
 import cors from 'cors'
-import protect from './utils/auth'
 
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
@@ -18,7 +17,7 @@ app.use(morgan('dev'))
 // Routers
 app.use('/auth', authRouter)
 
-app.use('/api/users', protect, userRouter)
+app.use('/api/users', userRouter)
 
 // Error handling
 app.use((err, req, res, next) => {

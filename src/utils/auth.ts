@@ -40,7 +40,7 @@ const getTokenFromHeader = req => {
 	return null
 }
 
-const protect = async (req, res, next) => {
+export const checkToken = async (req, res, next) => {
 	const token = getTokenFromHeader(req)
 
 	let payload
@@ -61,5 +61,3 @@ const protect = async (req, res, next) => {
 
 	next()
 }
-
-export default protect
