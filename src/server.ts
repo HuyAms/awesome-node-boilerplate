@@ -3,11 +3,15 @@ import {json, urlencoded} from 'body-parser'
 import morgan from 'morgan'
 import cors from 'cors'
 import protect from './utils/auth'
+import dotenv from 'dotenv'
 
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
 
 export const app = express()
+
+// Env variables
+dotenv.config()
 
 // Global Middlewares
 app.use(cors())
