@@ -13,7 +13,7 @@ export const getMany = (req, res, next) => {
  * Get user by id
  */
 export const getOne = (req, res, next) => {
-	findUserWithId(req.id)
+	findUserWithId(Number(req.params.id))
 		.then(user => res.status(200).json(user))
 		.catch(next)
 }

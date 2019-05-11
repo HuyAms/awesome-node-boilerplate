@@ -22,6 +22,7 @@ app.use('/api/users', userRouter)
  * Error Handler
  */
 app.use((err, req, res, next) => {
+	logger.info(err.message)
 	res.json({error: err.message})
 })
 
