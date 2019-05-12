@@ -20,7 +20,7 @@ app.use(middlewares)
  * Passport
  *
  */
-require('./services/passport')
+import './services/passport'
 
 /**
  * Routers
