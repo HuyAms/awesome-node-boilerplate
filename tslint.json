@@ -11,7 +11,6 @@
 		"object-literal-sort-keys": false,
 		"no-console": false,
 		"prefer-const": false,
-		"no-unused-variable": true,
 		"no-shadowed-variable": false,
 		"quotemark": false
 	},
