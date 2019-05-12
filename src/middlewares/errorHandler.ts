@@ -1,4 +1,6 @@
 import error, {ApiError} from '../utils/apiError'
+import httpStatus from 'http-status'
+import logger from '../utils/logger'
 
 /**
  * Middleware to parse Error
@@ -27,6 +29,12 @@ const parseError = (err, req, res, next) => {
  */
 const sendError = (err, req, res, next) => {
 	const {errorCode, message, status} = err
+
+	if (status === httpStatus.INTERNAL_SERVER_ERROR) {
+		logger.error(err)
+	} else {
+		logger.debug(`[ERROR]: ${message}`)
+	}
 
 	res.status(status).json({
 		status: status,
