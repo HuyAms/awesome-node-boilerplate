@@ -16,7 +16,18 @@ export class ApiError extends Error {
 }
 
 /**
- * Bad request (400)
+ *  Throw api error
+ *
+ * @param message
+ * @param status
+ * @param errorCode
+ */
+export const apiError = (message, status, errorCode?: ErrorCode) => {
+	return new ApiError(message, status, errorCode)
+}
+
+/**
+ * Throw Bad request (400)
  *
  * @param message
  * @param errorCode
@@ -29,7 +40,7 @@ export const badRequest = (
 }
 
 /**
- * Unauthorized (401)
+ * Throw Unauthorized (401)
  *
  * @param message
  * @param errorCode
@@ -42,7 +53,7 @@ export const unauthorized = (
 }
 
 /**
- * Not found (404)
+ * Throw Not found (404)
  *
  * @param message
  * @param errorCode
@@ -52,7 +63,7 @@ export const notFound = (message = 'Not found', errorCode?: ErrorCode) => {
 }
 
 /**
- * Unsupported media type (415)
+ * Throw Unsupported media type (415)
  *
  * @param message
  * @param errorCode
@@ -65,7 +76,7 @@ export const unsupportedMediaType = (
 }
 
 /**
- * Internal server (500)
+ * Throw Internal server (500)
  *
  * @param message
  * @param errorCode
@@ -78,6 +89,7 @@ export const internalServer = (
 }
 
 export default {
+	apiError,
 	badRequest,
 	unauthorized,
 	notFound,
