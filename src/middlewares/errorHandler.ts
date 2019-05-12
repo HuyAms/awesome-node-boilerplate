@@ -10,11 +10,11 @@ import error, {ApiError} from '../utils/apiError'
  */
 const parseError = (err, req, res, next) => {
 	if (!(err instanceof ApiError)) {
-		const apiError = error.internalServerError(err.message || err.msg)
-		next(apiError)
+		const apiError = error.internalServer(err.message || err.msg)
+		return next(apiError)
 	}
 
-	next(err)
+	return next(err)
 }
 
 /**

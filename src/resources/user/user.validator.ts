@@ -16,8 +16,8 @@ export const validateUpdateUser = (req, res, next) => {
 	const errors = req.validationErrors()
 
 	if (errors) {
-		next(error.badRequestError(errors[0].msg))
+		return next(error.badRequest(errors[0].msg))
 	}
 
-	next()
+	return next()
 }

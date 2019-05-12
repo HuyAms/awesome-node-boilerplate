@@ -26,7 +26,7 @@ const checkPermission = (permissions?: [Permission]) => {
 		const {user} = req
 
 		if (!user) {
-			next(error.unauthorizedError())
+			return next(error.unauthorized())
 		}
 
 		const userPermissions = permissionRole[user.role]
@@ -34,9 +34,9 @@ const checkPermission = (permissions?: [Permission]) => {
 			_.difference(permissions, userPermissions).length === 0
 
 		if (hasPermission) {
-			next()
+			return next()
 		} else {
-			next(error.unauthorizedError())
+			return next(error.unauthorized())
 		}
 	}
 }

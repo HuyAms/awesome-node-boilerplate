@@ -20,14 +20,14 @@ export const checkToken = async (req, res, next) => {
 	try {
 		payload = await verifyToken(token)
 	} catch (e) {
-		next(error.unauthorizedError('Invalid token'))
+		return next(error.unauthorized('Invalid token'))
 	}
 
 	let user
 	try {
 		user = await findUserWithId(payload.id)
 	} catch (e) {
-		next(error.unauthorizedError('Cannot find user with that token'))
+		return next(error.unauthorized('Cannot find user with that token'))
 	}
 
 	req.user = user

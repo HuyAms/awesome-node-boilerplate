@@ -2,6 +2,7 @@ import {newToken} from '../../utils/auth'
 import {createUser, findUserWithEmail} from '../../mockDB/db'
 import logger from '../../utils/logger'
 import apiError from '../../utils/apiError'
+import ErrorCode from '../../utils/ErrorCode'
 
 /**
  * Sign up new user
@@ -12,9 +13,9 @@ export const signup = (req, res, next) => {
 	createUser(req.body)
 		.then(user => {
 			const token = newToken(user)
-			res.json({token})
+			return res.json({token})
 		})
-		.catch(err => next(apiError.badRequestError(err.message)))
+		.catch(err => next(apiError.badRequest(err.message)))
 }
 
 /**
@@ -30,10 +31,22 @@ export const signin = (req, res, next) => {
 		.then(user => {
 			if (user.password === password) {
 				const token = newToken(user)
-				res.json({token})
+				return res.json({token})
 			} else {
-				next(apiError.unauthorizedError('Fail to login'))
+				return next(
+					apiError.unauthorized(
+						'Password is not correct',
+						ErrorCode.passwordNotCorrect,
+					),
+				)
 			}
 		})
-		.catch(err => next(apiError.badRequestError(err.message)))
+		.catch(err =>
+			next(
+				apiError.unauthorized(
+					'Email is not correct',
+					ErrorCode.emailNotCorrect,
+				),
+			),
+		)
 }
