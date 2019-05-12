@@ -2,8 +2,8 @@ import {createLogger, format, transports, Logger} from 'winston'
 import {StreamOptions} from 'morgan'
 import fs from 'fs'
 import path from 'path'
+import config from '../config'
 
-const env = process.env.NODE_ENV || 'development'
 const logDir = 'log'
 
 const logFormat = format.printf(
@@ -19,7 +19,7 @@ const filename = path.join(logDir, 'results.log')
 
 const logger: Logger = createLogger({
 	// change level if in dev environment versus production
-	level: env === 'production' ? 'info' : 'debug',
+	level: config.isProd ? 'info' : 'debug',
 	format: format.combine(
 		format.label({label: path.basename(process.mainModule.filename)}),
 		format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),

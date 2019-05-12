@@ -1,4 +1,4 @@
-import {merge} from 'lodash'
+import * as _ from 'lodash'
 
 import devConfig from './dev'
 import prodConfig from './prod'
@@ -9,6 +9,7 @@ const env = process.env.NODE_ENV || 'development'
 const baseConfig = {
 	env,
 	isDev: env === 'development',
+	isProd: env === 'production',
 	isTest: env === 'test',
 	port: process.env.PORT || 3000,
 	secrets: {
@@ -36,6 +37,6 @@ switch (env) {
 		envConfig = devConfig
 }
 
-const config = merge(baseConfig, envConfig)
+const config = _.merge(baseConfig, envConfig)
 
 export default config

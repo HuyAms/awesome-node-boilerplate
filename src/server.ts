@@ -9,7 +9,9 @@ import logger from './utils/logger'
 
 export const app = express()
 
-// Env variables
+/**
+ * Dotenv
+ */
 dotenv.config()
 
 /**
@@ -35,7 +37,7 @@ app.use((err, req, res, next) => {
 /**
  * Start Express server
  */
-const port = {config}
+const {port} = config
 
 export const start = () => {
 	try {
