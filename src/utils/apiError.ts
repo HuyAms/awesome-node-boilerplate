@@ -1,7 +1,11 @@
 import httpStatus from 'http-status'
+import ErrorCode from './errorCode'
 
+/**
+ * Api Error
+ */
 export class ApiError extends Error {
-	errorCode?: number
+	errorCode?: ErrorCode
 	status?: number
 
 	constructor(message, status?, errorCode?) {
@@ -17,7 +21,10 @@ export class ApiError extends Error {
  * @param message
  * @param errorCode
  */
-export const badRequest = (message = 'Invalid params', errorCode?: number) => {
+export const badRequest = (
+	message = 'Invalid params',
+	errorCode?: ErrorCode,
+) => {
 	return new ApiError(message, httpStatus.BAD_REQUEST, errorCode)
 }
 
@@ -27,7 +34,10 @@ export const badRequest = (message = 'Invalid params', errorCode?: number) => {
  * @param message
  * @param errorCode
  */
-export const unauthorized = (message = 'Unauthorized', errorCode?: number) => {
+export const unauthorized = (
+	message = 'Unauthorized',
+	errorCode?: ErrorCode,
+) => {
 	return new ApiError(message, httpStatus.UNAUTHORIZED, errorCode)
 }
 
@@ -37,7 +47,7 @@ export const unauthorized = (message = 'Unauthorized', errorCode?: number) => {
  * @param message
  * @param errorCode
  */
-export const notFound = (message = 'Not found', errorCode?: number) => {
+export const notFound = (message = 'Not found', errorCode?: ErrorCode) => {
 	return new ApiError(message, httpStatus.NOT_FOUND, errorCode)
 }
 
@@ -49,7 +59,7 @@ export const notFound = (message = 'Not found', errorCode?: number) => {
  */
 export const unsupportedMediaType = (
 	message = 'Invalid photo type',
-	errorCode?: number,
+	errorCode?: ErrorCode,
 ) => {
 	return new ApiError(message, httpStatus.UNSUPPORTED_MEDIA_TYPE, errorCode)
 }
@@ -62,7 +72,7 @@ export const unsupportedMediaType = (
  */
 export const internalServer = (
 	message = 'Unexpected database error',
-	errorCode?: number,
+	errorCode?: ErrorCode,
 ) => {
 	return new ApiError(message, httpStatus.INTERNAL_SERVER_ERROR, errorCode)
 }
