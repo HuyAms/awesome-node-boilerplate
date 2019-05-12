@@ -14,6 +14,6 @@ router.use(cors())
 router.use(json())
 router.use(urlencoded({extended: true}))
 router.use(morgan('dev', {stream: morganStream}))
-router.use(validator)
+router.use(validator())
 
 export default router

@@ -1,6 +1,7 @@
 import {Router} from 'express'
 import * as userController from './user.controller'
 import {Permission, protect} from '../../middlewares/permission'
+import {validateUpdateUser} from './user.validator'
 
 const router = Router()
 
@@ -12,7 +13,7 @@ router.route('/').get(readUser, userController.getMany)
 router
 	.route('/:id')
 	.get(readUser, userController.getOne)
-	.put(writeUser, userController.updateOne)
+	.put(writeUser, validateUpdateUser, userController.updateOne)
 	.delete(writeUser, userController.deleteOne)
 
 export default router
