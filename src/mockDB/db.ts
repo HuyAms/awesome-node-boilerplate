@@ -40,3 +40,21 @@ export const findUserWithId = (id: number) => {
 
 	return Promise.reject(new Error('Cannot find user with that id'))
 }
+
+export const saveUser = (user: UserModel) => {
+	const {email} = user
+	let replacedIndex
+	const userExist = users.some((user, index) => {
+		if (user.email === email) {
+			replacedIndex = index
+			return true
+		}
+	})
+
+	if (userExist) {
+		users.splice(replacedIndex, 1, user)
+		return Promise.resolve(user)
+	} else {
+		return Promise.reject(new Error('Cannot save user to the database'))
+	}
+}
