@@ -1,4 +1,5 @@
 import {UserRole} from './user.model'
+import error from '../../utils/apiError'
 
 export const validateUpdateUser = (req, res, next) => {
 	req
@@ -15,7 +16,7 @@ export const validateUpdateUser = (req, res, next) => {
 	const errors = req.validationErrors()
 
 	if (errors) {
-		return res.status(400).json({errors: errors})
+		next(error.badRequestError(errors[0].msg))
 	}
 
 	next()

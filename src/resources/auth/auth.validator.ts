@@ -1,3 +1,5 @@
+import error from '../../utils/apiError'
+
 export const validateSignUp = (req, res, next) => {
 	req
 		.checkBody('email', 'Invalidi email')
@@ -12,7 +14,7 @@ export const validateSignUp = (req, res, next) => {
 	const errors = req.validationErrors()
 
 	if (errors) {
-		return res.status(400).json({errors: errors})
+		next(error.badRequestError(errors[0].msg))
 	}
 
 	next()
@@ -31,7 +33,7 @@ export const validateSignIn = (req, res, next) => {
 	const errors = req.validationErrors()
 
 	if (errors) {
-		return res.status(400).json({errors: errors.array()})
+		next(error.badRequestError(errors[0].msg))
 	}
 
 	next()

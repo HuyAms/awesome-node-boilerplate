@@ -1,6 +1,7 @@
 import {newToken} from '../../utils/auth'
 import {createUser, findUserWithEmail} from '../../mockDB/db'
 import logger from '../../utils/logger'
+import apiError from '../../utils/apiError'
 
 /**
  * Sign up new user
@@ -11,9 +12,9 @@ export const signup = (req, res, next) => {
 	createUser(req.body)
 		.then(user => {
 			const token = newToken(user)
-			return res.status(201).send({token})
+			res.json({token})
 		})
-		.catch(next)
+		.catch(err => next(apiError.badRequestError(err.message)))
 }
 
 /**
@@ -29,10 +30,10 @@ export const signin = (req, res, next) => {
 		.then(user => {
 			if (user.password === password) {
 				const token = newToken(user)
-				return res.status(200).send({token})
+				res.json({token})
 			} else {
-				return res.status(401).send({message: 'Fail to login'})
+				next(apiError.unauthorizedError('Fail to login'))
 			}
 		})
-		.catch(next)
+		.catch(err => next(apiError.badRequestError(err.message)))
 }

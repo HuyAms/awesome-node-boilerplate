@@ -1,6 +1,7 @@
 import * as _ from 'lodash'
 import {checkToken} from './auth'
 import {UserRole} from '../resources/user/user.model'
+import error from '../utils/apiError'
 
 /**
  * Declare user's permissions
@@ -25,7 +26,7 @@ const checkPermission = (permissions?: [Permission]) => {
 		const {user} = req
 
 		if (!user) {
-			return res.status(401).send({message: 'Unauthorized'})
+			next(error.unauthorizedError())
 		}
 
 		const userPermissions = permissionRole[user.role]
@@ -35,7 +36,7 @@ const checkPermission = (permissions?: [Permission]) => {
 		if (hasPermission) {
 			next()
 		} else {
-			return res.status(401).send({message: 'Unauthorized'})
+			next(error.unauthorizedError())
 		}
 	}
 }
