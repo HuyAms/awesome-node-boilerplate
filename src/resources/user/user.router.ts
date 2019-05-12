@@ -10,6 +10,8 @@ const readUser = protect([Permission.UserRead])
 
 router.route('/').get(readUser, userController.getMany)
 
+router.route('/me').get(readUser, userController.getMe)
+
 router
 	.route('/:id')
 	.get(readUser, userController.getOne)
