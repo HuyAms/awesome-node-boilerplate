@@ -17,6 +17,12 @@ dotenv.config()
 app.use(middlewares)
 
 /**
+ * Passport
+ *
+ */
+require('./services/passport')
+
+/**
  * Routers
  */
 app.use('/auth', authRouter)
@@ -33,7 +39,7 @@ app.use((err, req, res, next) => {
 /**
  * Start Express server
  */
-const port = {config}
+const {port} = config
 
 export const start = () => {
 	try {
