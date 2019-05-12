@@ -12,7 +12,10 @@ import logger from '../utils/logger'
  */
 const parseError = (err, req, res, next) => {
 	if (!(err instanceof ApiError)) {
-		const apiError = error.internalServer(err.message || err.msg)
+		const apiError = error.apiError(
+			err.message || err.msg,
+			err.status || httpStatus.INTERNAL_SERVER_ERROR,
+		)
 		return next(apiError)
 	}
 
