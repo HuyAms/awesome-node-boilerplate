@@ -23,6 +23,7 @@ const logger: Logger = createLogger({
 	format: format.combine(
 		format.label({label: path.basename(process.mainModule.filename)}),
 		format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+		format.splat(),
 	),
 	transports: [
 		new transports.Console({

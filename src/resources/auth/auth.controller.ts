@@ -6,7 +6,7 @@ import logger from '../../utils/logger'
  * Sign up new user
  */
 export const signup = (req, res, next) => {
-	logger.debug(`Sign up with ${JSON.stringify(req.body)}`)
+	logger.debug('Sign up with: %o', req.body)
 
 	const {email, password} = req.body
 	if (!email || !password) {
@@ -25,7 +25,7 @@ export const signup = (req, res, next) => {
  * Sign in user
  */
 export const signin = (req, res, next) => {
-	logger.debug(`Sign in with ${JSON.stringify(req.body)}`)
+	logger.debug('Sign in with: %o', req.body)
 
 	const {email, password} = req.body
 
