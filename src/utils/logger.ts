@@ -37,7 +37,7 @@ const logger: Logger = createLogger({
 	exitOnError: false,
 })
 
-export const stream: StreamOptions = {
+export const morganStream: StreamOptions = {
 	write: function(message) {
 		logger.info(message)
 	},

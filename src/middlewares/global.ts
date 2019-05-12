@@ -2,7 +2,7 @@ import {Router} from 'express'
 import {json, urlencoded} from 'body-parser'
 import morgan from 'morgan'
 import cors from 'cors'
-import {stream} from '../utils/logger'
+import {morganStream} from '../utils/logger'
 
 const router = Router()
 
@@ -12,6 +12,6 @@ const router = Router()
 router.use(cors())
 router.use(json())
 router.use(urlencoded({extended: true}))
-router.use(morgan('dev', {stream}))
+router.use(morgan('dev', {stream: morganStream}))
 
 export default router
