@@ -5,10 +5,13 @@ import config from './config'
 
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
+import logger from './utils/logger'
 
 export const app = express()
 
-// Env variables
+/**
+ * Dotenv
+ */
 dotenv.config()
 
 /**
@@ -27,20 +30,21 @@ app.use('/api/users', userRouter)
  * Error Handler
  */
 app.use((err, req, res, next) => {
+	logger.info(err.message)
 	res.json({error: err.message})
 })
 
 /**
  * Start Express server
  */
-const port = {config}
+const {port} = config
 
 export const start = () => {
 	try {
 		app.listen(port, () => {
-			console.log(`REST API on port ${port}`)
+			logger.info(`REST API on port ${port}`)
 		})
 	} catch (e) {
-		console.error(e)
+		logger.error(e.message)
 	}
 }

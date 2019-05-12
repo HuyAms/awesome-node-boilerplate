@@ -22,9 +22,10 @@ export const checkToken = async (req, res, next) => {
 		return res.status(401).end()
 	}
 
-	const user = await findUserWithId(payload.id)
-
-	if (!user) {
+	let user
+	try {
+		user = await findUserWithId(payload.id)
+	} catch (e) {
 		return res.status(401).end()
 	}
 
