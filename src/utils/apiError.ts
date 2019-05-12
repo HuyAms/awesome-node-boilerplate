@@ -11,41 +11,66 @@ export class ApiError extends Error {
 	}
 }
 
-/*errorCode 400*/
-export const badRequestError = (message = 'Invalid params', errorCode = 0) => {
+/**
+ * Bad request (400)
+ *
+ * @param message
+ * @param errorCode
+ */
+export const badRequest = (message = 'Invalid params', errorCode = 0) => {
 	return new ApiError(message, httpStatus.BAD_REQUEST, errorCode)
 }
 
-/*errorCode 401*/
-export const unauthorizedError = (message = 'Unauthorize', errorCode = 0) => {
+/**
+ * Unauthorized (401)
+ *
+ * @param message
+ * @param errorCode
+ */
+export const unauthorized = (message = 'Unauthorized', errorCode = 0) => {
 	return new ApiError(message, httpStatus.UNAUTHORIZED, errorCode)
 }
 
-/*errorCode 404*/
-export const notFoundError = (message = 'Not found', errorCode = 0) => {
+/**
+ * Not found (404)
+ *
+ * @param message
+ * @param errorCode
+ */
+export const notFound = (message = 'Not found', errorCode?) => {
 	return new ApiError(message, httpStatus.NOT_FOUND, errorCode)
 }
 
-/*errorCode 415*/
-export const unsupportedMediaTypeError = (
+/**
+ * Unsupported media type (415)
+ *
+ * @param message
+ * @param errorCode
+ */
+export const unsupportedMediaType = (
 	message = 'Invalid photo type',
-	errorCode = 0,
+	errorCode?,
 ) => {
 	return new ApiError(message, httpStatus.UNSUPPORTED_MEDIA_TYPE, errorCode)
 }
 
-/*errorCode 500*/
-export const internalServerError = (
+/**
+ * Internal server (500)
+ *
+ * @param message
+ * @param errorCode
+ */
+export const internalServer = (
 	message = 'Unexpected database error',
-	errorCode = 0,
+	errorCode?,
 ) => {
 	return new ApiError(message, httpStatus.INTERNAL_SERVER_ERROR, errorCode)
 }
 
 export default {
-	badRequestError,
-	unauthorizedError,
-	notFoundError,
-	unsupportedMediaTypeError,
-	internalServerError,
+	badRequest,
+	unauthorized,
+	notFound,
+	unsupportedMediaType,
+	internalServer,
 }
