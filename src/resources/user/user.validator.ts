@@ -1,5 +1,12 @@
 import {UserRole} from './user.model'
 
+/**
+ * Validate update user request
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 export const validateUpdateUser = (req, res, next) => {
 	req
 		.checkBody('email', 'Invalidi email')

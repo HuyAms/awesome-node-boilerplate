@@ -1,3 +1,10 @@
+/**
+ * Validate sign up request
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 export const validateSignUp = (req, res, next) => {
 	req
 		.checkBody('email', 'Invalidi email')
@@ -18,6 +25,13 @@ export const validateSignUp = (req, res, next) => {
 	next()
 }
 
+/**
+ * Validate sign in request
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
 export const validateSignIn = (req, res, next) => {
 	req
 		.checkBody('email', 'Invalidi email')
