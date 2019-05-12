@@ -1,18 +1,14 @@
 import httpStatus from 'http-status'
 
-class ApiError extends Error {
-	errorCode: number
-	httpCode: number
+export class ApiError extends Error {
+	errorCode?: number
+	status?: number
 
-	constructor(message, httpCode, errorerrorCode) {
+	constructor(message, status?, errorCode?) {
 		super(message)
-		this.httpCode = httpCode
-		this.errorCode = errorerrorCode
+		this.status = status
+		this.errorCode = errorCode
 	}
-}
-
-export const apiError = (message: string, httpCode: number, errorCode = 0) => {
-	return new ApiError(message, httpStatus.BAD_REQUEST, errorCode)
 }
 
 /*errorCode 400*/
@@ -47,7 +43,6 @@ export const internalServerError = (
 }
 
 export default {
-	apiError,
 	badRequestError,
 	unauthorizedError,
 	notFoundError,
