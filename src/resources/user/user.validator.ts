@@ -1,23 +1,21 @@
+import {body} from 'express-validator/check'
+import {returnValidationError} from '../../middlewares/errorValidator'
 import {UserRole} from './user.model'
-import error from '../../utils/apiError'
 
-export const validateUpdateUser = (req, res, next) => {
-	req
-		.checkBody('email', 'Invalidi email')
-		.isEmail()
-		.normalizeEmail()
-	req
-		.checkBody('password', 'Password must be at least 5 chars long')
-		.isLength({min: 5})
-	req.checkBody('firstName', 'First name should not be empty').notEmpty()
-	req.checkBody('lastName', 'Last name should not be empty').notEmpty()
-	req.checkBody('role', 'Invalid role').isIn([UserRole.User, UserRole.Admin])
-
-	const errors = req.validationErrors()
-
-	if (errors) {
-		return next(error.badRequest(errors[0].msg))
-	}
-
-	return next()
+/**
+ * Validate update user request
+ */
+export const validateUpdateUser = () => {
+	return [
+		body('email', 'Invalid email')
+			.isEmail()
+			.normalizeEmail(),
+		body('password', 'Password must be at least 5 chars long').isLength({
+			min: 5,
+		}),
+		body('firstName', 'First name should not be empty').exists(),
+		body('lastName', 'Last name should not be empty').isEmail(),
+		body('role', 'Invalid role').isIn([UserRole.User, UserRole.Admin]),
+		returnValidationError,
+	]
 }

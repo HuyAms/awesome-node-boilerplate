@@ -16,7 +16,7 @@ router.param('id', userController.params)
 router
 	.route('/:id')
 	.get(readUser, userController.getOne)
-	.put(writeUser, validateUpdateUser, userController.updateOne)
+	.put(writeUser, validateUpdateUser(), userController.updateOne)
 	.delete(writeUser, userController.deleteOne)
 
 export default router
