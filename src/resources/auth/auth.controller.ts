@@ -1,5 +1,4 @@
 import passport from 'passport'
-import {passportLocal} from '../../services/passport'
 
 import {newToken} from '../../utils/auth'
 import {createUser, findUserWithEmail} from '../../mockDB/db'
@@ -8,35 +7,25 @@ import {createUser, findUserWithEmail} from '../../mockDB/db'
  * Sign up new user
  */
 export const signup = (req, res, next) => {
-	passport.authenticate(passportLocal.signup, (error, user, info) => {
-		if (error) {
-			return next(error)
-		}
+	const {email, password} = req.body
+	if (!email || !password) {
+		return res.status(400).send({message: 'need email and password'})
+	}
 
-		// If credentials are missing
-		if (!user) {
-			info.message = 'Email and password are required'
-			res.status(400).send(info)
-		} else {
-			createUser(user)
-				.then(user => {
-					const token = newToken(user)
-					return res.status(201).send({token})
-				})
-				.catch(error => {
-					return next(error)
-				})
-		}
-	})(req, res, next)
+	createUser(req.body)
+		.then(user => {
+			const token = newToken(user)
+			return res.status(201).send({token})
+		})
+		.catch(next)
 }
 
 /**
  * Sign in user
  */
 export const signin = (req, res, next) => {
-	passport.authenticate(passportLocal.login, (error, user, info) => {
+	passport.authenticate('local', (error, user, info) => {
 		if (error) {
-			console.log('Error', error)
 			return next(error)
 		}
 		// Missing credentials
