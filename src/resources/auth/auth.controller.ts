@@ -1,6 +1,8 @@
 import {newToken} from '../../utils/auth'
 import {createUser, findUserWithEmail} from '../../mockDB/db'
-import logger from '../../utils/logger'
+import createLogger from '../../utils/logger'
+
+const logger = createLogger(module)
 
 /**
  * Sign up new user
