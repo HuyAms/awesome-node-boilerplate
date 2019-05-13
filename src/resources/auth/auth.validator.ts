@@ -1,52 +1,35 @@
+import {body} from 'express-validator/check'
+import {returnValidationError} from '../../middlewares/error'
+
 /**
  * Validate sign up request
- *
- * @param req
- * @param res
- * @param next
  */
-export const validateSignUp = (req, res, next) => {
-	req
-		.checkBody('email', 'Invalidi email')
-		.isEmail()
-		.normalizeEmail()
-	req
-		.checkBody('password', 'Password must be at least 5 chars long')
-		.isLength({min: 5})
-	req.checkBody('firstName', 'First name should not be empty').notEmpty()
-	req.checkBody('lastName', 'Last name should not be empty').notEmpty()
-
-	const errors = req.validationErrors()
-
-	if (errors) {
-		return res.status(400).json({errors: errors})
-	}
-
-	next()
+export const validateSignUp = () => {
+	return [
+		body('email', 'Invalid email')
+			.isEmail()
+			.normalizeEmail(),
+		body('password', 'Password must be at least 5 chars long').isLength({
+			min: 5,
+		}),
+		body('firstName', 'First name should not be empty').exists(),
+		body('lastName', 'Last name should not be empty').exists(),
+		returnValidationError,
+	]
 }
 
 /**
  * Validate sign in request
- *
- * @param req
- * @param res
- * @param next
  */
-export const validateSignIn = (req, res, next) => {
-	req
-		.checkBody('email', 'Invalidi email')
-		.notEmpty()
-		.isEmail()
-		.normalizeEmail()
-	req
-		.checkBody('password', 'Password must be at least 5 chars long')
-		.isLength({min: 5})
-
-	const errors = req.validationErrors()
-
-	if (errors) {
-		return res.status(400).json({errors: errors.array()})
-	}
-
-	next()
+export const validateSignIn = () => {
+	return [
+		body('email', 'Invalid email')
+			.exists()
+			.isEmail()
+			.normalizeEmail(),
+		body('password', 'Password must be at least 5 chars long').isLength({
+			min: 5,
+		}),
+		returnValidationError,
+	]
 }
