@@ -10,11 +10,6 @@ import logger from '../../utils/logger'
 export const signup = (req, res, next) => {
 	logger.debug('Sign up with: %o', req.body)
 
-	const {email, password} = req.body
-	if (!email || !password) {
-		return res.status(400).send({message: 'need email and password'})
-	}
-
 	createUser(req.body)
 		.then(user => {
 			const token = newToken(user)
@@ -32,14 +27,11 @@ export const signin = (req, res, next) => {
 		if (error) {
 			return next(error)
 		}
+
 		// Missing credentials
 		if (user) {
 			const token = newToken(user)
 			return res.status(200).send({token})
-		}
-
-		if (info) {
-			return res.status(400).send(info)
 		}
 	})(req, res, next)
 }
