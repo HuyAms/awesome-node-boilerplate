@@ -1,12 +1,13 @@
 import UserModel from '../resources/user/user.model'
 
 const users: UserModel[] = []
-const id = 0
+let id = 0
 
 export const createUser = (user: UserModel) => {
 	const email = user.email
 
-	user.id = id + 1
+	id += 1
+	user.id = id
 
 	const emailExist = users.some(user => user.email === email)
 
