@@ -20,6 +20,12 @@ dotenv.config()
 app.use(middlewares)
 
 /**
+ * Passport
+ *
+ */
+import './services/passport'
+
+/**
  * Routers
  */
 app.use('/auth', authRouter)

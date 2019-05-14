@@ -1,5 +1,7 @@
+import passport from 'passport'
+
 import {newToken} from '../../utils/auth'
-import {createUser, findUserWithEmail} from '../../mockDB/db'
+import {createUser} from '../../mockDB/db'
 import logger from '../../utils/logger'
 
 /**
@@ -21,18 +23,15 @@ export const signup = (req, res, next) => {
  */
 export const signin = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
+	passport.authenticate('local', (error, user, info) => {
+		if (error) {
+			return next(error)
+		}
 
-	const {email, password} = req.body
-
-	// Check password
-	findUserWithEmail(email)
-		.then(user => {
-			if (user.password === password) {
-				const token = newToken(user)
-				return res.status(200).send({token})
-			} else {
-				return res.status(401).send({message: 'Fail to login'})
-			}
-		})
-		.catch(next)
+		// Missing credentials
+		if (user) {
+			const token = newToken(user)
+			return res.status(200).send({token})
+		}
+	})(req, res, next)
 }
