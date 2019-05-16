@@ -1,4 +1,4 @@
-import express from 'express'
+import express, {NextFunction, Request, Response} from 'express'
 import middlewares from './middlewares/global'
 import dotenv from 'dotenv'
 import config from './config'
@@ -43,7 +43,7 @@ app.use('/api/users', userRouter)
 /**
  * Error Handler
  */
-app.use((err, req, res, next) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 	logger.info(err.message)
 	res.json({error: err.message})
 })
