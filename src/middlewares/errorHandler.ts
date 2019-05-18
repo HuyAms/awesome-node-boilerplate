@@ -1,6 +1,9 @@
-import error, {ApiError} from '../utils/apiError'
+import {ApiError} from '../utils/apiError'
+import {ErrorRequestHandler} from 'express'
 import httpStatus from 'http-status'
-import logger from '../utils/logger'
+import createLogger from '../utils/logger'
+
+const logger = createLogger(module)
 
 /**
  * Middleware to parse Error
@@ -10,9 +13,9 @@ import logger from '../utils/logger'
  * @param res
  * @param next
  */
-const parseError = (err, req, res, next) => {
+const parseError: ErrorRequestHandler = (err, req, res, next) => {
 	if (!(err instanceof ApiError)) {
-		const apiError = error.apiError(
+		const apiError = new ApiError(
 			err.message || err.msg,
 			err.status || httpStatus.INTERNAL_SERVER_ERROR,
 		)
@@ -30,7 +33,7 @@ const parseError = (err, req, res, next) => {
  * @param res
  * @param next
  */
-const sendError = (err, req, res, next) => {
+const sendError: ErrorRequestHandler = (err, req, res, next) => {
 	const {errorCode, message, status} = err
 
 	if (status === httpStatus.INTERNAL_SERVER_ERROR) {

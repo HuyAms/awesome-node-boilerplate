@@ -1,5 +1,12 @@
 import httpStatus from 'http-status'
-import ErrorCode from './errorCode'
+
+/**
+ * Api Error
+ */
+export enum ErrorCode {
+	passwordNotCorrect = 1,
+	emailNotCorrect = 2,
+}
 
 /**
  * Api Error
@@ -8,22 +15,11 @@ export class ApiError extends Error {
 	errorCode?: ErrorCode
 	status?: number
 
-	constructor(message, status?, errorCode?) {
+	constructor(message: string, status?: number, errorCode?: ErrorCode) {
 		super(message)
 		this.status = status
 		this.errorCode = errorCode
 	}
-}
-
-/**
- *  Throw api error
- *
- * @param message
- * @param status
- * @param errorCode
- */
-export const apiError = (message, status, errorCode?: ErrorCode) => {
-	return new ApiError(message, status, errorCode)
 }
 
 /**
@@ -82,14 +78,13 @@ export const unsupportedMediaType = (
  * @param errorCode
  */
 export const internalServer = (
-	message = 'Unexpected database error',
+	message = 'Unexpected database createError',
 	errorCode?: ErrorCode,
 ) => {
 	return new ApiError(message, httpStatus.INTERNAL_SERVER_ERROR, errorCode)
 }
 
 export default {
-	apiError,
 	badRequest,
 	unauthorized,
 	notFound,

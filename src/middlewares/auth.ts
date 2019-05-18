@@ -1,6 +1,7 @@
 import {findUserWithId} from '../mockDB/db'
 import {getTokenFromRequest, verifyToken} from '../utils/auth'
 import error from '../utils/apiError'
+import {RequestHandler} from 'express'
 
 /**
  * Middleware to check user's token
@@ -12,10 +13,10 @@ import error from '../utils/apiError'
  * @param res
  * @param next
  */
-export const checkToken = async (req, res, next) => {
-	const token = getTokenFromRequest(req)
+export const checkToken: RequestHandler = async (req, res, next) => {
+	const token: string = getTokenFromRequest(req)
 
-	let payload
+	let payload: any
 
 	try {
 		payload = await verifyToken(token)

@@ -12,8 +12,12 @@ export const validateSignUp = () => {
 		body('password', 'Password must be at least 5 chars long').isLength({
 			min: 5,
 		}),
-		body('firstName', 'First name should not be empty').exists(),
-		body('lastName', 'Last name should not be empty').exists(),
+		body('firstName', 'First name must be string and at least 2 chars long')
+			.isString()
+			.isLength({min: 2}),
+		body('lastName', 'Last name must be string at least 2 chars long')
+			.isString()
+			.isLength({min: 2}),
 		returnValidationError,
 	]
 }
