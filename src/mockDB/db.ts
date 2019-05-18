@@ -60,3 +60,16 @@ export const saveUser = (user: UserModel) => {
 		return Promise.reject(new Error('Cannot save user to the database'))
 	}
 }
+
+export const findUserWithToken = (resetToken: string) => {
+	console.log(users)
+	const user = users.find(user => user.resetPasswordToken === resetToken)
+
+	if (user) {
+		return Promise.resolve(user)
+	}
+
+	return Promise.reject(
+		new Error('Cannot find user having provided reset token'),
+	)
+}
