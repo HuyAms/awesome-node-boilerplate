@@ -18,10 +18,14 @@ if (!fs.existsSync(logDir)) {
 
 const filename = path.join(logDir, 'results.log')
 
-const getLogger = (module: any): Logger => {
-	const path = _.isString(module)
-		? module
-		: (_.last(module.filename.split('\\')) as string)
+const getLogger = (module: NodeModule | string): Logger => {
+	let path: string
+
+	if (typeof module === 'string') {
+		path = module
+	} else {
+		path = _.last(module.filename.split('\\'))
+	}
 
 	return createLogger({
 		// change level if in dev environment versus production
