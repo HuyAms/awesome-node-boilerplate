@@ -35,7 +35,7 @@ export const signup: RequestHandler = (req, res, next) => {
  */
 export const signin: RequestHandler = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
-	passport.authenticate('local', (error, user, info) => {
+	passport.authenticate('local', (error, user) => {
 		if (error) {
 			return next(error)
 		}
