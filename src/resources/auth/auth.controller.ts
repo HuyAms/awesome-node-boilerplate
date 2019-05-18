@@ -2,7 +2,9 @@ import passport from 'passport'
 
 import {newToken} from '../../utils/auth'
 import {createUser} from '../../mockDB/db'
-import logger from '../../utils/logger'
+import createLogger from '../../utils/logger'
+
+const logger = createLogger(module)
 
 /**
  * Sign up new user
@@ -23,7 +25,7 @@ export const signup = (req, res, next) => {
  */
 export const signin = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
-	passport.authenticate('local', (error, user, info) => {
+	passport.authenticate('local', (error, user) => {
 		if (error) {
 			return next(error)
 		}

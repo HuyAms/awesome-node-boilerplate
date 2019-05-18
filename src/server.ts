@@ -6,7 +6,9 @@ import {seed} from './utils/seeder'
 
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
-import logger from './utils/logger'
+import createLogger from './utils/logger'
+
+const logger = createLogger(module)
 
 export const app = express()
 
