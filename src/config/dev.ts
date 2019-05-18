@@ -1,4 +1,5 @@
 const config = {
+	seed: true,
 	secrets: {
 		jwt: 'jwtdev',
 	},
