@@ -1,6 +1,23 @@
 import {findAllUser, findUserWithId} from '../../mockDB/db'
 
 /**
+ * Find user with req.params.id
+ * - If found then attach user to req
+ */
+export const params = (req, res, next, id) => {
+	findUserWithId(Number(id))
+		.then(user => (req.user = user))
+		.catch(next)
+}
+
+/**
+ * Get me
+ */
+export const getMe = (req, res, next) => {
+	res.status(200).json(req.user)
+}
+
+/**
  * Get users
  */
 export const getMany = (req, res, next) => {
@@ -13,9 +30,7 @@ export const getMany = (req, res, next) => {
  * Get user by id
  */
 export const getOne = (req, res, next) => {
-	findUserWithId(Number(req.params.id))
-		.then(user => res.status(200).json(user))
-		.catch(next)
+	res.status(200).json(req.user)
 }
 
 /**

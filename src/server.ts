@@ -2,6 +2,7 @@ import express from 'express'
 import middlewares from './middlewares/global'
 import dotenv from 'dotenv'
 import config from './config'
+import {seed} from './utils/seeder'
 
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
@@ -18,6 +19,19 @@ dotenv.config()
  * Global middlewares
  */
 app.use(middlewares)
+
+/**
+ * Passport
+ *
+ */
+import './services/passport'
+
+/**
+ * Seed data for dev
+ */
+if (config.seed) {
+	seed()
+}
 
 /**
  * Routers
