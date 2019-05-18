@@ -5,6 +5,11 @@ import apiError from '../../utils/apiError'
 /**
  * Find user with req.params.id
  * - If found then attach user to req
+ *
+ * @param req
+ * @param res
+ * @param next
+ * @param id
  */
 export const params: RequestParamHandler = (req, res, next, id) => {
 	findUserWithId(Number(id))
@@ -14,13 +19,20 @@ export const params: RequestParamHandler = (req, res, next, id) => {
 
 /**
  * Get me
+ *
+ * @param req
+ * @param res
  */
-export const getMe: RequestHandler = (req, res, next) => {
+export const getMe: RequestHandler = (req, res) => {
 	return res.json(req.user)
 }
 
 /**
  * Get users
+ *
+ * @param req
+ * @param res
+ * @param next
  */
 export const getMany: RequestHandler = (req, res, next) => {
 	findAllUser()
@@ -30,13 +42,19 @@ export const getMany: RequestHandler = (req, res, next) => {
 
 /**
  * Get user by id
+ *
+ * @param req
+ * @param res
  */
-export const getOne: RequestHandler = (req, res, next) => {
+export const getOne: RequestHandler = (req, res) => {
 	return res.json(req.user)
 }
 
 /**
  * Update user with id
+ *
+ * @param req
+ * @param res
  */
 export const updateOne: RequestHandler = (req, res) => {
 	return res.json(`UPDATE USER WITH ID ${req.params.id}`)
@@ -44,6 +62,9 @@ export const updateOne: RequestHandler = (req, res) => {
 
 /**
  * Delete user with id
+ *
+ * @param req
+ * @param res
  */
 export const deleteOne: RequestHandler = (req, res) => {
 	return res.json(`UPDATE USER WITH ID ${req.params.id}`)
