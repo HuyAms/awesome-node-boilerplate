@@ -2,8 +2,14 @@ import crypto from 'crypto'
 import passport from 'passport'
 
 import {newToken} from '../../utils/auth'
-import {createUser, findUserWithEmail, saveUser} from '../../mockDB/db'
+import {
+	createUser,
+	findUserWithEmail,
+	saveUser,
+	findUserWithToken,
+} from '../../mockDB/db'
 import logger from '../../utils/logger'
+import {sendEmail} from '../../utils/mail'
 
 /**
  * Sign up new user
@@ -61,17 +67,68 @@ export const forgetPassword = async (req, res, next) => {
 		user.resetPasswordToken = resetPasswordToken
 		user.resetPasswordExp = resetPasswordExp
 		// Save user to the database
-		try {
-			await saveUser(user)
-			// Create reset password url
-			const resetUrl = `${req.headers.host}/password/reset/${
-				user.resetPasswordToken
-			}`
-			// Send it to user
-			return res.status(201).send({link: resetUrl})
-		} catch (error) {
-			next(error)
+		await saveUser(user)
+		// Send an email to user, containing the reset password token
+		const resetUrl = `${req.headers.host}/auth/password/reset/${
+			user.resetPasswordToken
+		}`
+
+		const message = {
+			from: process.env.MAIL_SENDER,
+			to: user.email,
+			subject: 'Reset password',
+			text: `Please click this link to reset password ${resetUrl}`,
 		}
+
+		// Call back handler when email is successfully sent
+		const callback = () => {
+			res.status(201).send({message: 'Please check your email'})
+		}
+
+		// Error handler when email cannot be sent
+		const errorHandler = error => {
+			res.status(500).send(error)
+		}
+		sendEmail(message, callback, errorHandler)
+	} catch (error) {
+		next(error)
+	}
+}
+
+/**
+ * Reset password
+ * Verify reset password token from request param
+ * Save new user password and clear reset password token & expire
+ *
+ */
+export const resetPassword = async (req, res, next) => {
+	// Check if the token in req params match with an user in db
+	const {resetToken} = req.params
+	try {
+		const user = await findUserWithToken(resetToken)
+		logger.debug('User', user)
+		if (!user) {
+			return res
+				.status(404)
+				.send({message: 'Could not find an user with provided email'})
+		}
+		// Check if expire time is over
+		const resetPasswordExp = user.resetPasswordExp
+		if (Date.now() > resetPasswordExp) {
+			return res.status(405).send({message: 'Token is already expired'})
+		}
+
+		// Save new user passsword
+		// and remove reset token and expired time
+		const {password} = req.body
+		user.password = password
+		user.resetPasswordExp = null
+		user.resetPasswordToken = null
+		await saveUser(user)
+
+		return res
+			.status(200)
+			.send({message: 'Password has been successfully resetted'})
 	} catch (error) {
 		next(error)
 	}
