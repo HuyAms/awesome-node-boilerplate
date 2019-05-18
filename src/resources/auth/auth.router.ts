@@ -10,4 +10,6 @@ router.route('/signin').post(validateSignIn(), authController.signin)
 
 router.route('/password/forget').post(authController.forgetPassword)
 
+router.route('/password/reset/:resetToken').post(authController.resetPassword)
+
 export default router
