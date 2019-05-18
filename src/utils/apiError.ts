@@ -1,7 +1,7 @@
 import httpStatus from 'http-status'
 
 /**
- * Api Error
+ * ErrorCode
  */
 export enum ErrorCode {
 	passwordNotCorrect = 1,
