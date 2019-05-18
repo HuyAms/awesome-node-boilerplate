@@ -11,7 +11,7 @@ export enum Permission {
 	UserWrite = 'user:write',
 }
 
-type PermissionRole = {[key: string]: string[]}
+type PermissionRole = {[key in UserRole]: Permission[]}
 
 const permissionRole: PermissionRole = {
 	[UserRole.Admin]: [Permission.UserRead, Permission.UserWrite],
@@ -31,7 +31,7 @@ const checkPermission = (permissions?: [Permission]) => {
 			return res.status(401).send({message: 'Unauthorized'})
 		}
 
-		const userPermissions = permissionRole[user.role]
+		const userPermissions = permissionRole[user.role as UserRole]
 		const hasPermission =
 			_.difference(permissions, userPermissions).length === 0
 
