@@ -6,8 +6,6 @@
 		"noEmit": true,
 		"noUnusedLocals": true,
 		"strict": true,
-		"strictFunctionTypes": false,
-		"noImplicitAny": false,
 		"strictNullChecks": false,
 		"esModuleInterop": true
 	},

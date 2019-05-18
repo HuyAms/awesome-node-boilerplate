@@ -1,4 +1,5 @@
 import * as _ from 'lodash'
+import {Request, Response, NextFunction} from 'express'
 import {checkToken} from './auth'
 import {UserRole} from '../resources/user/user.model'
 
@@ -10,7 +11,9 @@ export enum Permission {
 	UserWrite = 'user:write',
 }
 
-const permissionRole = {
+type PermissionRole = {[key in UserRole]: Permission[]}
+
+const permissionRole: PermissionRole = {
 	[UserRole.Admin]: [Permission.UserRead, Permission.UserWrite],
 	[UserRole.User]: [Permission.UserRead],
 }
@@ -21,14 +24,14 @@ const permissionRole = {
  * @param permissions
  */
 const checkPermission = (permissions?: [Permission]) => {
-	return (req, res, next) => {
+	return (req: Request, res: Response, next: NextFunction) => {
 		const {user} = req
 
 		if (!user) {
 			return res.status(401).send({message: 'Unauthorized'})
 		}
 
-		const userPermissions = permissionRole[user.role]
+		const userPermissions = permissionRole[user.role as UserRole]
 		const hasPermission =
 			_.difference(permissions, userPermissions).length === 0
 
