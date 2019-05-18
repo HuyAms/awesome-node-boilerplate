@@ -10,6 +10,10 @@ const logger = createLogger(module)
 
 /**
  * Sign up new user
+ *
+ * @param req
+ * @param res
+ * @param next
  */
 export const signup: RequestHandler = (req, res, next) => {
 	logger.debug('Sign up with: %o', req.body)
@@ -24,18 +28,21 @@ export const signup: RequestHandler = (req, res, next) => {
 
 /**
  * Sign in user
+ *
+ * @param req
+ * @param res
+ * @param next
  */
 export const signin: RequestHandler = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
-	passport.authenticate('local', (error, user) => {
+	passport.authenticate('local', (error, user, info) => {
 		if (error) {
 			return next(error)
 		}
 
-		// Missing credentials
 		if (user) {
 			const token = newToken(user)
-			return res.status(200).send({token})
+			return res.json({token})
 		}
 	})(req, res, next)
 }

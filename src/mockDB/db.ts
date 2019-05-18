@@ -30,7 +30,7 @@ export const findUserWithEmail = (email: string) => {
 		return Promise.resolve(user)
 	}
 
-	return Promise.reject(new Error('Cannot find user with that email'))
+	return Promise.resolve(null)
 }
 
 export const findUserWithId = (id: number) => {
@@ -40,5 +40,5 @@ export const findUserWithId = (id: number) => {
 		return Promise.resolve(user)
 	}
 
-	return Promise.reject(new Error('Cannot find user with that id'))
+	return Promise.resolve(null)
 }
