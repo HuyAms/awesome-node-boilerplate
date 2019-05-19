@@ -12,6 +12,7 @@ router.route('/').get(readUser, userController.getMany)
 
 router.route('/me').get(readUser, userController.getMe)
 
+router.param('id', userController.params)
 router
 	.route('/:id')
 	.get(readUser, userController.getOne)

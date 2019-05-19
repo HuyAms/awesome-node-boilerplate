@@ -3,12 +3,17 @@ import {RequestHandler} from 'express'
 
 import {newToken} from '../../utils/auth'
 import {createUser} from '../../mockDB/db'
+import apiError from '../../utils/apiError'
 import createLogger from '../../utils/logger'
 
 const logger = createLogger(module)
 
 /**
  * Sign up new user
+ *
+ * @param req
+ * @param res
+ * @param next
  */
 export const signup: RequestHandler = (req, res, next) => {
 	logger.debug('Sign up with: %o', req.body)
@@ -16,13 +21,17 @@ export const signup: RequestHandler = (req, res, next) => {
 	createUser(req.body)
 		.then(user => {
 			const token = newToken(user)
-			return res.status(201).send({token})
+			return res.json({token})
 		})
-		.catch(next)
+		.catch(err => next(apiError.badRequest(err.message)))
 }
 
 /**
  * Sign in user
+ *
+ * @param req
+ * @param res
+ * @param next
  */
 export const signin: RequestHandler = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
@@ -31,10 +40,9 @@ export const signin: RequestHandler = (req, res, next) => {
 			return next(error)
 		}
 
-		// Missing credentials
 		if (user) {
 			const token = newToken(user)
-			return res.status(200).send({token})
+			return res.json({token})
 		}
 	})(req, res, next)
 }

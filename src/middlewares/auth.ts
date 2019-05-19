@@ -1,5 +1,6 @@
 import {findUserWithId} from '../mockDB/db'
 import {getTokenFromRequest, verifyToken} from '../utils/auth'
+import apiError from '../utils/apiError'
 import {RequestHandler} from 'express'
 
 /**
@@ -20,14 +21,14 @@ export const checkToken: RequestHandler = async (req, res, next) => {
 	try {
 		payload = await verifyToken(token)
 	} catch (e) {
-		return res.status(401).end()
+		return next(apiError.unauthorized('Invalid token'))
 	}
 
 	let user
 	try {
 		user = await findUserWithId(payload.id)
 	} catch (e) {
-		return res.status(401).end()
+		return next(apiError.unauthorized('Cannot find user with that token'))
 	}
 
 	req.user = user

@@ -2,6 +2,7 @@ import * as _ from 'lodash'
 import {Request, Response, NextFunction} from 'express'
 import {checkToken} from './auth'
 import {UserRole} from '../resources/user/user.model'
+import apiError from '../utils/apiError'
 
 /**
  * Declare user's permissions
@@ -28,7 +29,7 @@ const checkPermission = (permissions?: [Permission]) => {
 		const {user} = req
 
 		if (!user) {
-			return res.status(401).send({message: 'Unauthorized'})
+			return next(apiError.unauthorized())
 		}
 
 		const userPermissions = permissionRole[user.role as UserRole]
@@ -36,9 +37,9 @@ const checkPermission = (permissions?: [Permission]) => {
 			_.difference(permissions, userPermissions).length === 0
 
 		if (hasPermission) {
-			next()
+			return next()
 		} else {
-			return res.status(401).send({message: 'Unauthorized'})
+			return next(apiError.unauthorized())
 		}
 	}
 }

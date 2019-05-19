@@ -1,8 +1,8 @@
 import {body} from 'express-validator/check'
-import {returnValidationError} from '../../middlewares/error'
+import {returnValidationError} from '../../middlewares/errorValidator'
 
 /**
- * Validate sign up request
+ * Middleware to validate sign up request
  */
 export const validateSignUp = () => {
 	return [
@@ -23,7 +23,7 @@ export const validateSignUp = () => {
 }
 
 /**
- * Validate sign in request
+ * Middleware to validate sign in request
  */
 export const validateSignIn = () => {
 	return [
