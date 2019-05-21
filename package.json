@@ -41,6 +41,7 @@
 		"morgan": "1.9.1",
 		"passport": "0.4.0",
 		"passport-local": "1.0.0",
+		"uuid": "3.3.2",
 		"winston": "3.2.1"
 	},
 	"devDependencies": {
@@ -60,6 +61,7 @@
 		"@types/morgan": "1.7.35",
 		"@types/passport": "1.0.0",
 		"@types/passport-local": "1.0.33",
+		"@types/uuid": "3.4.4",
 		"@types/winston": "2.4.4",
 		"dotenv": "8.0.0",
 		"husky": "2.2.0",
