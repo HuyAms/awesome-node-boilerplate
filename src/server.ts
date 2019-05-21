@@ -1,6 +1,7 @@
 import express from 'express'
 import middlewares from './middlewares/global'
 import errorHandler from './middlewares/errorHandler'
+import swagger from './middlewares/swagger'
 import dotenv from 'dotenv'
 import config from './config'
 import {seed} from './utils/seeder'
@@ -42,6 +43,12 @@ if (config.seed) {
 app.use('/auth', authRouter)
 
 app.use('/api/users', userRouter)
+
+app.use('/api-docs', swagger)
+
+app.get('/', (req, res) => {
+	res.redirect('/api-docs')
+})
 
 /**
  * Error Handler
