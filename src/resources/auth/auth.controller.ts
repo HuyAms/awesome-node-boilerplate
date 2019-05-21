@@ -66,9 +66,9 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 	try {
 		let user = await findUserWithEmail(email)
 		if (!user) {
-			return res
-				.status(404)
-				.send({message: 'Could not find an user with provided email'})
+			const message = 'Could not find an user with provided email'
+			next(apiError.notFound(message))
+			return
 		}
 		// Create reset password token
 		const resetPasswordToken = crypto.randomBytes(20).toString('hex')
@@ -118,16 +118,15 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		const user = await findUserWithToken(resetToken)
 		logger.debug('User', user)
 		if (!user) {
-			return res
-				.status(404)
-				.send({message: 'Could not find an user with provided email'})
+			const message = 'Cannot find user with provided token'
+			next(apiError.notFound(message))
 		}
 		// Check if expire time is over
 		const resetPasswordExp = user.resetPasswordExp
 		if (Date.now() > resetPasswordExp) {
-			return res.status(405).send({message: 'Token is already expired'})
+			const message = 'Token is already expired'
+			next(apiError.notFound(message))
 		}
-
 		// Save new user passsword
 		// and remove reset token and expired time
 		const {password} = req.body
@@ -140,6 +139,6 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 			.status(200)
 			.send({message: 'Password has been successfully resetted'})
 	} catch (error) {
-		next(error)
+		next(apiError.notFound(error))
 	}
 }
