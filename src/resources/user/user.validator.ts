@@ -1,9 +1,9 @@
-import {UserRole} from './user.model'
 import {body} from 'express-validator/check'
-import {returnValidationError} from '../../middlewares/error'
+import {returnValidationError} from '../../middlewares/errorValidator'
+import {UserRole} from './user.model'
 
 /**
- * Validate update user request
+ * Middleware to validate update user request
  */
 export const validateUpdateUser = () => {
 	return [

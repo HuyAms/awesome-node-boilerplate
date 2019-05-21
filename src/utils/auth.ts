@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 import config from '../config'
 import UserModel from '../resources/user/user.model'
+import {Request} from 'express'
 
 /**
  * Generate new token with user id
@@ -20,7 +21,7 @@ export const newToken = (user: UserModel) => {
  *
  * @param token
  */
-export const verifyToken = token =>
+export const verifyToken = (token: string) =>
 	new Promise((resolve, reject) => {
 		jwt.verify(token, config.secrets.jwt, (err, payload) => {
 			if (err) {
@@ -37,7 +38,7 @@ export const verifyToken = token =>
  *
  * @param req
  */
-export const getTokenFromRequest = req => {
+export const getTokenFromRequest = (req: Request) => {
 	let formattedToken: string
 
 	// If found token in query then place it in the header

@@ -1,12 +1,15 @@
 import express from 'express'
 import middlewares from './middlewares/global'
+import errorHandler from './middlewares/errorHandler'
 import dotenv from 'dotenv'
 import config from './config'
 import {seed} from './utils/seeder'
 
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
-import logger from './utils/logger'
+import createLogger from './utils/logger'
+
+const logger = createLogger(module)
 
 export const app = express()
 
@@ -43,10 +46,8 @@ app.use('/api/users', userRouter)
 /**
  * Error Handler
  */
-app.use((err, req, res, next) => {
-	logger.info(err.message)
-	res.json({error: err.message})
-})
+
+app.use(errorHandler)
 
 /**
  * Start Express server

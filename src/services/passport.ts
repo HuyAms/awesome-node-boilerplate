@@ -7,6 +7,7 @@
 import passport from 'passport'
 import * as localStrategy from 'passport-local'
 import {findUserWithEmail} from '../mockDB/db'
+import apiError, {ErrorCode} from '../utils/apiError'
 
 const LocalStrategy = localStrategy.Strategy
 
@@ -24,15 +25,25 @@ passport.use(
 				// Check if provided email belongs to an user
 				const user = await findUserWithEmail(email)
 				if (!user) {
-					return done(null, null, {
-						message: 'There is no email associated with this user',
-					})
+					return done(
+						apiError.unauthorized(
+							'Email is incorrect',
+							ErrorCode.emailNotCorrect,
+						),
+						false,
+					)
 				}
 				// Check if provided password matches with user's password
 				if (user.password === password) {
 					return done(null, user)
 				} else {
-					return done(null, null, {message: 'Password is incorrect'})
+					return done(
+						apiError.unauthorized(
+							'Password is incorrect',
+							ErrorCode.passwordNotCorrect,
+						),
+						false,
+					)
 				}
 			} catch (error) {
 				done(error)

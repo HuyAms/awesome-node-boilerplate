@@ -1,5 +1,6 @@
 import crypto from 'crypto'
 import passport from 'passport'
+import {RequestHandler} from 'express'
 
 import {newToken} from '../../utils/auth'
 import {
@@ -8,37 +9,47 @@ import {
 	saveUser,
 	findUserWithToken,
 } from '../../mockDB/db'
-import logger from '../../utils/logger'
 import {sendEmail} from '../../utils/mail'
+import apiError from '../../utils/apiError'
+import createLogger from '../../utils/logger'
+
+const logger = createLogger(module)
 
 /**
  * Sign up new user
+ *
+ * @param req
+ * @param res
+ * @param next
  */
-export const signup = (req, res, next) => {
+export const signup: RequestHandler = (req, res, next) => {
 	logger.debug('Sign up with: %o', req.body)
 
 	createUser(req.body)
 		.then(user => {
 			const token = newToken(user)
-			return res.status(201).send({token})
+			return res.json({token})
 		})
-		.catch(next)
+		.catch(err => next(apiError.badRequest(err.message)))
 }
 
 /**
  * Sign in user
+ *
+ * @param req
+ * @param res
+ * @param next
  */
-export const signin = (req, res, next) => {
+export const signin: RequestHandler = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
-	passport.authenticate('local', (error, user, info) => {
+	passport.authenticate('local', (error, user) => {
 		if (error) {
 			return next(error)
 		}
 
-		// Missing credentials
 		if (user) {
 			const token = newToken(user)
-			return res.status(200).send({token})
+			return res.json({token})
 		}
 	})(req, res, next)
 }
@@ -49,7 +60,7 @@ export const signin = (req, res, next) => {
  * Send user a link that has the reset password token
  *
  */
-export const forgetPassword = async (req, res, next) => {
+export const forgetPassword: RequestHandler = async (req, res, next) => {
 	// Check if email that user submitted belongs to an user
 	const {email} = req.body
 	try {
@@ -80,16 +91,15 @@ export const forgetPassword = async (req, res, next) => {
 			text: `Please click this link to reset password ${resetUrl}`,
 		}
 
-		// Call back handler when email is successfully sent
-		const callback = () => {
+		const callback = (error: any) => {
+			if (error) {
+				next(apiError.internalServer(error))
+			}
+
 			res.status(201).send({message: 'Please check your email'})
 		}
 
-		// Error handler when email cannot be sent
-		const errorHandler = error => {
-			res.status(500).send(error)
-		}
-		sendEmail(message, callback, errorHandler)
+		sendEmail(message, callback)
 	} catch (error) {
 		next(error)
 	}
@@ -101,7 +111,7 @@ export const forgetPassword = async (req, res, next) => {
  * Save new user password and clear reset password token & expire
  *
  */
-export const resetPassword = async (req, res, next) => {
+export const resetPassword: RequestHandler = async (req, res, next) => {
 	// Check if the token in req params match with an user in db
 	const {resetToken} = req.params
 	try {

@@ -3,8 +3,10 @@
  *
  */
 import sgMail from '@sendgrid/mail'
-import logger from './logger'
+import createLogger from './logger'
 sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+
+const logger = createLogger(module)
 
 export interface Message {
 	from: string
@@ -14,12 +16,12 @@ export interface Message {
 	html?: string
 }
 
-export const sendEmail = (message: Message, callback, errorHandler) => {
+export const sendEmail = (message: Message, callback: any) => {
 	sgMail
 		.send(message)
-		.then(() => callback())
+		.then(() => callback(null))
 		.catch(error => {
 			logger.debug('Error sending email', error)
-			errorHandler(error)
+			callback(error)
 		})
 }
