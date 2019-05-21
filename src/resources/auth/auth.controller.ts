@@ -91,15 +91,8 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 			text: `Please click this link to reset password ${resetUrl}`,
 		}
 
-		const callback = (error: any) => {
-			if (error) {
-				next(apiError.internalServer(error))
-			}
-
-			res.status(201).send({message: 'Please check your email'})
-		}
-
-		sendEmail(message, callback)
+		await sendEmail(message)
+		return res.status(201).send({message: 'Please check your email'})
 	} catch (error) {
 		next(error)
 	}
