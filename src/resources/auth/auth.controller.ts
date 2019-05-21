@@ -1,5 +1,5 @@
-import crypto from 'crypto'
 import passport from 'passport'
+import uuidv4 from 'uuid/v4'
 import {RequestHandler} from 'express'
 
 import {newToken} from '../../utils/auth'
@@ -71,7 +71,7 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 			return
 		}
 		// Create reset password token
-		const resetPasswordToken = crypto.randomBytes(20).toString('hex')
+		const resetPasswordToken = uuidv4()
 		// Set expired time to be 1 hour
 		const resetPasswordExp = Date.now() + 3600000
 		// Save them to user object
