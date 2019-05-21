@@ -62,14 +62,11 @@ export const saveUser = (user: UserModel) => {
 }
 
 export const findUserWithToken = (resetToken: string) => {
-	console.log(users)
 	const user = users.find(user => user.resetPasswordToken === resetToken)
 
 	if (user) {
 		return Promise.resolve(user)
 	}
 
-	return Promise.reject(
-		new Error('Cannot find user having provided reset token'),
-	)
+	return Promise.resolve(null)
 }
