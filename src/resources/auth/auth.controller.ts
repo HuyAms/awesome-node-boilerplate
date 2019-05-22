@@ -6,11 +6,11 @@ import {newToken} from '../../utils/auth'
 import {
 	createUser,
 	findUserWithEmail,
-	saveUser,
 	findUserWithToken,
+	saveUser,
 } from '../../mockDB/db'
 import {sendEmail} from '../../utils/mail'
-import apiError from '../../utils/apiError'
+import apiError, {ErrorCode} from '../../utils/apiError'
 import createLogger from '../../utils/logger'
 import config from '../../config'
 
@@ -72,7 +72,12 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	try {
 		let user = await findUserWithEmail(email)
 		if (!user) {
-			next(apiError.notFound('Could not find an user with provided email'))
+			next(
+				apiError.notFound(
+					'Could not find an user with provided email',
+					ErrorCode.emailNotFound,
+				),
+			)
 			return
 		}
 		// Create reset password token
@@ -123,13 +128,23 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		logger.debug('Reset password of user: %o', user)
 
 		if (!user) {
-			next(apiError.notFound('Cannot find user with provided token'))
+			next(
+				apiError.notFound(
+					'Cannot find user with provided token',
+					ErrorCode.resetTokenInvalid,
+				),
+			)
 		}
 
 		// Check if expire time is over
 		const resetPasswordExp = user.resetPasswordExp
 		if (Date.now() > resetPasswordExp) {
-			next(apiError.badRequest('Token is already expired'))
+			next(
+				apiError.badRequest(
+					'Token is already expired',
+					ErrorCode.resetTokenInvalid,
+				),
+			)
 		}
 
 		// Check if user sends a password that is exact to be old one

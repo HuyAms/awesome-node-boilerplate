@@ -6,6 +6,8 @@ import httpStatus from 'http-status'
 export enum ErrorCode {
 	passwordNotCorrect = 1,
 	emailNotCorrect = 2,
+	emailNotFound = 3,
+	resetTokenInvalid = 4,
 }
 
 /**
