@@ -5,6 +5,7 @@ import {validateUpdateUser} from './user.validator'
 
 /**
  * @swagger
+ *
  * tags:
  * - name: User
  */
@@ -15,6 +16,7 @@ const readUser = protect([Permission.UserRead])
 
 /**
  * @swagger
+ *
  * /api/user:
  *   get:
  *    tags:
@@ -25,6 +27,7 @@ router.route('/').get(readUser, userController.getMany)
 
 /**
  * @swagger
+ *
  * /api/user/me:
  *   get:
  *    tags:
@@ -37,6 +40,7 @@ router.param('id', userController.params)
 
 /**
  * @swagger
+ *
  * /api/user/:id:
  *   get:
  *    tags:

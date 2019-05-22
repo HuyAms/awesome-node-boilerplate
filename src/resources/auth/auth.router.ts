@@ -9,6 +9,7 @@ import {
 
 /**
  * @swagger
+ *
  * tags:
  * - name: Authentication
  */
@@ -16,6 +17,7 @@ const router = Router()
 
 /**
  * @swagger
+ *
  * /auth/signup:
  *   post:
  *    tags:
@@ -26,6 +28,7 @@ router.route('/signup').post(validateSignUp(), authController.signup)
 
 /**
  * @swagger
+ *
  * /auth/signin:
  *   post:
  *    tags:
@@ -34,10 +37,28 @@ router.route('/signup').post(validateSignUp(), authController.signup)
  */
 router.route('/signin').post(validateSignIn(), authController.signin)
 
+/**
+ * @swagger
+ *
+ * /auth//password/forgot:
+ *   post:
+ *    tags:
+ *    - Authentication
+ *    summary: Send user reset password link
+ */
 router
-	.route('/password/forget')
-	.post(validateForgetPassword(), authController.forgetPassword)
+	.route('/password/forgot')
+	.post(validateForgetPassword(), authController.forgotPassword)
 
+/**
+ * @swagger
+ *
+ * /auth/password/reset/:resetToken:
+ *   post:
+ *    tags:
+ *    - Authentication
+ *    summary: Reset user password
+ */
 router
 	.route('/password/reset/:resetToken')
 	.post(validateResetPassword(), authController.resetPassword)

@@ -61,7 +61,7 @@ export const signin: RequestHandler = (req, res, next) => {
  * Send user a link that has the reset password token
  *
  */
-export const forgetPassword: RequestHandler = async (req, res, next) => {
+export const forgotPassword: RequestHandler = async (req, res, next) => {
 	// Check if email that user submitted belongs to an user
 	const {email} = req.body
 	try {
