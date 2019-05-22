@@ -29,6 +29,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@sendgrid/mail": "6.4.0",
 		"bcryptjs": "2.4.3",
 		"body-parser": "1.19.0",
 		"cors": "2.8.5",
@@ -42,6 +43,7 @@
 		"passport-local": "1.0.0",
 		"swagger-jsdoc": "3.2.9",
 		"swagger-ui-express": "4.0.4",
+		"uuid": "3.3.2",
 		"winston": "3.2.1"
 	},
 	"devDependencies": {
@@ -63,6 +65,7 @@
 		"@types/passport-local": "1.0.33",
 		"@types/swagger-jsdoc": "0.0.2",
 		"@types/swagger-ui-express": "3.0.0",
+		"@types/uuid": "3.4.4",
 		"@types/winston": "2.4.4",
 		"dotenv": "8.0.0",
 		"husky": "2.2.0",

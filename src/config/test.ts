@@ -4,6 +4,7 @@ const config = {
 	secrets: {
 		jwt: 'jwttest',
 	},
+	mailSender: 'test<noreply@test.com>',
 }
 
 export default config
