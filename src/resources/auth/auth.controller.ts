@@ -9,7 +9,7 @@ import {
 	findUserWithToken,
 	saveUser,
 } from '../../mockDB/db'
-import {sendEmail} from '../../utils/mail'
+import {Message, sendEmail} from '../../utils/mail'
 import apiError, {ErrorCode} from '../../utils/apiError'
 import createLogger from '../../utils/logger'
 import config from '../../config'
@@ -71,7 +71,8 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	logger.debug(`Forgot password email: ${email}`)
 
 	try {
-		let user = await findUserWithEmail(email)
+		const user = await findUserWithEmail(email)
+
 		if (!user) {
 			next(
 				apiError.notFound(
@@ -84,18 +85,19 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 
 		// Create reset password token
 		const resetPasswordToken = uuidv4()
-		const resetPasswordExp = Date.now() + 3600000 //1 hour
+		const resetPasswordExp = Date.now() + 3600000 // 1 hour
 		user.resetPasswordToken = resetPasswordToken
 		user.resetPasswordExp = resetPasswordExp
 
 		// Save user to the database
 		await saveUser(user)
+
 		// Send an email to user, containing the reset password token
 		const resetUrl = `${req.headers.host}/auth/password/reset/${
 			user.resetPasswordToken
 		}`
 
-		const message = {
+		const message: Message = {
 			from: config.mailSender,
 			to: user.email,
 			subject: 'Reset password',
@@ -125,6 +127,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 export const resetPassword: RequestHandler = async (req, res, next) => {
 	// Check if the token in req params match with an user in db
 	const {resetToken} = req.params
+
 	try {
 		const user = await findUserWithToken(resetToken)
 		logger.debug('Reset password of user: %o', user)
@@ -164,7 +167,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		await saveUser(user)
 
 		// Send an email to notify user that password has been resetted
-		const successMessage = {
+		const successMessage: Message = {
 			from: config.mailSender,
 			to: user.email,
 			subject: 'You password has been reset',

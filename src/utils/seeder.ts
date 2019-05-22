@@ -1,9 +1,9 @@
 import {createUser} from '../mockDB/db'
-import UserModel, {UserRole} from '../resources/user/user.model'
+import {UserRole, User} from '../resources/user/user.interface'
 import createLogger from '../utils/logger'
 const logger = createLogger(module)
 
-const mockUser1: UserModel = {
+const mockUser1: User = {
 	id: undefined,
 	firstName: 'fName1',
 	lastName: 'lName1',
@@ -12,7 +12,7 @@ const mockUser1: UserModel = {
 	role: UserRole.User,
 }
 
-const mockUser2: UserModel = {
+const mockUser2: User = {
 	id: undefined,
 	firstName: 'fName2',
 	lastName: 'lName2',

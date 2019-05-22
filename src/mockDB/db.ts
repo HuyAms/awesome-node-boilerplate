@@ -1,9 +1,9 @@
-import UserModel from '../resources/user/user.model'
+import {User} from '../resources/user/user.interface'
 
-const users: UserModel[] = []
+const users: User[] = []
 let id = 0
 
-export const createUser = (user: UserModel) => {
+export const createUser = (user: User) => {
 	const email = user.email
 
 	id += 1
@@ -43,7 +43,7 @@ export const findUserWithId = (id: number) => {
 	return Promise.resolve(null)
 }
 
-export const saveUser = (user: UserModel) => {
+export const saveUser = (user: User) => {
 	const {email} = user
 	let replacedIndex
 	const userExist = users.some((user, index) => {
