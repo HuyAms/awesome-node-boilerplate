@@ -13,6 +13,8 @@ import {Message, sendEmail} from '../../utils/mail'
 import apiError, {ErrorCode} from '../../utils/apiError'
 import createLogger from '../../utils/logger'
 import config from '../../config'
+import {UserSignUp} from './auth.interface'
+import {User} from '../user/user.interface'
 
 const logger = createLogger(module)
 
@@ -26,7 +28,9 @@ const logger = createLogger(module)
 export const signup: RequestHandler = (req, res, next) => {
 	logger.debug('Sign up with: %o', req.body)
 
-	createUser(req.body)
+	const user: UserSignUp = req.body
+
+	createUser(user)
 		.then(user => {
 			const token = newToken(user)
 			return res.json({token})
@@ -43,7 +47,7 @@ export const signup: RequestHandler = (req, res, next) => {
  */
 export const signin: RequestHandler = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
-	passport.authenticate('local', (error, user) => {
+	passport.authenticate('local', (error, user: User) => {
 		if (error) {
 			return next(error)
 		}
