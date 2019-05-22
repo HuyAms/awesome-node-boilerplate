@@ -20,7 +20,7 @@ export const app = express()
  * Dotenv
  */
 
-if (dotEnvResult.error) {
+if (!config.isProd && dotEnvResult.error) {
 	logger.error('Please create .env file at root folder')
 }
 
