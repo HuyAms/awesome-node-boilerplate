@@ -12,7 +12,7 @@ import apiError from '../utils/apiError'
 export const returnValidationError: RequestHandler = (req, res, next) => {
 	const errors = validationResult(req)
 
-	const errorFormatter: ErrorFormatter<String> = ({msg}) => {
+	const errorFormatter: ErrorFormatter<string> = ({msg}) => {
 		return msg
 	}
 

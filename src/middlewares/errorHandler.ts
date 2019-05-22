@@ -43,9 +43,9 @@ const sendError: ErrorRequestHandler = (err, req, res, next) => {
 	}
 
 	res.status(status).json({
-		status: status,
-		errorCode: errorCode,
-		message: message,
+		status,
+		errorCode,
+		message,
 	})
 }
 
