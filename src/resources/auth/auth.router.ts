@@ -19,6 +19,6 @@ router
 
 router
 	.route('/password/reset/:resetToken')
-	.get(validateResetPassword(), authController.resetPassword)
+	.post(validateResetPassword(), authController.resetPassword)
 
 export default router

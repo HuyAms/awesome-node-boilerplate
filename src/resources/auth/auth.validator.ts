@@ -61,6 +61,21 @@ export const validateResetPassword = () => {
 		param('resetToken', 'Invalid token')
 			.isString()
 			.isLength({min: 10}),
+		body('password', 'Password must be at least 5 chars long').isLength({
+			min: 5,
+		}),
+		body(
+			'passwordConfirmation',
+			'Password confirmation should exist and has at least 5 chars long',
+		).isLength({
+			min: 5,
+		}),
+		body(
+			'passwordConfirmation',
+			'Password confirmation must match with new provided password',
+		).custom((value, {req}) => {
+			return value === req.body.password
+		}),
 		returnValidationError,
 	]
 }
