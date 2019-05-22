@@ -13,6 +13,4 @@ export interface Message {
 	html?: string
 }
 
-export const sendEmail = (message: Message) => {
-	sgMail.send(message)
-}
+export const sendEmail = (message: Message) => sgMail.send(message)

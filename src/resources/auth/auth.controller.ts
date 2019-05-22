@@ -66,8 +66,7 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 	try {
 		let user = await findUserWithEmail(email)
 		if (!user) {
-			const message = 'Could not find an user with provided email'
-			next(apiError.notFound(message))
+			next(apiError.notFound('Could not find an user with provided email'))
 			return
 		}
 		// Create reset password token
@@ -111,22 +110,37 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		const user = await findUserWithToken(resetToken)
 		logger.debug('User', user)
 		if (!user) {
-			const message = 'Cannot find user with provided token'
-			next(apiError.notFound(message))
+			next(apiError.notFound('Cannot find user with provided token'))
 		}
 		// Check if expire time is over
 		const resetPasswordExp = user.resetPasswordExp
 		if (Date.now() > resetPasswordExp) {
-			const message = 'Token is already expired'
-			next(apiError.notFound(message))
+			next(apiError.notFound('Token is already expired'))
+		}
+		// Check if user sends a password that is exact to be old one
+		const {password} = req.body
+		const oldPassword = user.password
+		if (password === oldPassword) {
+			next(apiError.badRequest('New password should not match with old one'))
 		}
 		// Save new user passsword
 		// and remove reset token and expired time
-		const {password} = req.body
 		user.password = password
 		user.resetPasswordExp = null
 		user.resetPasswordToken = null
 		await saveUser(user)
+
+		// Send an email to notify user that password has been resetted
+		const successMessage = {
+			from: process.env.MAIL_SENDER,
+			to: user.email,
+			subject: 'You password has been resetted',
+			text: `This is a confirmation message for account ${
+				user.email
+			}. Your password has just been changed`,
+		}
+
+		await sendEmail(successMessage)
 
 		return res
 			.status(200)
