@@ -9,6 +9,16 @@ export interface User {
 	resetPasswordExp?: number
 }
 
+/**
+ * @swagger
+ *
+ * definitions:
+ *   UserRole:
+ *     type: string
+ *     enum:
+ *       - admin
+ *       - user
+ */
 export enum UserRole {
 	Admin = 'admin',
 	User = 'user',

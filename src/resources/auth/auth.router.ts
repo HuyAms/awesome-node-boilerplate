@@ -20,9 +20,9 @@ const router = Router()
  *
  * /auth/signup:
  *   post:
- *    tags:
- *    - Authentication
- *    summary: Sign up user
+ *     tags:
+ *     - Authentication
+ *     summary: Sign up user
  */
 router.route('/signup').post(validateSignUp(), authController.signup)
 
@@ -31,9 +31,9 @@ router.route('/signup').post(validateSignUp(), authController.signup)
  *
  * /auth/signin:
  *   post:
- *    tags:
- *    - Authentication
- *    summary: Sign in user
+ *     tags:
+ *     - Authentication
+ *     summary: Sign in user
  */
 router.route('/signin').post(validateSignIn(), authController.signin)
 
@@ -42,9 +42,9 @@ router.route('/signin').post(validateSignIn(), authController.signin)
  *
  * /auth/password/forgot:
  *   post:
- *    tags:
- *    - Authentication
- *    summary: Send user reset password link
+ *     tags:
+ *     - Authentication
+ *     summary: Send user reset password link
  */
 router
 	.route('/password/forgot')
@@ -55,9 +55,9 @@ router
  *
  * /auth/password/reset/:resetToken:
  *   post:
- *    tags:
- *    - Authentication
- *    summary: Reset user password
+ *     tags:
+ *     - Authentication
+ *     summary: Reset user password
  */
 router
 	.route('/password/reset/:resetToken')
