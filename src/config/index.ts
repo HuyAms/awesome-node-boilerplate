@@ -16,6 +16,9 @@ const baseConfig = {
 		jwt: process.env.JWT_SECRET,
 		jwtExp: process.env.JWT_EXP || '100d',
 	},
+	apiKeys: {
+		sendGrid: process.env.SENDGRID_API_KEY,
+	},
 }
 
 let envConfig

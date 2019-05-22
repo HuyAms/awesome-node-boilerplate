@@ -3,7 +3,9 @@
  *
  */
 import sgMail from '@sendgrid/mail'
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+import config from '../config'
+
+sgMail.setApiKey(config.apiKeys.sendGrid)
 
 export interface Message {
 	from: string

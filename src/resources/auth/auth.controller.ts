@@ -12,6 +12,7 @@ import {
 import {sendEmail} from '../../utils/mail'
 import apiError from '../../utils/apiError'
 import createLogger from '../../utils/logger'
+import config from '../../config'
 
 const logger = createLogger(module)
 
@@ -84,7 +85,7 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 		}`
 
 		const message = {
-			from: process.env.MAIL_SENDER,
+			from: config.mailSender,
 			to: user.email,
 			subject: 'Reset password',
 			text: `Please click this link to reset password ${resetUrl}`,
@@ -132,7 +133,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 
 		// Send an email to notify user that password has been resetted
 		const successMessage = {
-			from: process.env.MAIL_SENDER,
+			from: config.mailSender,
 			to: user.email,
 			subject: 'You password has been resetted',
 			text: `This is a confirmation message for account ${
