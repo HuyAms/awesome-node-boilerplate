@@ -1,6 +1,7 @@
 import passport from 'passport'
 import uuidv4 from 'uuid/v4'
 import {RequestHandler} from 'express'
+import bcrypt from 'bcryptjs'
 
 import {newToken} from '../../utils/auth'
 import {
@@ -121,7 +122,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		// Check if user sends a password that is exact to be old one
 		const {password} = req.body
 		const oldPassword = user.password
-		if (password === oldPassword) {
+		if (bcrypt.compareSync(password, oldPassword)) {
 			next(apiError.badRequest('New password should not match with old one'))
 		}
 		// Save new user passsword
