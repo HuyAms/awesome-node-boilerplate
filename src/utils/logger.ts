@@ -24,7 +24,8 @@ const getLogger = (module: NodeModule | string): Logger => {
 	if (typeof module === 'string') {
 		path = module
 	} else {
-		path = _.last(module.filename.split('\\'))
+		const regex = /\/|\\/i
+		path = _.last(module.filename.split(regex))
 	}
 
 	return createLogger({
