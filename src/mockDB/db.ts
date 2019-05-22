@@ -53,3 +53,31 @@ export const findUserWithId = (id: number) => {
 
 	return Promise.resolve(null)
 }
+
+export const saveUser = (user: UserModel) => {
+	const {email} = user
+	let replacedIndex
+	const userExist = users.some((user, index) => {
+		if (user.email === email) {
+			replacedIndex = index
+			return true
+		}
+	})
+
+	if (userExist) {
+		users.splice(replacedIndex, 1, user)
+		return Promise.resolve(user)
+	} else {
+		return Promise.reject(new Error('Cannot save user to the database'))
+	}
+}
+
+export const findUserWithToken = (resetToken: string) => {
+	const user = users.find(user => user.resetPasswordToken === resetToken)
+
+	if (user) {
+		return Promise.resolve(user)
+	}
+
+	return Promise.resolve(null)
+}

@@ -3,6 +3,7 @@ const config = {
 	secrets: {
 		jwt: 'jwtdev',
 	},
+	mailSender: 'dev<noreply@dev.com>',
 }
 
 export default config
