@@ -5,6 +5,8 @@ export default interface UserModel {
 	email: string
 	password: string
 	role: UserRole
+	resetPasswordToken?: string
+	resetPasswordExp?: number
 }
 
 export enum UserRole {
