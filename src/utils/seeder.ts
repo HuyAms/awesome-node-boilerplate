@@ -1,5 +1,7 @@
 import {createUser} from '../mockDB/db'
 import UserModel, {UserRole} from '../resources/user/user.model'
+import createLogger from '../utils/logger'
+const logger = createLogger(module)
 
 const mockUser1: UserModel = {
 	id: undefined,
@@ -20,6 +22,7 @@ const mockUser2: UserModel = {
 }
 
 export const seed = () => {
+	logger.debug(`Database seeded`)
 	createUser(mockUser1)
 	createUser(mockUser2)
 }

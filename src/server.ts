@@ -59,12 +59,12 @@ app.use(errorHandler)
 /**
  * Start Express server
  */
-const {port} = config
+const {port, env} = config
 
 export const start = () => {
 	try {
 		app.listen(port, () => {
-			logger.info(`REST API on port ${port}`)
+			logger.info(`App is running on port ${port} in ${env} mode`)
 		})
 	} catch (e) {
 		logger.error(e.message)
