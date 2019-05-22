@@ -51,7 +51,7 @@ getLogger(module).info(`Logging initialized at ${config.loggerLevel} level`)
 
 export const morganStream: StreamOptions = {
 	write(message) {
-		getLogger('morgan').info(message)
+		getLogger('morgan').debug(message)
 	},
 }
 

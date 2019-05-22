@@ -7,7 +7,7 @@ const mockUser1: UserModel = {
 	id: undefined,
 	firstName: 'fName1',
 	lastName: 'lName1',
-	email: 'user@gmail.com',
+	email: 'dinhhuyams@gmail.com',
 	password: '123456',
 	role: UserRole.User,
 }

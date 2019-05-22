@@ -1,8 +1,10 @@
+import dotenv from 'dotenv'
+const dotEnvResult = dotenv.config()
+
 import express from 'express'
 import middlewares from './middlewares/global'
 import errorHandler from './middlewares/errorHandler'
 import swagger from './middlewares/swagger'
-import dotenv from 'dotenv'
 import config from './config'
 import {seed} from './utils/seeder'
 
@@ -17,7 +19,10 @@ export const app = express()
 /**
  * Dotenv
  */
-dotenv.config()
+
+if (dotEnvResult.error) {
+	logger.error('Please create .env file at root folder')
+}
 
 /**
  * Global middlewares

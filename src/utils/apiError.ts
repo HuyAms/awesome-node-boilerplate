@@ -80,7 +80,7 @@ export const unsupportedMediaType = (
  * @param errorCode
  */
 export const internalServer = (
-	message = 'Unexpected database createError',
+	message = 'Unexpected server error',
 	errorCode?: ErrorCode,
 ) => {
 	return new ApiError(message, httpStatus.INTERNAL_SERVER_ERROR, errorCode)

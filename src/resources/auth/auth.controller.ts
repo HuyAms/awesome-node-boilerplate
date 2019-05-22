@@ -66,8 +66,9 @@ export const signin: RequestHandler = (req, res, next) => {
  */
 export const forgotPassword: RequestHandler = async (req, res, next) => {
 	// Check if email that user submitted belongs to an user
+
 	const {email} = req.body
-	logger.debug('Forgot password: ', email)
+	logger.debug(`Forgot password email: ${email}`)
 
 	try {
 		let user = await findUserWithEmail(email)
@@ -80,6 +81,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 			)
 			return
 		}
+
 		// Create reset password token
 		const resetPasswordToken = uuidv4()
 		const resetPasswordExp = Date.now() + 3600000 //1 hour

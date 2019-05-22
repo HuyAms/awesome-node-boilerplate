@@ -40,7 +40,7 @@ router.route('/signin').post(validateSignIn(), authController.signin)
 /**
  * @swagger
  *
- * /auth//password/forgot:
+ * /auth/password/forgot:
  *   post:
  *    tags:
  *    - Authentication
