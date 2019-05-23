@@ -1,10 +1,21 @@
-import {User} from '../resources/user/user.model'
+import {UserModel} from '../resources/user/user.model'
+import bcrypt from 'bcryptjs'
 
-const users: User[] = []
+const users: UserModel[] = []
 let id = 0
 
-export const createUser = (user: User) => {
+const hashPassword = (plainTextPword: string) => {
+	if (!plainTextPword) {
+		return ''
+	}
+
+	const salt = bcrypt.genSaltSync(10)
+	return bcrypt.hashSync(plainTextPword, salt)
+}
+
+export const createUser = (user: UserModel) => {
 	const email = user.email
+	user.password = hashPassword(user.password)
 
 	id += 1
 	user.id = id
@@ -43,7 +54,7 @@ export const findUserWithId = (id: number) => {
 	return Promise.resolve(null)
 }
 
-export const saveUser = (user: User) => {
+export const saveUser = (user: UserModel) => {
 	const {email} = user
 	let replacedIndex
 	const userExist = users.some((user, index) => {

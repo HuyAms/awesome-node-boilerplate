@@ -1,6 +1,7 @@
 import passport from 'passport'
 import uuidv4 from 'uuid/v4'
 import {RequestHandler} from 'express'
+import bcrypt from 'bcryptjs'
 
 import {newToken} from '../../services/auth'
 import {
@@ -13,7 +14,7 @@ import {Message, sendEmail} from '../../services/mail'
 import apiError, {ErrorCode} from '../../utils/apiError'
 import createLogger from '../../utils/logger'
 import config from '../../config'
-import {User} from '../user/user.model'
+import {UserModel} from '../user/user.model'
 
 const logger = createLogger(module)
 
@@ -46,7 +47,7 @@ export const signup: RequestHandler = (req, res, next) => {
  */
 export const signin: RequestHandler = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
-	passport.authenticate('local', (error, user: User) => {
+	passport.authenticate('local', (error, user: UserModel) => {
 		if (error) {
 			return next(error)
 		}
@@ -158,7 +159,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		// Check if user sends a password that is exact to be old one
 		const {password} = req.body
 		const oldPassword = user.password
-		if (password === oldPassword) {
+		if (bcrypt.compareSync(password, oldPassword)) {
 			next(apiError.badRequest('New password should not match with old one'))
 		}
 

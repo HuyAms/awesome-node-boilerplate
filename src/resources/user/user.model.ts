@@ -1,4 +1,4 @@
-export interface User {
+export interface UserModel {
 	id: number
 	firstName: string
 	lastName: string
@@ -9,16 +9,6 @@ export interface User {
 	resetPasswordExp?: number
 }
 
-/**
- * @swagger
- *
- * definitions:
- *   UserRole:
- *     type: string
- *     enum:
- *       - admin
- *       - user
- */
 export enum UserRole {
 	Admin = 'admin',
 	User = 'user',
