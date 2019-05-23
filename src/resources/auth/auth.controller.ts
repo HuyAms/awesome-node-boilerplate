@@ -13,7 +13,6 @@ import {Message, sendEmail} from '../../utils/mail'
 import apiError, {ErrorCode} from '../../utils/apiError'
 import createLogger from '../../utils/logger'
 import config from '../../config'
-import {UserSignUp} from './auth.interface'
 import {User} from '../user/user.interface'
 
 const logger = createLogger(module)
@@ -28,7 +27,7 @@ const logger = createLogger(module)
 export const signup: RequestHandler = (req, res, next) => {
 	logger.debug('Sign up with: %o', req.body)
 
-	const user: UserSignUp = req.body
+	const user = req.body
 
 	createUser(user)
 		.then(user => {

@@ -73,6 +73,13 @@ router
  *     tags:
  *       - Authentication
  *     summary: Reset user password
+ *     parameters:
+ *       - in: path
+ *         name: resetToken
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: User's reset password token
  *     responses:
  *       200:
  *         description: Successfully send reset password link to user's email

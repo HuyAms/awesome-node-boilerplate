@@ -29,6 +29,7 @@ const options = {
 		'./src/resources/**/*.ts',
 		'./src/utils/apiError.ts',
 		'./src/middlewares/errorHandler.ts',
+		'./src/*.yaml',
 	],
 }
 
