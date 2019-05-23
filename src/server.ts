@@ -3,7 +3,7 @@ const dotEnvResult = dotenv.config()
 
 import express from 'express'
 import middlewares from './middlewares/global'
-import errorHandler from './middlewares/errorHandler'
+import {errorHandler} from './middlewares/errorHandler'
 import swagger from './middlewares/swagger'
 import config from './config'
 import {seed} from './utils/seeder'

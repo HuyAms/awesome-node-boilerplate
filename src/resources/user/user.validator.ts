@@ -1,5 +1,5 @@
 import {body} from 'express-validator/check'
-import {returnValidationError} from '../../middlewares/errorValidator'
+import {returnValidationError} from '../../middlewares/errorHandler'
 import {UserRole} from './user.model'
 
 /**
