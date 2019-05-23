@@ -65,6 +65,7 @@ export const saveUser = (user: UserModel) => {
 	})
 
 	if (userExist) {
+		user.password = hashPassword(user.password)
 		users.splice(replacedIndex, 1, user)
 		return Promise.resolve(user)
 	} else {
