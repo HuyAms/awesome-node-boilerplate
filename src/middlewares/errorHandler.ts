@@ -5,28 +5,10 @@ import createLogger from '../utils/logger'
 
 const logger = createLogger(module)
 
-/**
- * @swagger
- *
- * definitions:
- *   ErrorResponse:
- *     type: object
- *     properties:
- *       status:
- *         type: integer
- *       errorCode:
- *         $ref: '#/definitions/ErrorCode'
- *       message:
- *         type: string
- *     required:
- *       - status
- *       - errorCode
- *       - message
- */
 interface ErrorResponse {
 	status: number
 	errorCode: number
-	message: number
+	message: string
 }
 
 /**

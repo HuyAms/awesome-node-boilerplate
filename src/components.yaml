@@ -71,9 +71,60 @@ components:
         - email
         - password
 
+    #-------------------------------
+    # Error
+    #-------------------------------
+
+    Error:  # Can be referenced as '#/components/schemas/Error'
+      type: object
+      properties:
+        status:
+          type: integer
+        errorCode:
+          type: integer
+        message:
+          type: string
+      required:
+        - status
+        - errorCode
+        - message
+
   #-------------------------------
   # Reusable responses
   #-------------------------------
+
   responses:
-    404NotFound: # Can be referenced as '#/components/responses/404NotFound'
-      description: The specified resource was not found
+    BadRequest: # Can be referenced as '#/components/responses/BadRequest'
+      description: Bad request (400)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    Unauthorized: # Can be referenced as '#/components/responses/Unauthorized'
+      description: Unauthorized (401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    NotFound: # Can be referenced as '#/components/responses/NotFound'
+      description: Not found (404)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    UnsupportedMediaType: # Can be referenced as '#/components/responses/UnsupportedMediaType'
+      description: Unsupported Media Type (415)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    InternalServer: # Can be referenced as '#/components/responses/InternalServer'
+      description: InternalServer (500)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

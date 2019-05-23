@@ -30,6 +30,13 @@ const router = Router()
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/UserSignUp'
+ *     responses:
+ *       '200':
+ *         description: Sign in successfully
+ *       '400':
+ *         $ref: "#/components/responses/BadRequest"
+ *       '500':
+ *         $ref: "#/components/responses/InternalServer"
  */
 router.route('/signup').post(validateSignUp(), authController.signup)
 
@@ -48,6 +55,15 @@ router.route('/signup').post(validateSignUp(), authController.signup)
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/UserSignIn'
+ *     responses:
+ *       '200':
+ *         description: Sign in successfully
+ *       '400':
+ *         $ref: "#/components/responses/BadRequest"
+ *       '401':
+ *         $ref: "#/components/responses/Unauthorized"
+ *       '500':
+ *         $ref: "#/components/responses/InternalServer"
  */
 router.route('/signin').post(validateSignIn(), authController.signin)
 
@@ -73,20 +89,12 @@ router.route('/signin').post(validateSignIn(), authController.signin)
  *             required:
  *               - email
  *     responses:
- *       200:
+ *       '200':
  *         description: Successfully send reset password link to user's email
- *       400:
- *         description: Not found user email
- *         schema:
- *           $ref: "#/definitions/ErrorResponse"
- *         example:
- *           status: 200
- *           errorCode: 1
- *           errorMessage: 123
- *       500:
- *         description: Unexpected server error
- *         schema:
- *           $ref: "#/definitions/ErrorResponse"
+ *       '400':
+ *         $ref: "#/components/responses/BadRequest"
+ *       '500':
+ *         $ref: "#/components/responses/InternalServer"
  */
 router
 	.route('/password/forgot')
@@ -126,12 +134,12 @@ router
  *             required:
  *               - email
  *     responses:
- *       200:
+ *       '200':
  *         description: Successfully send reset password link to user's email
- *       400:
- *         description: Not found user email
- *       500:
- *         description: Unexpected server error
+ *       '400':
+ *         $ref: "#/components/responses/BadRequest"
+ *       '500':
+ *         $ref: "#/components/responses/InternalServer"
  */
 router
 	.route('/password/reset/:resetToken')
