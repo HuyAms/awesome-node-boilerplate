@@ -81,13 +81,26 @@ components:
         status:
           type: integer
         errorCode:
-          type: integer
+          $ref: '#/components/schemas/ErrorCode'
         message:
           type: string
       required:
         - status
         - errorCode
         - message
+
+    ErrorCode:  # Can be referenced as '#/components/schemas/ErrorCode'
+      type: integer
+      description: |
+        * 1 - passwordNotCorrect
+        * 2 - emailNotCorrect
+        * 3 - emailNotFound
+        * 4 - resetTokenInvalid
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
 
   #-------------------------------
   # Reusable responses

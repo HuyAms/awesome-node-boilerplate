@@ -114,6 +114,7 @@ router
  *         required: true
  *         schema:
  *           type: string
+ *           format: uuid
  *           description: User's reset password token
  *     requestBody:
  *       description: New password to update

@@ -1,22 +1,5 @@
 import httpStatus from 'http-status'
 
-/**
- * @swagger
- *
- * definitions:
- *   ErrorCode:
- *     type: integer
- *     enum:
- *       - 1
- *       - 2
- *       - 3
- *       - 4
- *     description: |
- *      * 1 - passwordNotCorrect
- *      * 2 - emailNotCorrect
- *      * 3 - emailNotFound
- *      * 4 - resetTokenInvalid
- */
 export enum ErrorCode {
 	passwordNotCorrect = 1,
 	emailNotCorrect = 2,
