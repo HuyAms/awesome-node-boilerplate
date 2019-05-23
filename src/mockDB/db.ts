@@ -1,10 +1,21 @@
 import UserModel from '../resources/user/user.model'
+import bcrypt from 'bcryptjs'
 
 const users: UserModel[] = []
 let id = 0
 
+const hashPassword = (plainTextPword: string) => {
+	if (!plainTextPword) {
+		return ''
+	}
+
+	const salt = bcrypt.genSaltSync(10)
+	return bcrypt.hashSync(plainTextPword, salt)
+}
+
 export const createUser = (user: UserModel) => {
 	const email = user.email
+	user.password = hashPassword(user.password)
 
 	id += 1
 	user.id = id
@@ -54,6 +65,7 @@ export const saveUser = (user: UserModel) => {
 	})
 
 	if (userExist) {
+		user.password = hashPassword(user.password)
 		users.splice(replacedIndex, 1, user)
 		return Promise.resolve(user)
 	} else {

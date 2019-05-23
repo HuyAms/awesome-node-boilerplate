@@ -6,6 +6,7 @@
 
 import passport from 'passport'
 import * as localStrategy from 'passport-local'
+import bcrypt from 'bcryptjs'
 import {findUserWithEmail} from '../mockDB/db'
 import apiError, {ErrorCode} from '../utils/apiError'
 
@@ -34,7 +35,7 @@ passport.use(
 					)
 				}
 				// Check if provided password matches with user's password
-				if (user.password === password) {
+				if (bcrypt.compareSync(password, user.password)) {
 					return done(null, user)
 				} else {
 					return done(
