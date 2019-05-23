@@ -32,11 +32,7 @@ const router = Router()
  *             $ref: '#/components/schemas/UserSignUp'
  *     responses:
  *       '200':
- *         description: Sign in successfully
- *       '400':
- *         $ref: "#/components/responses/BadRequest"
- *       '500':
- *         $ref: "#/components/responses/InternalServer"
+ *         $ref: '#/components/responses/TokenResponse'
  */
 router.route('/signup').post(validateSignUp(), authController.signup)
 
@@ -57,13 +53,7 @@ router.route('/signup').post(validateSignUp(), authController.signup)
  *             $ref: '#/components/schemas/UserSignIn'
  *     responses:
  *       '200':
- *         description: Sign in successfully
- *       '400':
- *         $ref: "#/components/responses/BadRequest"
- *       '401':
- *         $ref: "#/components/responses/Unauthorized"
- *       '500':
- *         $ref: "#/components/responses/InternalServer"
+ *         $ref: '#/components/responses/TokenResponse'
  */
 router.route('/signin').post(validateSignIn(), authController.signin)
 
@@ -90,11 +80,7 @@ router.route('/signin').post(validateSignIn(), authController.signin)
  *               - email
  *     responses:
  *       '200':
- *         description: Successfully send reset password link to user's email
- *       '400':
- *         $ref: "#/components/responses/BadRequest"
- *       '500':
- *         $ref: "#/components/responses/InternalServer"
+ *         $ref: '#/components/responses/MessageResponse'
  */
 router
 	.route('/password/forgot')
@@ -136,11 +122,7 @@ router
  *               - email
  *     responses:
  *       '200':
- *         description: Successfully send reset password link to user's email
- *       '400':
- *         $ref: "#/components/responses/BadRequest"
- *       '500':
- *         $ref: "#/components/responses/InternalServer"
+ *         $ref: '#/components/responses/MessageResponse'
  */
 router
 	.route('/password/reset/:resetToken')

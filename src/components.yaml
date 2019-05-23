@@ -72,6 +72,24 @@ components:
         - password
 
     #-------------------------------
+    # General Response
+    #-------------------------------
+
+    Response: # Can be referenced as '#/components/schemas/Response'
+      type: object
+      properties:
+        status:
+          type: integer
+          enum:
+            - 200
+            - 201
+        data:
+          type: object
+          description: Success response data
+      required:
+        - data
+
+    #-------------------------------
     # Error
     #-------------------------------
 
@@ -107,37 +125,47 @@ components:
   #-------------------------------
 
   responses:
-    BadRequest: # Can be referenced as '#/components/responses/BadRequest'
-      description: Bad request (400)
+    ErrorResponse: # Can be referenced as '#/components/responses/ErrorResponse'
+      description: Error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
 
-    Unauthorized: # Can be referenced as '#/components/responses/Unauthorized'
-      description: Unauthorized (401)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    #-------------------------------
+    # General
+    #-------------------------------
 
-    NotFound: # Can be referenced as '#/components/responses/NotFound'
-      description: Not found (404)
+    MessageResponse:  # Can be referenced as '#/components/schemas/MessageResponse'
+      description: A JSON object containing success message response
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            allOf:
+            - $ref: '#/components/schemas/Response'
+            - properties:
+                data:
+                  properties:
+                    message:
+                      type: string
+              required:
+              - data
 
-    UnsupportedMediaType: # Can be referenced as '#/components/responses/UnsupportedMediaType'
-      description: Unsupported Media Type (415)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    #-------------------------------
+    # Authentication
+    #-------------------------------
 
-    InternalServer: # Can be referenced as '#/components/responses/InternalServer'
-      description: InternalServer (500)
+    TokenResponse:  # Can be referenced as '#/components/schemas/TokenResponse'
+      description: A JSON object containing token
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            allOf:
+              - $ref: '#/components/schemas/Response'
+              - properties:
+                  data:
+                    properties:
+                      token:
+                        type: string
+                required:
+                  - data
