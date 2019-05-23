@@ -1,6 +1,7 @@
 import {RequestHandler, RequestParamHandler} from 'express'
 import {findAllUser, findUserWithId} from '../../mockDB/db'
 import apiError from '../../utils/apiError'
+import apiResponse from '../../utils/apiResponse'
 
 /**
  * Find user with req.params.id
@@ -24,7 +25,7 @@ export const params: RequestParamHandler = (req, res, next, id) => {
  * @param res
  */
 export const getMe: RequestHandler = (req, res) => {
-	return res.json(req.user)
+	return res.json(apiResponse.successResponse(req.user))
 }
 
 /**
@@ -36,7 +37,7 @@ export const getMe: RequestHandler = (req, res) => {
  */
 export const getMany: RequestHandler = (req, res, next) => {
 	findAllUser()
-		.then(users => res.json(users))
+		.then(users => res.json(apiResponse.successResponse(users)))
 		.catch(error => next(apiError.badRequest(error)))
 }
 
@@ -47,7 +48,7 @@ export const getMany: RequestHandler = (req, res, next) => {
  * @param res
  */
 export const getOne: RequestHandler = (req, res) => {
-	return res.json(req.user)
+	return res.json(apiResponse.successResponse(req.user))
 }
 
 /**
@@ -57,7 +58,8 @@ export const getOne: RequestHandler = (req, res) => {
  * @param res
  */
 export const updateOne: RequestHandler = (req, res) => {
-	return res.json(`UPDATE USER WITH ID ${req.params.id}`)
+	const successMessage = `UPDATE USER WITH ID ${req.params.id}`
+	return res.json(apiResponse.successResponse({message: successMessage}, true))
 }
 
 /**
@@ -67,5 +69,6 @@ export const updateOne: RequestHandler = (req, res) => {
  * @param res
  */
 export const deleteOne: RequestHandler = (req, res) => {
-	return res.json(`UPDATE USER WITH ID ${req.params.id}`)
+	const successMessage = `UPDATE USER WITH ID ${req.params.id}`
+	return res.json(apiResponse.successResponse({message: successMessage}))
 }
