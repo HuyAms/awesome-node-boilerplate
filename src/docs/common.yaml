@@ -1,0 +1,104 @@
+components:
+  #-------------------------------
+  # Reusable schemas (data models)
+  #-------------------------------
+  schemas:
+
+    #-------------------------------
+    # Success response
+    #-------------------------------
+
+    Response: # Can be referenced as '#/components/schemas/Response'
+      type: object
+      properties:
+        status:
+          type: integer
+          enum:
+            - 200
+            - 201
+        data:
+          type: object
+          description: Success response data
+      required:
+        - data
+
+    #-------------------------------
+    # Error response
+    #-------------------------------
+
+    Error:  # Can be referenced as '#/components/schemas/Error'
+      type: object
+      properties:
+        status:
+          type: integer
+        errorCode:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+      required:
+        - status
+        - errorCode
+        - message
+
+    ErrorCode:  # Can be referenced as '#/components/schemas/ErrorCode'
+      type: integer
+      description: |
+        * 1 - passwordNotCorrect
+        * 2 - emailNotCorrect
+        * 3 - emailNotFound
+        * 4 - resetTokenInvalid
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+
+  #-------------------------------
+  # Reusable parameters
+  #-------------------------------
+
+  parameters:
+
+    id: # Can be referenced as '#/components/parameters/id'
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        description: Model id
+
+  #-------------------------------
+  # Reusable responses
+  #-------------------------------
+
+  responses:
+
+    #-------------------------------
+    # Error response
+    #-------------------------------
+
+    ErrorResponse: # Can be referenced as '#/components/responses/ErrorResponse'
+      description: Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+    #-------------------------------
+    # Message response
+    #-------------------------------
+
+    MessageResponse:  # Can be referenced as '#/components/responses/MessageResponse'
+      description: A JSON object containing success message response
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Response'
+            - properties:
+                data:
+                  properties:
+                    message:
+                      type: string
+              required:
+              - data
