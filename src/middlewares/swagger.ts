@@ -16,13 +16,10 @@ const swaggerDefinition = {
 	},
 	servers: [
 		{
-			url: `http://localhost:${config.port}/`,
+			url: `http://localhost:${config.port}`,
 			description: 'development server',
 		},
 	],
-	produces: ['application/json'],
-	consumes: ['application/json'],
-	host: process.env.HOST || 'localhost:3000',
 	basePath: '/',
 }
 

@@ -17,7 +17,7 @@ const readUser = protect([Permission.UserRead])
 /**
  * @swagger
  *
- * /api/user:
+ * /api/users:
  *   get:
  *     tags:
  *       - User
@@ -33,7 +33,7 @@ router.route('/').get(readUser, userController.getMany)
 /**
  * @swagger
  *
- * /api/user/me:
+ * /api/users/me:
  *   get:
  *     tags:
  *       - User
@@ -49,7 +49,7 @@ router.route('/me').get(readUser, userController.getMe)
 /**
  * @swagger
  *
- * /api/user/{:id}:
+ * /api/users/{:id}:
  *   parameters:
  *     - $ref: '#/components/parameters/id'
  */
@@ -61,7 +61,7 @@ router
 	/**
 	 * @swagger
 	 *
-	 * /api/user/{:id}:
+	 * /api/users/{:id}:
 	 *   get:
 	 *     tags:
 	 *       - User
@@ -77,7 +77,7 @@ router
 	/**
 	 * @swagger
 	 *
-	 * /api/user/{:id}:
+	 * /api/users/{:id}:
 	 *   put:
 	 *     tags:
 	 *       - User
@@ -95,7 +95,7 @@ router
 	/**
 	 * @swagger
 	 *
-	 * /api/user/{:id}:
+	 * /api/users/{:id}:
 	 *   delete:
 	 *     tags:
 	 *       - User

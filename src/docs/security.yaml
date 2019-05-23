@@ -1,0 +1,20 @@
+#----------------------------------
+# Define security
+#----------------------------------
+components:
+
+  securitySchemes:
+
+    #-------------------------------
+    # jwt
+
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+#----------------------------------
+# Apply security to all operations
+#----------------------------------
+security:
+  - jwt: []
