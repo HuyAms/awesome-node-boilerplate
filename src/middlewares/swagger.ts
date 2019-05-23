@@ -3,6 +3,10 @@ import swaggerUi from 'swagger-ui-express'
 import packageJson from '../../package.json'
 import config from '../config'
 
+/**
+ * Config swagger jsdoc
+ *
+ */
 const swaggerDefinition = {
 	openapi: '3.0.0',
 	info: {

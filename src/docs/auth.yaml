@@ -4,9 +4,111 @@ components:
   #-------------------------------
   schemas:
 
+    #-------------------------------
+    # Token
+    #-------------------------------
 
     Token:  # Can be referenced as '#/components/schemas/Token'
-      type: string
+      description: Access token
+      type: object
+      properties:
+        token:
+          type: string
+
+  #-------------------------------
+  # Reusable bodies
+  #-------------------------------
+
+  requestBodies:
+
+    #-------------------------------
+    # AuthSignUp
+    #-------------------------------
+
+    AuthSignUp: # Can be referenced as '#/components/requestBodies/AuthSignUp'
+      description: User to sign up
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                minLength: 2
+              lastName:
+                type: string
+                minLength: 2
+              email:
+                type: string
+                format: email
+              role:
+                $ref: '#/components/schemas/UserRole'
+
+    #-------------------------------
+    # AuthSignIn
+    #-------------------------------
+
+    AuthSignIn: # Can be referenced as '#/components/requestBodies/AuthSignIn'
+      description: User to sign in
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+                format: password
+                minLength: 5
+            required:
+              - email
+              - password
+
+    #-------------------------------
+    # ForgotPassword
+    #-------------------------------
+
+    ForgotPassword: # Can be referenced as '#/components/requestBodies/ForgotPassword'
+      description: Email to receive reset password link
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                format: email
+            required:
+              - email
+
+    #-------------------------------
+    # ResetPassword
+    #-------------------------------
+
+    ResetPassword: # Can be referenced as '#/components/requestBodies/ResetPassword'
+      description: New password to update
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              password:
+                type: string
+                format: password
+                minLength: 5
+              passwordConfirmation:
+                type: string
+                format: password
+                minLength: 5
+            required:
+              - password
+              - passwordConfirmation
 
   #-------------------------------
   # Reusable parameters
@@ -26,6 +128,8 @@ components:
   # Reusable responses
   #-------------------------------
 
+  responses:
+
     #-------------------------------
     # Authentication response
     #-------------------------------
@@ -39,7 +143,6 @@ components:
             - $ref: '#/components/schemas/Response'
             - properties:
                 data:
-                  properties:
-                    $ref: '#/components/schemas/Token'
+                  $ref: '#/components/schemas/Token'
               required:
               - data

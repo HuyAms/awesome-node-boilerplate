@@ -5,6 +5,48 @@ components:
   schemas:
 
     #-------------------------------
+    # Error response
+    #-------------------------------
+
+    Error:  # Can be referenced as '#/components/schemas/Error'
+      type: object
+      properties:
+        status:
+          type: integer
+        errorCode:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          type: string
+      required:
+      - status
+      - errorCode
+      - message
+
+    ErrorCode:  # Can be referenced as '#/components/schemas/ErrorCode'
+      type: integer
+      description: |
+        * 1 - passwordNotCorrect
+        * 2 - emailNotCorrect
+        * 3 - emailNotFound
+        * 4 - resetTokenInvalid
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+
+    #-------------------------------
+    # Message response
+    #-------------------------------
+
+    Message:  # Can be referenced as '#/components/schemas/Message'
+      description: Success response string message
+      type: object
+      properties:
+        message:
+          type: string
+
+    #-------------------------------
     # Success response
     #-------------------------------
 
@@ -21,37 +63,6 @@ components:
           description: Success response data
       required:
         - data
-
-    #-------------------------------
-    # Error response
-    #-------------------------------
-
-    Error:  # Can be referenced as '#/components/schemas/Error'
-      type: object
-      properties:
-        status:
-          type: integer
-        errorCode:
-          $ref: '#/components/schemas/ErrorCode'
-        message:
-          type: string
-      required:
-        - status
-        - errorCode
-        - message
-
-    ErrorCode:  # Can be referenced as '#/components/schemas/ErrorCode'
-      type: integer
-      description: |
-        * 1 - passwordNotCorrect
-        * 2 - emailNotCorrect
-        * 3 - emailNotFound
-        * 4 - resetTokenInvalid
-      enum:
-        - 1
-        - 2
-        - 3
-        - 4
 
   #-------------------------------
   # Reusable parameters
@@ -97,8 +108,6 @@ components:
             - $ref: '#/components/schemas/Response'
             - properties:
                 data:
-                  properties:
-                    message:
-                      type: string
+                  $ref: '#/components/schemas/Message'
               required:
               - data

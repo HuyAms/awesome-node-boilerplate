@@ -68,12 +68,7 @@ router
 	 *       - User
 	 *     summary: Update one user
 	 *     requestBody:
-	 *       description: User to update
-	 *       required: true
-	 *       content:
-	 *         application/json:
-	 *           schema:
-	 *             $ref: '#/components/schemas/UserUpdate'
+	 *       $ref: '#/components/requestBodies/UserUpdate'
 	 */
 	.put(writeUser, validateUpdateUser(), userController.updateOne)
 
