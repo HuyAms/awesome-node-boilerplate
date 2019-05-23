@@ -68,7 +68,7 @@ router
 /**
  * @swagger
  *
- * /auth/password/reset/:resetToken:
+ * /auth/password/reset/{:resetToken}:
  *   post:
  *     tags:
  *       - Authentication

@@ -41,7 +41,7 @@ router.param('id', userController.params)
 /**
  * @swagger
  *
- * /api/user/:id:
+ * /api/user/{:id}:
  *   get:
  *     tags:
  *       - User
