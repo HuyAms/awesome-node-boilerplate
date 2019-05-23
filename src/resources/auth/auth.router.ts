@@ -23,6 +23,13 @@ const router = Router()
  *     tags:
  *       - Authentication
  *     summary: Sign up user
+ *     requestBody:
+ *       description: User to sign up
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserSignUp'
  */
 router.route('/signup').post(validateSignUp(), authController.signup)
 
@@ -34,6 +41,13 @@ router.route('/signup').post(validateSignUp(), authController.signup)
  *     tags:
  *       - Authentication
  *     summary: Sign in user
+ *     requestBody:
+ *       description: User to sign in
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserSignIn'
  */
 router.route('/signin').post(validateSignIn(), authController.signin)
 
@@ -45,6 +59,19 @@ router.route('/signin').post(validateSignIn(), authController.signin)
  *     tags:
  *       - Authentication
  *     summary: Send user reset password link
+ *     requestBody:
+ *       description: Email to receive reset password link
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *             required:
+ *               - email
  *     responses:
  *       200:
  *         description: Successfully send reset password link to user's email
@@ -80,6 +107,24 @@ router
  *         schema:
  *           type: string
  *           description: User's reset password token
+ *     requestBody:
+ *       description: New password to update
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 5
+ *               passwordConfirmation:
+ *                 type: string
+ *                 format: password
+ *                 minLength: 5
+ *             required:
+ *               - email
  *     responses:
  *       200:
  *         description: Successfully send reset password link to user's email

@@ -3,6 +3,11 @@ components:
   # Reusable schemas (data models)
   #-------------------------------
   schemas:
+
+    #-------------------------------
+    # User
+    #-------------------------------
+
     UserRole: # Can be referenced as '#/components/schemas/UserRole'
       type: string
       enum:
@@ -24,10 +29,47 @@ components:
         password:
           type: string
           format: password
+          minLength: 5
         role:
           $ref: '#/components/schemas/UserRole'
-        required:
-          - firstName
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+
+    UserSignIn:  # Can be referenced as '#/components/schemas/UserSignIn'
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: passwor
+      required:
+        - email
+        - password
+
+    UserUpdate:  # Can be referenced as '#/components/schemas/UserUpdate'
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 2
+        lastName:
+          type: string
+          minLength: 2
+        email:
+          type: string
+          format: email
+        role:
+          $ref: '#/components/schemas/UserRole'
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
 
   #-------------------------------
   # Reusable responses
