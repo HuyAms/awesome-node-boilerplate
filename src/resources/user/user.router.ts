@@ -36,6 +36,18 @@ router.route('/').get(readUser, userController.getMany)
  */
 router.route('/me').get(readUser, userController.getMe)
 
+/**
+ * @swagger
+ *
+ * /api/user/{:id}:
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       schema:
+ *         type: string
+ *         description: User's id
+ */
 router.param('id', userController.params)
 
 router
@@ -49,13 +61,6 @@ router
 	 *     tags:
 	 *       - User
 	 *     summary: Get one user
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *           description: User's id
 	 */
 	.get(readUser, userController.getOne)
 
@@ -67,13 +72,6 @@ router
 	 *     tags:
 	 *       - User
 	 *     summary: Update one user
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *           description: User's id
 	 */
 	.put(writeUser, validateUpdateUser(), userController.updateOne)
 
@@ -85,13 +83,6 @@ router
 	 *     tags:
 	 *       - User
 	 *     summary: Delete one user
-	 *     parameters:
-	 *       - in: path
-	 *         name: id
-	 *         required: true
-	 *         schema:
-	 *           type: string
-	 *           description: User's id
 	 */
 	.delete(writeUser, userController.deleteOne)
 
