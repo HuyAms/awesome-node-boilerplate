@@ -41,12 +41,7 @@ router.route('/me').get(readUser, userController.getMe)
  *
  * /api/user/{:id}:
  *   parameters:
- *     - in: path
- *       name: id
- *       required: true
- *       schema:
- *         type: string
- *         description: User's id
+ *     - $ref: '#/components/parameters/id'
  */
 router.param('id', userController.params)
 

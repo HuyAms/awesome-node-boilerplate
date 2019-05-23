@@ -31,8 +31,10 @@ const router = Router()
  *           schema:
  *             $ref: '#/components/schemas/UserSignUp'
  *     responses:
- *       '200':
+ *       '201':
  *         $ref: '#/components/responses/TokenResponse'
+ *       default:
+ *         $ref: '#/components/responses/ErrorResponse'
  */
 router.route('/signup').post(validateSignUp(), authController.signup)
 
@@ -54,6 +56,8 @@ router.route('/signup').post(validateSignUp(), authController.signup)
  *     responses:
  *       '200':
  *         $ref: '#/components/responses/TokenResponse'
+ *       default:
+ *         $ref: '#/components/responses/ErrorResponse'
  */
 router.route('/signin').post(validateSignIn(), authController.signin)
 
@@ -81,6 +85,8 @@ router.route('/signin').post(validateSignIn(), authController.signin)
  *     responses:
  *       '200':
  *         $ref: '#/components/responses/MessageResponse'
+ *       default:
+ *         $ref: '#/components/responses/ErrorResponse'
  */
 router
 	.route('/password/forgot')
@@ -95,13 +101,7 @@ router
  *       - Authentication
  *     summary: Reset user password
  *     parameters:
- *       - in: path
- *         name: resetToken
- *         required: true
- *         schema:
- *           type: string
- *           format: uuid
- *           description: User's reset password token
+ *      - $ref: '#/components/parameters/resetToken'
  *     requestBody:
  *       description: New password to update
  *       required: true
@@ -123,6 +123,8 @@ router
  *     responses:
  *       '200':
  *         $ref: '#/components/responses/MessageResponse'
+ *       default:
+ *         $ref: '#/components/responses/ErrorResponse'
  */
 router
 	.route('/password/reset/:resetToken')

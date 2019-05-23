@@ -71,8 +71,31 @@ components:
         - email
         - password
 
+    UserResponse:  # Can be referenced as '#/components/schemas/UserResponse'
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+          minLength: 2
+        lastName:
+          type: string
+          minLength: 2
+        email:
+          type: string
+          format: email
+        role:
+          $ref: '#/components/schemas/UserRole'
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - password
+
     #-------------------------------
-    # General Response
+    # Success response
     #-------------------------------
 
     Response: # Can be referenced as '#/components/schemas/Response'
@@ -90,7 +113,7 @@ components:
         - data
 
     #-------------------------------
-    # Error
+    # Error response
     #-------------------------------
 
     Error:  # Can be referenced as '#/components/schemas/Error'
@@ -121,10 +144,33 @@ components:
         - 4
 
   #-------------------------------
+  # Reusable parameters
+  #-------------------------------
+
+  parameters:
+
+    id: # Can be referenced as '#/components/parameters/id'
+      in: path
+      name: id
+      required: true
+      schema:
+        type: string
+        description: Model id
+
+    resetToken: # Can be referenced as '#/components/parameters/resetToken'
+      in: path
+      name: resetToken
+      required: true
+      schema:
+        type: string
+        description: Password reset token
+
+  #-------------------------------
   # Reusable responses
   #-------------------------------
 
   responses:
+
     ErrorResponse: # Can be referenced as '#/components/responses/ErrorResponse'
       description: Error
       content:
@@ -133,10 +179,10 @@ components:
             $ref: '#/components/schemas/Error'
 
     #-------------------------------
-    # General
+    # General response
     #-------------------------------
 
-    MessageResponse:  # Can be referenced as '#/components/schemas/MessageResponse'
+    MessageResponse:  # Can be referenced as '#/components/responses/MessageResponse'
       description: A JSON object containing success message response
       content:
         application/json:
@@ -152,10 +198,10 @@ components:
               - data
 
     #-------------------------------
-    # Authentication
+    # Authentication response
     #-------------------------------
 
-    TokenResponse:  # Can be referenced as '#/components/schemas/TokenResponse'
+    TokenResponse:  # Can be referenced as '#/components/responses/TokenResponse'
       description: A JSON object containing token
       content:
         application/json:
@@ -169,3 +215,20 @@ components:
                         type: string
                 required:
                   - data
+
+    #-------------------------------
+    # User response
+    #-------------------------------
+
+    UserResponse:  # Can be referenced as '#/components/responses/UserResponse'
+      description: A JSON object containing user
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Response'
+            - properties:
+                data:
+                  $ref: '#/components/schemas/UserResponse'
+              required:
+              - data
