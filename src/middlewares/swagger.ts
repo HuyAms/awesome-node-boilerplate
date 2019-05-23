@@ -1,26 +1,28 @@
 import swaggerJSDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import packageJson from '../../package.json'
-import config from '../config'
 
 /**
  * Config swagger jsdoc
  *
  */
 const swaggerDefinition = {
-	openapi: '3.0.0',
+	openapi: '3.0.1',
 	info: {
 		title: packageJson.name,
 		version: packageJson.version,
 		description: packageJson.description,
 	},
-	servers: [
-		{
-			url: `http://localhost:${config.port}`,
-			description: 'development server',
+	components: {
+		securitySchemes: {
+			jwt: {
+				type: 'http',
+				scheme: 'bearer',
+				bearerFormat: 'JWT',
+			},
 		},
-	],
-	basePath: '/',
+	},
+	security: [{jwt: [] as string[]}],
 }
 
 const options = {
