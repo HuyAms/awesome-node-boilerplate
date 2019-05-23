@@ -3,7 +3,7 @@
  *
  */
 import sgMail from '@sendgrid/mail'
-import config from '../config'
+import config from '../config/index'
 
 sgMail.setApiKey(config.apiKeys.sendGrid)
 

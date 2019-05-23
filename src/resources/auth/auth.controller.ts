@@ -2,14 +2,14 @@ import passport from 'passport'
 import uuidv4 from 'uuid/v4'
 import {RequestHandler} from 'express'
 
-import {newToken} from '../../utils/auth'
+import {newToken} from '../../services/auth'
 import {
 	createUser,
 	findUserWithEmail,
 	findUserWithToken,
 	saveUser,
 } from '../../mockDB/db'
-import {Message, sendEmail} from '../../utils/mail'
+import {Message, sendEmail} from '../../services/mail'
 import apiError, {ErrorCode} from '../../utils/apiError'
 import createLogger from '../../utils/logger'
 import config from '../../config'
