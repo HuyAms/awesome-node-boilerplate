@@ -6,7 +6,6 @@ components:
 
     #-------------------------------
     # Error Code
-    #-------------------------------
 
     ErrorCode:  # Can be referenced as '#/components/schemas/ErrorCode'
       type: integer
@@ -23,7 +22,6 @@ components:
 
     #-------------------------------
     # Error response
-    #-------------------------------
 
     Error:  # Can be referenced as '#/components/schemas/Error'
       type: object
@@ -41,7 +39,6 @@ components:
 
     #-------------------------------
     # Message response
-    #-------------------------------
 
     ResponseMessage:  # Can be referenced as '#/components/schemas/ResponseMessage'
       description: Success response string message
@@ -52,7 +49,6 @@ components:
 
     #-------------------------------
     # Success response
-    #-------------------------------
 
     Response: # Can be referenced as '#/components/schemas/Response'
       type: object
@@ -90,7 +86,6 @@ components:
 
     #-------------------------------
     # Error response
-    #-------------------------------
 
     ErrorResponse: # Can be referenced as '#/components/responses/ErrorResponse'
       description: Error
@@ -101,7 +96,6 @@ components:
 
     #-------------------------------
     # Message response
-    #-------------------------------
 
     MessageResponse:  # Can be referenced as '#/components/responses/MessageResponse'
       description: A JSON object containing success message response

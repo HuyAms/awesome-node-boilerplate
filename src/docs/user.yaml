@@ -6,7 +6,6 @@ components:
 
     #-------------------------------
     # UserRole
-    #-------------------------------
 
     UserRole: # Can be referenced as '#/components/schemas/UserRole'
       type: string
@@ -16,7 +15,6 @@ components:
 
     #-------------------------------
     # User
-    #-------------------------------
 
     User:  # Can be referenced as '#/components/schemas/User'
       type: object
@@ -53,7 +51,6 @@ components:
 
     #-------------------------------
     # UserUpdate
-    #-------------------------------
 
     UserUpdate: # Can be referenced as '#/components/requestBodies/UserUpdate'
       description: User to update
@@ -87,7 +84,6 @@ components:
 
     #-------------------------------
     # UserResponse
-    #-------------------------------
 
     UserResponse:  # Can be referenced as '#/components/responses/UserResponse'
       description: A JSON object containing user
@@ -124,7 +120,6 @@ components:
 
     #-------------------------------
     # UsersResponse
-    #-------------------------------
 
     UsersResponse:  # Can be referenced as '#/components/responses/UsersResponse'
       description: A JSON object containing a list of user
