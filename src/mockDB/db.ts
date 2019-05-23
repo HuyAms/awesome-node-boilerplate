@@ -1,4 +1,4 @@
-import {User} from '../resources/user/user.interface'
+import {User} from '../resources/user/user.model'
 
 const users: User[] = []
 let id = 0

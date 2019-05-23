@@ -1,11 +1,11 @@
 components:
-  #-------------------------------
-  # Reusable schemas (data models)
-  #-------------------------------
+#-------------------------------
+# Reusable schemas (data models)
+#-------------------------------
   schemas:
 
     #-------------------------------
-    # User
+    # UserRole
     #-------------------------------
 
     UserRole: # Can be referenced as '#/components/schemas/UserRole'
@@ -13,6 +13,10 @@ components:
       enum:
       - admin
       - user
+
+    #-------------------------------
+    # User
+    #-------------------------------
 
     User:  # Can be referenced as '#/components/schemas/User'
       type: object
@@ -41,9 +45,9 @@ components:
         - email
         - password
 
-  #-------------------------------
-  # Reusable bodies
-  #-------------------------------
+#-------------------------------
+# Reusable bodies
+#-------------------------------
 
   requestBodies:
 
@@ -75,9 +79,9 @@ components:
               role:
                 $ref: '#/components/schemas/UserRole'
 
-  #-------------------------------
-  # Reusable responses
-  #-------------------------------
+#-------------------------------
+# Reusable responses
+#-------------------------------
 
   responses:
 

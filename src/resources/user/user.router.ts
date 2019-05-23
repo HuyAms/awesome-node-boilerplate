@@ -22,6 +22,11 @@ const readUser = protect([Permission.UserRead])
  *     tags:
  *       - User
  *     summary: Get all users
+ *     responses:
+ *       '200':
+ *         $ref: '#/components/responses/TokenResponse'
+ *       default:
+ *         $ref: '#/components/responses/ErrorResponse'
  */
 router.route('/').get(readUser, userController.getMany)
 
@@ -33,6 +38,11 @@ router.route('/').get(readUser, userController.getMany)
  *     tags:
  *       - User
  *     summary: Get my profile
+ *     responses:
+ *       '200':
+ *         $ref: '#/components/responses/UserResponse'
+ *       default:
+ *         $ref: '#/components/responses/ErrorResponse'
  */
 router.route('/me').get(readUser, userController.getMe)
 
@@ -56,6 +66,11 @@ router
 	 *     tags:
 	 *       - User
 	 *     summary: Get one user
+	 *     responses:
+	 *       '200':
+	 *         $ref: '#/components/responses/UserResponse'
+	 *       default:
+	 *         $ref: '#/components/responses/ErrorResponse'
 	 */
 	.get(readUser, userController.getOne)
 
@@ -69,6 +84,11 @@ router
 	 *     summary: Update one user
 	 *     requestBody:
 	 *       $ref: '#/components/requestBodies/UserUpdate'
+	 *     responses:
+	 *       '201':
+	 *         $ref: '#/components/responses/UserResponse'
+	 *       default:
+	 *         $ref: '#/components/responses/ErrorResponse'
 	 */
 	.put(writeUser, validateUpdateUser(), userController.updateOne)
 
@@ -80,6 +100,11 @@ router
 	 *     tags:
 	 *       - User
 	 *     summary: Delete one user
+	 *     responses:
+	 *       '200':
+	 *         $ref: '#/components/responses/UserResponse'
+	 *       default:
+	 *         $ref: '#/components/responses/ErrorResponse'
 	 */
 	.delete(writeUser, userController.deleteOne)
 

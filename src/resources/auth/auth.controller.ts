@@ -13,7 +13,7 @@ import {Message, sendEmail} from '../../utils/mail'
 import apiError, {ErrorCode} from '../../utils/apiError'
 import createLogger from '../../utils/logger'
 import config from '../../config'
-import {User} from '../user/user.interface'
+import {User} from '../user/user.model'
 
 const logger = createLogger(module)
 

@@ -1,5 +1,5 @@
 import {createUser} from '../mockDB/db'
-import {UserRole, User} from '../resources/user/user.interface'
+import {UserRole, User} from '../resources/user/user.model'
 import createLogger from '../utils/logger'
 const logger = createLogger(module)
 

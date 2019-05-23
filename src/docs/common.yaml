@@ -1,8 +1,25 @@
 components:
-  #-------------------------------
-  # Reusable schemas (data models)
-  #-------------------------------
+#-------------------------------
+# Reusable schemas (data models)
+#-------------------------------
   schemas:
+
+    #-------------------------------
+    # Error Code
+    #-------------------------------
+
+    ErrorCode:  # Can be referenced as '#/components/schemas/ErrorCode'
+      type: integer
+      description: |
+        * 1 - passwordNotCorrect
+        * 2 - emailNotCorrect
+        * 3 - emailNotFound
+        * 4 - resetTokenInvalid
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
 
     #-------------------------------
     # Error response
@@ -22,24 +39,11 @@ components:
       - errorCode
       - message
 
-    ErrorCode:  # Can be referenced as '#/components/schemas/ErrorCode'
-      type: integer
-      description: |
-        * 1 - passwordNotCorrect
-        * 2 - emailNotCorrect
-        * 3 - emailNotFound
-        * 4 - resetTokenInvalid
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-
     #-------------------------------
     # Message response
     #-------------------------------
 
-    Message:  # Can be referenced as '#/components/schemas/Message'
+    ResponseMessage:  # Can be referenced as '#/components/schemas/ResponseMessage'
       description: Success response string message
       type: object
       properties:
@@ -64,9 +68,9 @@ components:
       required:
         - data
 
-  #-------------------------------
-  # Reusable parameters
-  #-------------------------------
+#-------------------------------
+# Reusable parameters
+#-------------------------------
 
   parameters:
 
@@ -78,9 +82,9 @@ components:
         type: string
         description: Model id
 
-  #-------------------------------
-  # Reusable responses
-  #-------------------------------
+#-------------------------------
+# Reusable responses
+#-------------------------------
 
   responses:
 
@@ -108,6 +112,6 @@ components:
             - $ref: '#/components/schemas/Response'
             - properties:
                 data:
-                  $ref: '#/components/schemas/Message'
+                  $ref: '#/components/schemas/ResponseMessage'
               required:
               - data

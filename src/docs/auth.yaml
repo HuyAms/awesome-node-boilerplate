@@ -1,7 +1,7 @@
 components:
-  #-------------------------------
-  # Reusable schemas (data models)
-  #-------------------------------
+#-------------------------------
+# Reusable schemas (data models)
+#-------------------------------
   schemas:
 
     #-------------------------------
@@ -15,9 +15,23 @@ components:
         token:
           type: string
 
-  #-------------------------------
-  # Reusable bodies
-  #-------------------------------
+#-------------------------------
+# Reusable parameters
+#-------------------------------
+
+  parameters:
+
+    resetToken: # Can be referenced as '#/components/parameters/resetToken'
+      in: path
+      name: resetToken
+      required: true
+      schema:
+        type: string
+        description: Password reset token
+
+#-------------------------------
+# Reusable bodies
+#-------------------------------
 
   requestBodies:
 
@@ -110,23 +124,9 @@ components:
               - password
               - passwordConfirmation
 
-  #-------------------------------
-  # Reusable parameters
-  #-------------------------------
-
-  parameters:
-
-    resetToken: # Can be referenced as '#/components/parameters/resetToken'
-      in: path
-      name: resetToken
-      required: true
-      schema:
-        type: string
-        description: Password reset token
-
-  #-------------------------------
-  # Reusable responses
-  #-------------------------------
+#-------------------------------
+# Reusable responses
+#-------------------------------
 
   responses:
 

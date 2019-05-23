@@ -1,6 +1,6 @@
 import {body} from 'express-validator/check'
 import {returnValidationError} from '../../middlewares/errorValidator'
-import {UserRole} from './user.interface'
+import {UserRole} from './user.model'
 
 /**
  * Middleware to validate update user request
