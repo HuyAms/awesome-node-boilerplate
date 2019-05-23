@@ -24,7 +24,7 @@ const readUser = protect([Permission.UserRead])
  *     summary: Get all users
  *     responses:
  *       '200':
- *         $ref: '#/components/responses/TokenResponse'
+ *         $ref: '#/components/responses/UsersResponse'
  *       default:
  *         $ref: '#/components/responses/ErrorResponse'
  */

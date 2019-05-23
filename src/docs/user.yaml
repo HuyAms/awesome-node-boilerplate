@@ -121,3 +121,41 @@ components:
                       - role
               required:
               - data
+
+    #-------------------------------
+    # UsersResponse
+    #-------------------------------
+
+    UsersResponse:  # Can be referenced as '#/components/responses/UsersResponse'
+      description: A JSON object containing a list of user
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Response'
+            - properties:
+                data:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: string
+                      firstName:
+                        type: string
+                        minLength: 2
+                      lastName:
+                        type: string
+                        minLength: 2
+                      email:
+                        type: string
+                        format: email
+                      role:
+                        $ref: '#/components/schemas/UserRole'
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                    - role
+              required:
+              - data
