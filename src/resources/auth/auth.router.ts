@@ -21,7 +21,7 @@ const router = Router()
  * /auth/signup:
  *   post:
  *     tags:
- *     - Authentication
+ *       - Authentication
  *     summary: Sign up user
  */
 router.route('/signup').post(validateSignUp(), authController.signup)
@@ -32,7 +32,7 @@ router.route('/signup').post(validateSignUp(), authController.signup)
  * /auth/signin:
  *   post:
  *     tags:
- *     - Authentication
+ *       - Authentication
  *     summary: Sign in user
  */
 router.route('/signin').post(validateSignIn(), authController.signin)
@@ -43,8 +43,23 @@ router.route('/signin').post(validateSignIn(), authController.signin)
  * /auth/password/forgot:
  *   post:
  *     tags:
- *     - Authentication
+ *       - Authentication
  *     summary: Send user reset password link
+ *     responses:
+ *       200:
+ *         description: Successfully send reset password link to user's email
+ *       400:
+ *         description: Not found user email
+ *         schema:
+ *           $ref: "#/definitions/ErrorResponse"
+ *         example:
+ *           status: 200
+ *           errorCode: 1
+ *           errorMessage: 123
+ *       500:
+ *         description: Unexpected server error
+ *         schema:
+ *           $ref: "#/definitions/ErrorResponse"
  */
 router
 	.route('/password/forgot')
@@ -56,8 +71,15 @@ router
  * /auth/password/reset/:resetToken:
  *   post:
  *     tags:
- *     - Authentication
+ *       - Authentication
  *     summary: Reset user password
+ *     responses:
+ *       200:
+ *         description: Successfully send reset password link to user's email
+ *       400:
+ *         description: Not found user email
+ *       500:
+ *         description: Unexpected server error
  */
 router
 	.route('/password/reset/:resetToken')

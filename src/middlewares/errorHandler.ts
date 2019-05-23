@@ -6,6 +6,30 @@ import createLogger from '../utils/logger'
 const logger = createLogger(module)
 
 /**
+ * @swagger
+ *
+ * definitions:
+ *   ErrorResponse:
+ *     type: object
+ *     properties:
+ *       status:
+ *         type: integer
+ *       errorCode:
+ *         $ref: '#/definitions/ErrorCode'
+ *       message:
+ *         type: string
+ *     required:
+ *       - status
+ *       - errorCode
+ *       - message
+ */
+interface ErrorResponse {
+	status: number
+	errorCode: number
+	message: number
+}
+
+/**
  * Middleware to parse Error
  *
  * @param err
@@ -42,11 +66,13 @@ const sendError: ErrorRequestHandler = (err, req, res, next) => {
 		logger.debug(`[ERROR]: ${message}`)
 	}
 
-	res.status(status).json({
+	const errorResponse: ErrorResponse = {
 		status,
 		errorCode,
 		message,
-	})
+	}
+
+	res.status(status).json(errorResponse)
 }
 
 const errorHandler = [parseError, sendError]

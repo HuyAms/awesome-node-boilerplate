@@ -20,7 +20,7 @@ const readUser = protect([Permission.UserRead])
  * /api/user:
  *   get:
  *     tags:
- *     - User
+ *       - User
  *     summary: Get all users
  */
 router.route('/').get(readUser, userController.getMany)
@@ -31,7 +31,7 @@ router.route('/').get(readUser, userController.getMany)
  * /api/user/me:
  *   get:
  *     tags:
- *     - User
+ *       - User
  *     summary: Get my profile
  */
 router.route('/me').get(readUser, userController.getMe)
@@ -44,7 +44,7 @@ router.param('id', userController.params)
  * /api/user/:id:
  *   get:
  *     tags:
- *     - User
+ *       - User
  *     summary: Get one user
  */
 router

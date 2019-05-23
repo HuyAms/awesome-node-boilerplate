@@ -16,7 +16,12 @@ const swaggerDefinition = {
 
 const options = {
 	swaggerDefinition,
-	apis: ['./src/resources/**/*.ts', './src/utils/apiError.ts'],
+	// TODO: refactor all definitions to one folder
+	apis: [
+		'./src/resources/**/*.ts',
+		'./src/utils/apiError.ts',
+		'./src/middlewares/errorHandler.ts',
+	],
 }
 
 const swaggerSpec = swaggerJSDoc(options)
