@@ -5,8 +5,15 @@ export interface UserModel {
 	email: string
 	password: string
 	role: UserRole
-	resetPasswordToken?: string
-	resetPasswordExp?: number
+	resetToken?: string
+	resetTokenExp?: number
+	status: UserStatus
+}
+
+export enum UserStatus {
+	Initial = 'initial',
+	Active = 'active',
+	Disabled = 'disabled',
 }
 
 export enum UserRole {

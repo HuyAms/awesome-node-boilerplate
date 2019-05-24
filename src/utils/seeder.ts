@@ -1,6 +1,7 @@
 import {createUser} from '../mockDB/db'
-import {UserRole, UserModel} from '../resources/user/user.model'
+import {UserModel, UserRole, UserStatus} from '../resources/user/user.model'
 import createLogger from '../utils/logger'
+
 const logger = createLogger(module)
 
 const mockUser1: UserModel = {
@@ -10,6 +11,7 @@ const mockUser1: UserModel = {
 	email: 'user@gmail.com',
 	password: '123456',
 	role: UserRole.User,
+	status: UserStatus.Active,
 }
 
 const mockUser2: UserModel = {
@@ -19,6 +21,7 @@ const mockUser2: UserModel = {
 	email: 'admin@gmail.com',
 	password: '123456',
 	role: UserRole.Admin,
+	status: UserStatus.Active,
 }
 
 export const seed = () => {
