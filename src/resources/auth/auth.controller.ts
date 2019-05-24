@@ -11,7 +11,7 @@ import {
 } from '../../mockDB/db'
 import {sendEmail} from '../../utils/mail'
 import apiError from '../../utils/apiError'
-import apiResponse from '../../utils/apiResponse'
+import {successResponse} from '../../utils/apiResponse'
 import createLogger from '../../utils/logger'
 import config from '../../config'
 
@@ -30,7 +30,7 @@ export const signup: RequestHandler = (req, res, next) => {
 	createUser(req.body)
 		.then(user => {
 			const token = newToken(user)
-			return res.json(apiResponse.successResponse({token}, true))
+			return res.json(successResponse({token}, true))
 		})
 		.catch(err => next(apiError.badRequest(err.message)))
 }
@@ -51,7 +51,7 @@ export const signin: RequestHandler = (req, res, next) => {
 
 		if (user) {
 			const token = newToken(user)
-			return res.json(apiResponse.successResponse({token}, true))
+			return res.json(successResponse({token}))
 		}
 	})(req, res, next)
 }
@@ -93,9 +93,7 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 		}
 
 		await sendEmail(message)
-		return res.json(
-			apiResponse.successResponse('Please check your email', true),
-		)
+		return res.json(successResponse('Please check your email', true))
 	} catch (error) {
 		next(error)
 	}
@@ -146,10 +144,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 
 		await sendEmail(successMessage)
 		return res.json(
-			apiResponse.successResponse(
-				'Password has been successfully resetted',
-				true,
-			),
+			successResponse('Password has been successfully resetted', true),
 		)
 	} catch (error) {
 		next(apiError.notFound(error))
