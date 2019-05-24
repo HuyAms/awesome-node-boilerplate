@@ -55,8 +55,17 @@ components:
               email:
                 type: string
                 format: email
+              password:
+                type: string
+                format: password
+                minLength: 5
               role:
                 $ref: '#/components/schemas/UserRole'
+            required:
+              - firstName
+              - lastName
+              - email
+              - password
 
     #-------------------------------
     # AuthSignIn
