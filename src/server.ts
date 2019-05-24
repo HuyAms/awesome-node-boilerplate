@@ -6,6 +6,7 @@ import middlewares from './middlewares/global'
 import {errorHandler} from './middlewares/errorHandler'
 import swagger from './middlewares/swagger'
 import config from './config'
+import {connectDb} from './services/db'
 import {seed} from './utils/seeder'
 
 import userRouter from './resources/user/user.router'
@@ -62,12 +63,15 @@ app.get('/', (req, res) => {
 app.use(errorHandler)
 
 /**
+ * Connect database
  * Start Express server
  */
 const {port, env} = config
 
-export const start = () => {
+export const start = async () => {
 	try {
+		await connectDb()
+
 		app.listen(port, () => {
 			logger.info(`App is running on port ${port} in ${env} mode`)
 		})
