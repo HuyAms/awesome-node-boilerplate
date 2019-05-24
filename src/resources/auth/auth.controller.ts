@@ -38,8 +38,13 @@ export const signup: RequestHandler = async (req, res, next) => {
 			user.resetToken = uuidv4()
 			user.resetTokenExp = resetTokenExp
 		} else {
-			next(apiError.internalServer('Invalid reset token exp'))
+			return next(apiError.internalServer('Invalid reset token exp'))
 		}
+
+		// Save user to the database
+		await saveUser(user)
+
+		logger.debug('Save user: ', user.email)
 
 		// Send an email to user, containing the activation link
 		const activeUrl = `${req.headers.host}/auth/active/${user.resetToken}`
@@ -56,6 +61,8 @@ export const signup: RequestHandler = async (req, res, next) => {
 		await sendEmail(message)
 
 		logger.debug('Send reset password link to email: ', user.email)
+		console.log('LOG USER: ', user)
+		console.log('LOG LINK: ', activeUrl)
 
 		const token = newToken(user)
 		return res.json({token})
@@ -104,13 +111,12 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 		const user: UserModel = await findUserWithEmail(email)
 
 		if (!user) {
-			next(
+			return next(
 				apiError.notFound(
 					'Could not find an user with provided email',
 					ErrorCode.emailNotFound,
 				),
 			)
-			return
 		}
 
 		// Create reset password token
@@ -122,7 +128,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 			user.resetToken = resetPasswordToken
 			user.resetTokenExp = resetPasswordExp
 		} else {
-			next(apiError.internalServer('Invalid reset token exp'))
+			return next(apiError.internalServer('Invalid reset token exp'))
 		}
 
 		// Save user to the database
@@ -149,7 +155,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 
 		return res.json({message: 'Please check your email'})
 	} catch (error) {
-		next(error)
+		return next(error)
 	}
 }
 
@@ -168,10 +174,9 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 
 	try {
 		const user = await findUserWithToken(resetToken)
-		logger.debug('Reset password of user: %o', user)
 
 		if (!user) {
-			next(
+			return next(
 				apiError.notFound(
 					'Cannot find user with provided token',
 					ErrorCode.resetTokenInvalid,
@@ -179,10 +184,12 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 			)
 		}
 
+		logger.debug('Reset password of user: %o', user)
+
 		// Check if expire time is over
 		const resetPasswordExp = user.resetTokenExp
 		if (Date.now() > resetPasswordExp) {
-			next(
+			return next(
 				apiError.badRequest(
 					'Token is already expired',
 					ErrorCode.resetTokenInvalid,
@@ -194,7 +201,9 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		const {password} = req.body
 		const oldPassword = user.password
 		if (bcrypt.compareSync(password, oldPassword)) {
-			next(apiError.badRequest('New password should not match with old one'))
+			return next(
+				apiError.badRequest('New password should not match with old one'),
+			)
 		}
 
 		// Save new user passsword
@@ -220,7 +229,7 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 			.status(200)
 			.send({message: 'Password has been successfully reset'})
 	} catch (error) {
-		next(apiError.notFound(error))
+		return next(apiError.notFound(error))
 	}
 }
 
@@ -237,13 +246,13 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 export const activateAccount: RequestHandler = async (req, res, next) => {
 	// Check if the token in req params match with an user in db
 	const {resetToken} = req.params
+	console.log('REST:', resetToken)
 
 	try {
 		const user = await findUserWithToken(resetToken)
-		logger.debug(`Activation user with email ${user.email}`)
 
 		if (!user) {
-			next(
+			return next(
 				apiError.notFound(
 					'Cannot find user with provided token',
 					ErrorCode.resetTokenInvalid,
@@ -251,10 +260,12 @@ export const activateAccount: RequestHandler = async (req, res, next) => {
 			)
 		}
 
+		logger.debug(`Activation user with email ${user.email}`)
+
 		// Check if expire time is over
 		const resetPasswordExp = user.resetTokenExp
 		if (Date.now() > resetPasswordExp) {
-			next(
+			return next(
 				apiError.badRequest(
 					'Token is already expired',
 					ErrorCode.resetTokenInvalid,
@@ -266,7 +277,9 @@ export const activateAccount: RequestHandler = async (req, res, next) => {
 		const {password} = req.body
 		const oldPassword = user.password
 		if (bcrypt.compareSync(password, oldPassword)) {
-			next(apiError.badRequest('New password should not match with old one'))
+			return next(
+				apiError.badRequest('New password should not match with old one'),
+			)
 		}
 
 		// Activation user
@@ -278,6 +291,6 @@ export const activateAccount: RequestHandler = async (req, res, next) => {
 
 		return res.status(201).send({message: 'Active user successfully'})
 	} catch (error) {
-		next(apiError.notFound(error))
+		return next(apiError.notFound(error))
 	}
 }

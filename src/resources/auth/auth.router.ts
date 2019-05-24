@@ -98,7 +98,7 @@ router
  * @swagger
  *
  * /auth/active/{:resetToken}:
- *   post:
+ *   get:
  *     tags:
  *       - Authentication
  *     summary: Activate user
@@ -112,6 +112,6 @@ router
  */
 router
 	.route('/active/:resetToken')
-	.post(validateActivateAccount(), authController.activateAccount)
+	.get(validateActivateAccount(), authController.activateAccount)
 
 export default router
