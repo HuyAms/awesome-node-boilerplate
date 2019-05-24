@@ -12,11 +12,18 @@ import httpStatus from 'http-status'
  * @param status: specific http status code that we want to send
  */
 export const successResponse = (
-	data: any,
-	created?: Boolean,
+	data: string | object,
+	created?: boolean,
 	status?: number,
 ) => {
-	let responseStatus: Number
+	let responseData
+	if (typeof data === 'string') {
+		responseData = {message: data}
+	} else {
+		responseData = data
+	}
+
+	let responseStatus: number
 	if (status) {
 		responseStatus = status
 	} else {
@@ -25,7 +32,7 @@ export const successResponse = (
 
 	return {
 		status: responseStatus,
-		data,
+		data: responseData,
 	}
 }
 

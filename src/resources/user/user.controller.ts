@@ -58,8 +58,9 @@ export const getOne: RequestHandler = (req, res) => {
  * @param res
  */
 export const updateOne: RequestHandler = (req, res) => {
-	const successMessage = `UPDATE USER WITH ID ${req.params.id}`
-	return res.json(apiResponse.successResponse({message: successMessage}, true))
+	return res.json(
+		apiResponse.successResponse(`UPDATE USER WITH ID ${req.params.id}`, true),
+	)
 }
 
 /**
@@ -69,6 +70,7 @@ export const updateOne: RequestHandler = (req, res) => {
  * @param res
  */
 export const deleteOne: RequestHandler = (req, res) => {
-	const successMessage = `UPDATE USER WITH ID ${req.params.id}`
-	return res.json(apiResponse.successResponse({message: successMessage}))
+	return res.json(
+		apiResponse.successResponse(`UPDATE USER WITH ID ${req.params.id}`),
+	)
 }

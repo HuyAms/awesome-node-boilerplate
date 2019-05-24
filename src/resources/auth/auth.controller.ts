@@ -93,9 +93,8 @@ export const forgetPassword: RequestHandler = async (req, res, next) => {
 		}
 
 		await sendEmail(message)
-		const successMessage = 'Please check your email'
 		return res.json(
-			apiResponse.successResponse({message: successMessage}, true),
+			apiResponse.successResponse('Please check your email', true),
 		)
 	} catch (error) {
 		next(error)
@@ -146,9 +145,11 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		}
 
 		await sendEmail(successMessage)
-		const responseMessage = 'Password has been successfully resetted'
 		return res.json(
-			apiResponse.successResponse({message: responseMessage}, true),
+			apiResponse.successResponse(
+				'Password has been successfully resetted',
+				true,
+			),
 		)
 	} catch (error) {
 		next(apiError.notFound(error))
