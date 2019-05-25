@@ -3,15 +3,21 @@
  *
  */
 import httpStatus from 'http-status'
+import {ApiError} from './apiError'
 
 /**
- * Validate status code
+ * Check success status code
  *
  * @param status
- * @return {boolean} whether status code is valid
+ * @return {boolean} whether provided status code is valid as success status code
  */
-const validateStatus = (status: number) => {
+const isSuccessStatus = (status: number) => {
 	return 200 <= status && status <= 299
+}
+
+interface SuccessResponse {
+	data: object
+	status: number
 }
 
 /**
@@ -21,11 +27,6 @@ const validateStatus = (status: number) => {
  * @param created: whether new data is created or modified
  * @param status: specific http status code that we want to send
  */
-interface SuccessResponse {
-	data: object
-	status: number
-}
-
 export const successResponse = (
 	data: string | object,
 	created?: boolean,
@@ -40,7 +41,7 @@ export const successResponse = (
 
 	let responseStatus: number
 	if (status) {
-		if (validateStatus(status)) {
+		if (isSuccessStatus(status)) {
 			responseStatus = status
 		} else {
 			throw new Error('Invalid success status')
@@ -55,19 +56,19 @@ export const successResponse = (
 	}
 }
 
-/**
- * Send error response
- *
- * @param error error object passed from error handler middleware
- */
 interface ErrorResponse {
 	status: number
 	errorCode: number
 	message: string
 }
 
-export const errorResponse = (error: ErrorResponse) => {
-	const err = {
+/**
+ * Send error response
+ *
+ * @param error error object passed from error handler middleware
+ */
+export const errorResponse = (error: ApiError) => {
+	const err: ErrorResponse = {
 		status: error.status,
 		errorCode: error.errorCode,
 		message: error.message,
