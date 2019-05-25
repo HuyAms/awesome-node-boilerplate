@@ -67,12 +67,10 @@ interface ErrorResponse {
  *
  * @param error error object passed from error handler middleware
  */
-export const errorResponse = (error: ApiError) => {
-	const err: ErrorResponse = {
+export const errorResponse = (error: ApiError): ErrorResponse => {
+	return {
 		status: error.status,
 		errorCode: error.errorCode,
 		message: error.message,
 	}
-
-	return err
 }
