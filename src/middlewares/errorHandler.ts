@@ -4,14 +4,9 @@ import httpStatus from 'http-status'
 import createLogger from '../utils/logger'
 import {ErrorFormatter, validationResult} from 'express-validator/check'
 import apiError from '../utils/apiError'
+import {errorResponse} from '../utils/apiResponse'
 
 const logger = createLogger(module)
-
-interface ErrorResponse {
-	status: number
-	errorCode: number
-	message: string
-}
 
 /**
  * Middleware to parse Error
@@ -42,7 +37,7 @@ const parseError: ErrorRequestHandler = (err, req, res, next) => {
  * @param next
  */
 const sendError: ErrorRequestHandler = (err, req, res, next) => {
-	const {errorCode, message, status} = err
+	const {status, message} = err
 
 	if (status === httpStatus.INTERNAL_SERVER_ERROR) {
 		logger.error(`[ERROR]: ${message}`)
@@ -50,13 +45,7 @@ const sendError: ErrorRequestHandler = (err, req, res, next) => {
 		logger.debug(`[ERROR]: ${message}`)
 	}
 
-	const errorResponse: ErrorResponse = {
-		status,
-		errorCode,
-		message,
-	}
-
-	res.status(status).json(errorResponse)
+	res.status(status).json(errorResponse(err))
 }
 
 export const errorHandler = [parseError, sendError]
