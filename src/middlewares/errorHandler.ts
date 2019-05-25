@@ -2,6 +2,7 @@ import {ApiError} from '../utils/apiError'
 import {ErrorRequestHandler} from 'express'
 import httpStatus from 'http-status'
 import createLogger from '../utils/logger'
+import {errorResponse} from '../utils/apiResponse'
 
 const logger = createLogger(module)
 
@@ -34,7 +35,8 @@ const parseError: ErrorRequestHandler = (err, req, res, next) => {
  * @param next
  */
 const sendError: ErrorRequestHandler = (err, req, res, next) => {
-	const {errorCode, message, status} = err
+	const error = errorResponse(err)
+	const {status, message} = error
 
 	if (status === httpStatus.INTERNAL_SERVER_ERROR) {
 		logger.error(err)
@@ -42,11 +44,7 @@ const sendError: ErrorRequestHandler = (err, req, res, next) => {
 		logger.debug(`[ERROR]: ${message}`)
 	}
 
-	res.status(status).json({
-		status: status,
-		errorCode: errorCode,
-		message: message,
-	})
+	res.status(status).json(error)
 }
 
 const errorHandler = [parseError, sendError]
