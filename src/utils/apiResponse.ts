@@ -5,6 +5,16 @@
 import httpStatus from 'http-status'
 
 /**
+ * Validate status code
+ *
+ * @param status
+ * @return {boolean} whether status code is valid
+ */
+const validateStatus = (status: number) => {
+	return 200 <= status && status <= 299
+}
+
+/**
  * Send success response
  *
  * @param data: data that response sends to client
@@ -30,7 +40,11 @@ export const successResponse = (
 
 	let responseStatus: number
 	if (status) {
-		responseStatus = status
+		if (validateStatus(status)) {
+			responseStatus = status
+		} else {
+			throw new Error('Invalid success status')
+		}
 	} else {
 		responseStatus = created ? httpStatus.CREATED : httpStatus.OK
 	}
@@ -39,4 +53,25 @@ export const successResponse = (
 		status: responseStatus,
 		data: responseData,
 	}
+}
+
+/**
+ * Send error response
+ *
+ * @param error error object passed from error handler middleware
+ */
+interface ErrorResponse {
+	status: number
+	errorCode: number
+	message: string
+}
+
+export const errorResponse = (error: ErrorResponse) => {
+	const err = {
+		status: error.status,
+		errorCode: error.errorCode,
+		message: error.message,
+	}
+
+	return err
 }
