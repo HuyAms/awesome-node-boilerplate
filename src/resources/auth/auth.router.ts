@@ -5,6 +5,7 @@ import {
 	validateSignUp,
 	validateForgetPassword,
 	validateResetPassword,
+	validateActivateAccount,
 } from './auth.validator'
 
 /**
@@ -92,5 +93,25 @@ router
 router
 	.route('/password/reset/:resetToken')
 	.post(validateResetPassword(), authController.resetPassword)
+
+/**
+ * @swagger
+ *
+ * /auth/active/{:resetToken}:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Activate user
+ *     parameters:
+ *      - $ref: '#/components/parameters/resetToken'
+ *     responses:
+ *       '201':
+ *         $ref: '#/components/responses/MessageResponse'
+ *       default:
+ *         $ref: '#/components/responses/ErrorResponse'
+ */
+router
+	.route('/active/:resetToken')
+	.get(validateActivateAccount(), authController.activateAccount)
 
 export default router

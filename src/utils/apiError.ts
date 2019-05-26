@@ -5,6 +5,7 @@ export enum ErrorCode {
 	emailNotCorrect = 2,
 	emailNotFound = 3,
 	resetTokenInvalid = 4,
+	notActiveUser = 5,
 }
 
 /**

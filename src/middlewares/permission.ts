@@ -1,8 +1,8 @@
 import * as _ from 'lodash'
-import {Request, Response, NextFunction} from 'express'
+import {NextFunction, Request, RequestHandler, Response} from 'express'
 import {checkToken} from './auth'
-import {UserRole} from '../resources/user/user.model'
-import apiError from '../utils/apiError'
+import {UserRole, UserStatus} from '../resources/user/user.model'
+import apiError, {ErrorCode} from '../utils/apiError'
 
 /**
  * Declare user's permissions
@@ -45,10 +45,34 @@ const checkPermission = (permissions?: [Permission]) => {
 }
 
 /**
+ * Middleware to check user's status
+ *
+ * @param permissions
+ */
+export const checkUserStatus: RequestHandler = (req, res, next) => {
+	const {user} = req
+
+	if (!user) {
+		return next(apiError.unauthorized())
+	}
+
+	if (user.status === UserStatus.Active) {
+		return next()
+	} else {
+		return next(
+			apiError.unauthorized(
+				'User has not been activated',
+				ErrorCode.notActiveUser,
+			),
+		)
+	}
+}
+
+/**
  * Middleware to check user's token then permissions
  *
  * @param permissions
  */
 export const protect = (permissions: [Permission]) => {
-	return [checkToken, checkPermission(permissions)]
+	return [checkToken, checkUserStatus, checkPermission(permissions)]
 }

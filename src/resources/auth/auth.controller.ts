@@ -1,5 +1,4 @@
 import passport from 'passport'
-import uuidv4 from 'uuid/v4'
 import {RequestHandler} from 'express'
 import bcrypt from 'bcryptjs'
 
@@ -15,7 +14,8 @@ import apiError, {ErrorCode} from '../../utils/apiError'
 import {successResponse} from '../../utils/apiResponse'
 import createLogger from '../../utils/logger'
 import config from '../../config'
-import {UserModel} from '../user/user.model'
+import {UserModel, UserStatus} from '../user/user.model'
+import {generateResetToken} from '../../utils/util'
 
 const logger = createLogger(module)
 
@@ -26,17 +26,45 @@ const logger = createLogger(module)
  * @param res
  * @param next
  */
-export const signup: RequestHandler = (req, res, next) => {
+export const signup: RequestHandler = async (req, res, next) => {
 	logger.debug('Sign up with: %o', req.body)
 
-	const user = req.body
+	const newUser = req.body
 
-	createUser(user)
-		.then(user => {
-			const token = newToken(user)
-			return res.json(successResponse({token}, true))
-		})
-		.catch(err => next(apiError.badRequest(err.message)))
+	try {
+		const user = await createUser(newUser)
+
+		// Generate reset token
+		const {resetToken, resetTokenExp} = generateResetToken()
+		user.resetToken = resetToken
+		user.resetTokenExp = resetTokenExp
+
+		// Save user to the database
+		await saveUser(user)
+
+		logger.debug('Save user: ', user.email)
+
+		// Send an email to user, containing the activation link
+		const activeUrl = `${req.headers.host}/auth/active/${user.resetToken}`
+
+		const message: Message = {
+			from: config.mailSender,
+			to: user.email,
+			subject: 'Activate your account',
+			text: `To active your account, please click the following link: \n \n
+				${activeUrl}
+			`,
+		}
+
+		await sendEmail(message)
+
+		logger.debug('Send reset password link to email: ', user.email)
+
+		const token = newToken(user)
+		return res.json(successResponse({token}))
+	} catch (err) {
+		return next(apiError.internalServer(err.message))
+	}
 }
 
 /**
@@ -76,30 +104,28 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	logger.debug(`Forgot password email: ${email}`)
 
 	try {
-		const user = await findUserWithEmail(email)
+		const user: UserModel = await findUserWithEmail(email)
 
 		if (!user) {
-			next(
+			return next(
 				apiError.notFound(
 					'Could not find an user with provided email',
 					ErrorCode.emailNotFound,
 				),
 			)
-			return
 		}
 
-		// Create reset password token
-		const resetPasswordToken = uuidv4()
-		const resetPasswordExp = Date.now() + 3600000 // 1 hour
-		user.resetPasswordToken = resetPasswordToken
-		user.resetPasswordExp = resetPasswordExp
+		// Generate reset token
+		const {resetToken, resetTokenExp} = generateResetToken()
+		user.resetToken = resetToken
+		user.resetTokenExp = resetTokenExp
 
 		// Save user to the database
 		await saveUser(user)
 
 		// Send an email to user, containing the reset password token
 		const resetUrl = `${req.headers.host}/auth/password/reset/${
-			user.resetPasswordToken
+			user.resetToken
 		}`
 
 		const message: Message = {
@@ -118,7 +144,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 
 		return res.json(successResponse('Please check your email', true))
 	} catch (error) {
-		next(error)
+		return next(error)
 	}
 }
 
@@ -137,10 +163,9 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 
 	try {
 		const user = await findUserWithToken(resetToken)
-		logger.debug('Reset password of user: %o', user)
 
 		if (!user) {
-			next(
+			return next(
 				apiError.notFound(
 					'Cannot find user with provided token',
 					ErrorCode.resetTokenInvalid,
@@ -148,10 +173,12 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 			)
 		}
 
+		logger.debug('Reset password of user: %o', user)
+
 		// Check if expire time is over
-		const resetPasswordExp = user.resetPasswordExp
-		if (Date.now() > resetPasswordExp) {
-			next(
+		const {resetTokenExp} = user
+		if (Date.now() > resetTokenExp) {
+			return next(
 				apiError.badRequest(
 					'Token is already expired',
 					ErrorCode.resetTokenInvalid,
@@ -163,17 +190,19 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 		const {password} = req.body
 		const oldPassword = user.password
 		if (bcrypt.compareSync(password, oldPassword)) {
-			next(apiError.badRequest('New password should not match with old one'))
+			return next(
+				apiError.badRequest('New password should not match with old one'),
+			)
 		}
 
 		// Save new user passsword
 		// and remove reset token and expired time
 		user.password = password
-		user.resetPasswordExp = null
-		user.resetPasswordToken = null
+		user.resetTokenExp = null
+		user.resetToken = null
 		await saveUser(user)
 
-		// Send an email to notify user that password has been resetted
+		// Send an email to notify user that password has been reset
 		const successMessage: Message = {
 			from: config.mailSender,
 			to: user.email,
@@ -189,6 +218,60 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 			successResponse('Password has been successfully rest', true),
 		)
 	} catch (error) {
-		next(apiError.notFound(error))
+		return next(apiError.notFound(error))
+	}
+}
+
+/**
+ * Activate account
+ *
+ * Verify reset token from request param
+ * Active user account and clear reset password token & expire
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export const activateAccount: RequestHandler = async (req, res, next) => {
+	// Check if the token in req params match with an user in db
+	const {resetToken} = req.params
+
+	try {
+		const user = await findUserWithToken(resetToken)
+
+		if (!user) {
+			return next(
+				apiError.notFound(
+					'Cannot find user with provided token',
+					ErrorCode.resetTokenInvalid,
+				),
+			)
+		}
+
+		logger.debug(`Activation user with email ${user.email}`)
+
+		// Check if expire time is over
+		const {resetTokenExp} = user
+		if (Date.now() > resetTokenExp) {
+			return next(
+				apiError.badRequest(
+					'Token is already expired',
+					ErrorCode.resetTokenInvalid,
+				),
+			)
+		}
+
+		// Activation user
+		// and remove reset token and expired time
+		user.status = UserStatus.Active
+		user.resetTokenExp = null
+		user.resetToken = null
+		await saveUser(user)
+
+		return res.json(
+			successResponse({message: 'Active user successfully'}, true),
+		)
+	} catch (error) {
+		return next(apiError.notFound(error))
 	}
 }

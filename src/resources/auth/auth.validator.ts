@@ -18,6 +18,9 @@ export const validateSignUp = () => {
 		body('lastName', 'Last name must be string at least 2 chars long')
 			.isString()
 			.isLength({min: 2}),
+		body('status', 'Not allow to set user status')
+			.not()
+			.exists(),
 		returnValidationError,
 	]
 }
@@ -76,6 +79,19 @@ export const validateResetPassword = () => {
 		).custom((value, {req}) => {
 			return value === req.body.password
 		}),
+		returnValidationError,
+	]
+}
+
+/**
+ * Middleware to valide activate account
+ *
+ */
+export const validateActivateAccount = () => {
+	return [
+		param('resetToken', 'Invalid token')
+			.isString()
+			.isLength({min: 10}),
 		returnValidationError,
 	]
 }

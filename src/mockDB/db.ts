@@ -1,4 +1,4 @@
-import {UserModel} from '../resources/user/user.model'
+import {UserModel, UserStatus} from '../resources/user/user.model'
 import bcrypt from 'bcryptjs'
 
 const users: UserModel[] = []
@@ -19,6 +19,7 @@ export const createUser = (user: UserModel) => {
 
 	id += 1
 	user.id = id
+	user.status = UserStatus.Initial
 
 	const emailExist = users.some(user => user.email === email)
 
@@ -73,7 +74,7 @@ export const saveUser = (user: UserModel) => {
 }
 
 export const findUserWithToken = (resetToken: string) => {
-	const user = users.find(user => user.resetPasswordToken === resetToken)
+	const user = users.find(user => user.resetToken === resetToken)
 
 	if (user) {
 		return Promise.resolve(user)
