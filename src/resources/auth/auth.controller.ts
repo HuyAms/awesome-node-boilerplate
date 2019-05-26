@@ -14,7 +14,7 @@ import apiError, {ErrorCode} from '../../utils/apiError'
 import {successResponse} from '../../utils/apiResponse'
 import createLogger from '../../utils/logger'
 import config from '../../config'
-import {UserModel, UserStatus} from '../user/user.model'
+import {UserInterface, UserStatus} from '../user/user.interface'
 import {generateResetToken} from '../../utils/util'
 
 const logger = createLogger(module)
@@ -76,7 +76,7 @@ export const signup: RequestHandler = async (req, res, next) => {
  */
 export const signin: RequestHandler = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
-	passport.authenticate('local', (error, user: UserModel) => {
+	passport.authenticate('local', (error, user: UserInterface) => {
 		if (error) {
 			return next(error)
 		}
@@ -104,7 +104,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	logger.debug(`Forgot password email: ${email}`)
 
 	try {
-		const user: UserModel = await findUserWithEmail(email)
+		const user: UserInterface = await findUserWithEmail(email)
 
 		if (!user) {
 			return next(
