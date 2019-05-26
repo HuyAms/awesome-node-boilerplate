@@ -20,6 +20,11 @@ const baseConfig = {
 	apiKeys: {
 		sendGrid: process.env.SENDGRID_API_KEY,
 	},
+	requestLimiter: {
+		defaultTimeLimit: 15 * 60 * 1000, // 15 minutes
+		defaultAmountLimit: 100,
+		authAmountLimit: 50,
+	},
 }
 
 let envConfig

@@ -11,6 +11,7 @@ import {seed} from './utils/seeder'
 import userRouter from './resources/user/user.router'
 import authRouter from './resources/auth/auth.router'
 import createLogger from './utils/logger'
+import {limitRequest} from './utils/requestLimiter'
 
 const logger = createLogger(module)
 
@@ -43,11 +44,17 @@ if (config.seed) {
 }
 
 /**
+ * Limit requests for specific routes
+ *
+ */
+const {authAmountLimit} = config.requestLimiter
+
+/**
  * Routers
  */
-app.use('/auth', authRouter)
+app.use('/auth', limitRequest(null, authAmountLimit), authRouter)
 
-app.use('/api/users', userRouter)
+app.use('/api/users', limitRequest(), userRouter)
 
 app.use('/api-docs', swagger)
 
