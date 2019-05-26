@@ -1,4 +1,4 @@
-import UserModel from '../resources/user/user.model'
+import {UserModel} from '../resources/user/user.model'
 import bcrypt from 'bcryptjs'
 
 const users: UserModel[] = []
@@ -65,7 +65,6 @@ export const saveUser = (user: UserModel) => {
 	})
 
 	if (userExist) {
-		user.password = hashPassword(user.password)
 		users.splice(replacedIndex, 1, user)
 		return Promise.resolve(user)
 	} else {

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import config from '../config'
-import UserModel from '../resources/user/user.model'
+import config from '../config/index'
+import {UserModel} from '../resources/user/user.model'
 import {Request} from 'express'
 
 /**

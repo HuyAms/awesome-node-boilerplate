@@ -24,12 +24,12 @@ const getLogger = (module: NodeModule | string): Logger => {
 	if (typeof module === 'string') {
 		path = module
 	} else {
-		path = _.last(module.filename.split('\\'))
+		const regex = /\/|\\/i
+		path = _.last(module.filename.split(regex))
 	}
 
 	return createLogger({
-		// change level if in dev environment versus production
-		level: config.isProd ? 'info' : 'debug',
+		level: config.loggerLevel,
 		format: format.combine(
 			format.label({label: path}),
 			format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
@@ -48,9 +48,11 @@ const getLogger = (module: NodeModule | string): Logger => {
 	})
 }
 
+getLogger(module).info(`Logging initialized at ${config.loggerLevel} level`)
+
 export const morganStream: StreamOptions = {
 	write(message) {
-		getLogger('morgan').info(message)
+		getLogger('morgan').debug(message)
 	},
 }
 

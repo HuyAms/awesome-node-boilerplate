@@ -1,0 +1,156 @@
+components:
+#-------------------------------
+# Reusable schemas (data models)
+#-------------------------------
+  schemas:
+
+    #-------------------------------
+    # UserRole
+
+    UserRole: # Can be referenced as '#/components/schemas/UserRole'
+      type: string
+      enum:
+      - admin
+      - user
+
+    #-------------------------------
+    # User
+
+    User:  # Can be referenced as '#/components/schemas/User'
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+          minLength: 2
+        lastName:
+          type: string
+          minLength: 2
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+          minLength: 5
+        role:
+          $ref: '#/components/schemas/UserRole'
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - password
+
+#-------------------------------
+# Reusable bodies
+#-------------------------------
+
+  requestBodies:
+
+    #-------------------------------
+    # UserUpdate
+
+    UserUpdate: # Can be referenced as '#/components/requestBodies/UserUpdate'
+      description: User to update
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              firstName:
+                type: string
+                minLength: 2
+              lastName:
+                type: string
+                minLength: 2
+              email:
+                type: string
+                format: email
+              password:
+                type: string
+                format: password
+                minLength: 5
+              role:
+                $ref: '#/components/schemas/UserRole'
+
+#-------------------------------
+# Reusable responses
+#-------------------------------
+
+  responses:
+
+    #-------------------------------
+    # UserResponse
+
+    UserResponse:  # Can be referenced as '#/components/responses/UserResponse'
+      description: A JSON object containing user
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Response'
+            - properties:
+                data:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    firstName:
+                      type: string
+                      minLength: 2
+                    lastName:
+                      type: string
+                      minLength: 2
+                    email:
+                      type: string
+                      format: email
+                    role:
+                      $ref: '#/components/schemas/UserRole'
+                  required:
+                      - id
+                      - firstName
+                      - lastName
+                      - email
+                      - role
+              required:
+              - data
+
+    #-------------------------------
+    # UsersResponse
+
+    UsersResponse:  # Can be referenced as '#/components/responses/UsersResponse'
+      description: A JSON object containing a list of user
+      content:
+        application/json:
+          schema:
+            allOf:
+            - $ref: '#/components/schemas/Response'
+            - properties:
+                data:
+                  type: array
+                  items:
+                    properties:
+                      id:
+                        type: string
+                      firstName:
+                        type: string
+                        minLength: 2
+                      lastName:
+                        type: string
+                        minLength: 2
+                      email:
+                        type: string
+                        format: email
+                      role:
+                        $ref: '#/components/schemas/UserRole'
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                    - role
+              required:
+              - data

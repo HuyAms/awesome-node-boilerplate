@@ -1,11 +1,10 @@
 import httpStatus from 'http-status'
 
-/**
- * ErrorCode
- */
 export enum ErrorCode {
 	passwordNotCorrect = 1,
 	emailNotCorrect = 2,
+	emailNotFound = 3,
+	resetTokenInvalid = 4,
 }
 
 /**
@@ -78,7 +77,7 @@ export const unsupportedMediaType = (
  * @param errorCode
  */
 export const internalServer = (
-	message = 'Unexpected database createError',
+	message = 'Unexpected server error',
 	errorCode?: ErrorCode,
 ) => {
 	return new ApiError(message, httpStatus.INTERNAL_SERVER_ERROR, errorCode)

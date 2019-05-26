@@ -1,5 +1,6 @@
 const config = {
 	seed: false,
+	loggerLevel: 'debug',
 	secrets: {
 		jwt: 'jwttest',
 	},

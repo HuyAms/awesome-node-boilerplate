@@ -1,5 +1,5 @@
 import {body, param} from 'express-validator/check'
-import {returnValidationError} from '../../middlewares/errorValidator'
+import {returnValidationError} from '../../middlewares/errorHandler'
 
 /**
  * Middleware to validate sign up request

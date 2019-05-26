@@ -32,22 +32,16 @@ export const successResponse = (
 	created?: boolean,
 	status?: number,
 ): SuccessResponse => {
-	let responseData
-	if (typeof data === 'string') {
-		responseData = {message: data}
-	} else {
-		responseData = data
-	}
+	const responseData = typeof data === 'string' ? {message: data} : data
 
-	let responseStatus: number
+	let responseStatus = created ? httpStatus.CREATED : httpStatus.OK
+
 	if (status) {
 		if (isSuccessStatus(status)) {
 			responseStatus = status
 		} else {
 			throw new Error('Invalid success status')
 		}
-	} else {
-		responseStatus = created ? httpStatus.CREATED : httpStatus.OK
 	}
 
 	return {

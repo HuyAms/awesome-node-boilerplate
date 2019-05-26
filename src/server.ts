@@ -1,7 +1,10 @@
+import dotenv from 'dotenv'
+const dotEnvResult = dotenv.config()
+
 import express from 'express'
 import middlewares from './middlewares/global'
-import errorHandler from './middlewares/errorHandler'
-import dotenv from 'dotenv'
+import {errorHandler} from './middlewares/errorHandler'
+import swagger from './middlewares/swagger'
 import config from './config'
 import {seed} from './utils/seeder'
 
@@ -16,7 +19,10 @@ export const app = express()
 /**
  * Dotenv
  */
-dotenv.config()
+
+if (!config.isProd && dotEnvResult.error) {
+	logger.error('Please create .env file at root folder')
+}
 
 /**
  * Global middlewares
@@ -43,6 +49,12 @@ app.use('/auth', authRouter)
 
 app.use('/api/users', userRouter)
 
+app.use('/api-docs', swagger)
+
+app.get('/', (req, res) => {
+	res.redirect('/api-docs')
+})
+
 /**
  * Error Handler
  */
@@ -52,12 +64,12 @@ app.use(errorHandler)
 /**
  * Start Express server
  */
-const {port} = config
+const {port, env} = config
 
 export const start = () => {
 	try {
 		app.listen(port, () => {
-			logger.info(`REST API on port ${port}`)
+			logger.info(`App is running on port ${port} in ${env} mode`)
 		})
 	} catch (e) {
 		logger.error(e.message)

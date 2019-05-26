@@ -1,5 +1,5 @@
 import {findUserWithId} from '../mockDB/db'
-import {getTokenFromRequest, verifyToken} from '../utils/auth'
+import {getTokenFromRequest, verifyToken} from '../services/auth'
 import apiError from '../utils/apiError'
 import {RequestHandler} from 'express'
 
