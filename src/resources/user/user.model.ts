@@ -1,22 +1,43 @@
-export interface UserModel {
-	id: number
-	firstName: string
-	lastName: string
-	email: string
-	password: string
-	role: UserRole
-	resetToken?: string
-	resetTokenExp?: number
-	status: UserStatus
-}
+import mongoose from 'mongoose'
 
-export enum UserStatus {
-	Initial = 'initial',
-	Active = 'active',
-	Disabled = 'disabled',
-}
+const userSchema = new mongoose.Schema(
+	{
+		email: {
+			type: String,
+			required: true,
+			unique: true,
+			trim: true,
+		},
 
-export enum UserRole {
-	Admin = 'admin',
-	User = 'user',
-}
+		password: {
+			type: String,
+			required: true,
+		},
+
+		firstName: {
+			type: String,
+			required: true,
+		},
+		lastName: {
+			type: String,
+			required: true,
+		},
+		role: {
+			type: String,
+			required: true,
+			enum: ['admin', 'user'],
+			default: 'user',
+		},
+		status: {
+			type: String,
+			required: true,
+			enum: ['initial', 'active', 'disabled'],
+			default: 'initial',
+		},
+		resetToken: String,
+		resetTokenExp: Date,
+	},
+	{timestamps: true},
+)
+
+export const User = mongoose.model('user', userSchema)

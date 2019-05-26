@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import config from '../config/index'
-import {UserModel} from '../resources/user/user.model'
+import {UserInterface} from '../resources/user/user.interface'
 import {Request} from 'express'
 
 /**
@@ -8,7 +8,7 @@ import {Request} from 'express'
  *
  * @param user
  */
-export const newToken = (user: UserModel) => {
+export const newToken = (user: UserInterface) => {
 	const {secrets} = config
 
 	return jwt.sign({id: user.id}, secrets.jwt, {
