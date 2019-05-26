@@ -61,7 +61,7 @@ export const signup: RequestHandler = async (req, res, next) => {
 		logger.debug('Send reset password link to email: ', user.email)
 
 		const token = newToken(user)
-		return res.json({token})
+		return res.json(successResponse({token}))
 	} catch (err) {
 		return next(apiError.internalServer(err.message))
 	}
@@ -268,7 +268,9 @@ export const activateAccount: RequestHandler = async (req, res, next) => {
 		user.resetToken = null
 		await saveUser(user)
 
-		return res.status(201).send({message: 'Active user successfully'})
+		return res.json(
+			successResponse({message: 'Active user successfully'}, true),
+		)
 	} catch (error) {
 		return next(apiError.notFound(error))
 	}
