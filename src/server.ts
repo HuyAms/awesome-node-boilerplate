@@ -6,7 +6,8 @@ import middlewares from './middlewares/global'
 import {errorHandler} from './middlewares/errorHandler'
 import swagger from './middlewares/swagger'
 import config from './config'
-import {connectDb} from './services/db'
+import connectDb from './services/db'
+import initPassword from './services/passport'
 import {seed} from './utils/seeder'
 
 import userRouter from './resources/user/user.router'
@@ -34,7 +35,7 @@ app.use(middlewares)
  * Passport
  *
  */
-import './services/passport'
+initPassword()
 
 /**
  * Seed data for dev
