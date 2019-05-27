@@ -22,8 +22,7 @@ const baseConfig = {
 	},
 	requestLimiter: {
 		defaultTimeLimit: 15 * 60 * 1000, // 15 minutes
-		defaultAmountLimit: 100,
-		authAmountLimit: 50,
+		defaultAmountLimit: 100, // limit each IP to 100 requests per windowMs
 	},
 }
 
