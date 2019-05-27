@@ -12,9 +12,9 @@ export enum ErrorCode {
  * Api Error
  */
 export class ApiError extends Error {
-	errorCode?: ErrorCode
-	status?: number
-	name: string
+	readonly errorCode?: ErrorCode
+	readonly status?: number
+	readonly name: string
 
 	constructor(message: string, status?: number, errorCode?: ErrorCode) {
 		super(message)
