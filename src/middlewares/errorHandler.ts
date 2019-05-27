@@ -40,7 +40,7 @@ const sendError: ErrorRequestHandler = (err, req, res, next) => {
 	const {status, message} = err
 
 	if (status === httpStatus.INTERNAL_SERVER_ERROR) {
-		logger.error(`[ERROR]: ${message}`)
+		logger.error(err)
 	} else {
 		logger.debug(`[ERROR]: ${message}`)
 	}

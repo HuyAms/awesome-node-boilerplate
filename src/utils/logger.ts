@@ -7,9 +7,10 @@ import * as _ from 'lodash'
 
 const logDir = 'log'
 
-const logFormat = format.printf(
-	info => `${info.timestamp} ${info.level} [${info.label}]: ${info.message}`,
-)
+const logFormat = format.printf(info => {
+	const {timestamp, level, label, message, stack} = info
+	return `${timestamp} ${level} [${label}]: ${stack ? stack : message}`
+})
 
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {
@@ -33,6 +34,7 @@ const getLogger = (module: NodeModule | string): Logger => {
 		format: format.combine(
 			format.label({label: path}),
 			format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+			format.errors({stack: true}),
 			format.splat(),
 		),
 		transports: [
