@@ -4,10 +4,14 @@ import morgan from 'morgan'
 import cors from 'cors'
 import helmet from 'helmet'
 import validator from 'express-validator'
+import rateLimit from 'express-rate-limit'
 import {morganStream} from '../utils/logger'
-import {limitRequest} from '../utils/requestLimiter'
+import config from '../config'
 
 const router = Router()
+
+// Time and amount limit of requests to the API
+const {timeLimit, amountLimit} = config.requestLimiter
 
 /**
  * Global middlewares
@@ -18,6 +22,11 @@ router.use(urlencoded({extended: true}))
 router.use(morgan('dev', {stream: morganStream}))
 router.use(validator())
 router.use(helmet())
-router.use(limitRequest())
+router.use(
+	rateLimit({
+		windowMs: timeLimit,
+		max: amountLimit,
+	}),
+)
 
 export default router

@@ -21,8 +21,8 @@ const baseConfig = {
 		sendGrid: process.env.SENDGRID_API_KEY,
 	},
 	requestLimiter: {
-		defaultTimeLimit: 15 * 60 * 1000, // 15 minutes
-		defaultAmountLimit: 100, // limit each IP to 100 requests per windowMs
+		timeLimit: 15 * 60 * 1000, // 15 minutes
+		amountLimit: 100, // limit each IP to 100 requests per windowMs
 	},
 }
 
