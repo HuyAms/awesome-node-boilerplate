@@ -46,7 +46,7 @@ export const getMe: RequestHandler = (req, res) => {
  */
 export const getMany: RequestHandler = (req, res, next) => {
 	try {
-		const users = services.findMany()
+		const users = services.findMany({})
 		return users
 	} catch (e) {
 		return next(e)

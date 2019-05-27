@@ -20,7 +20,9 @@ export const signup: RequestHandler = async (req, res, next) => {
 	try {
 		const newUser = req.body
 
-		const token = await services.signup(newUser, req.headers.host)
+		const activateUserPath = `${req.headers.host}/auth/active`
+
+		const token = await services.signup(newUser, activateUserPath)
 
 		return res.json(successResponse(token))
 	} catch (err) {
@@ -65,7 +67,8 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	logger.debug(`Forgot password email: ${email}`)
 
 	try {
-		const message = await services.forgotPassword(email, req.headers.host)
+		const resetUrlPath = `${req.headers.host}/auth/password/reset`
+		const message = await services.forgotPassword(email, resetUrlPath)
 
 		return res.json(successResponse(message, true))
 	} catch (error) {
@@ -109,7 +112,7 @@ export const activateAccount: RequestHandler = async (req, res, next) => {
 	const {resetToken} = req.params
 
 	try {
-		const message = services.activateAccount(resetToken)
+		const message = await services.activateAccount(resetToken)
 
 		return res.json(successResponse(message, true))
 	} catch (error) {

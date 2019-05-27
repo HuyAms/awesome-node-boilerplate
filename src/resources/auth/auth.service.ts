@@ -11,9 +11,15 @@ import bcrypt from 'bcryptjs'
 
 const logger = createLogger(module)
 
+/**
+ * Sign up user
+ *
+ * @param userCreate
+ * @param activateUserPath
+ */
 export const signup = async (
 	userCreate: IUser,
-	host: string,
+	activateUserPath: string,
 ): Promise<Token> => {
 	// Generate reset token
 	const {resetToken, resetTokenExp} = generateResetToken()
@@ -26,14 +32,14 @@ export const signup = async (
 	logger.debug('Save user: ', user.email)
 
 	// Send an email to user, containing the activation link
-	const activeUrl = `${host}/auth/active/${user.resetToken}`
+	const activateUserUrl = `${activateUserPath}/${user.resetToken}`
 
 	const message: Message = {
 		from: config.mailSender,
 		to: user.email,
 		subject: 'Activate your account',
 		text: `To active your account, please click the following link: \n \n
-				${activeUrl}
+				${activateUserUrl}
 			`,
 	}
 
@@ -46,9 +52,15 @@ export const signup = async (
 	return {token}
 }
 
+/**
+ * Forgot password
+ *
+ * @param email
+ * @param resetUrlPath
+ */
 export const forgotPassword = async (
 	email: string,
-	host: string,
+	resetUrlPath: string,
 ): Promise<string> => {
 	// Check if email that user submitted belongs to an user
 
@@ -74,7 +86,7 @@ export const forgotPassword = async (
 	await userServices.update(user.id, user)
 
 	// Send an email to user, containing the reset password token
-	const resetUrl = `${host}/auth/password/reset/${user.resetToken}`
+	const resetUrl = `${resetUrlPath}/${user.resetToken}`
 
 	const message: Message = {
 		from: config.mailSender,
@@ -93,6 +105,12 @@ export const forgotPassword = async (
 	return 'Please check your email'
 }
 
+/**
+ * Reset password
+ *
+ * @param resetToken
+ * @param password
+ */
 export const resetPassword = async (
 	resetToken: string,
 	password: string,
@@ -112,6 +130,7 @@ export const resetPassword = async (
 
 	// Check if expire time is over
 	const {resetTokenExp} = user
+
 	if (Date.now() > resetTokenExp) {
 		Promise.reject(
 			apiError.badRequest(
@@ -151,6 +170,11 @@ export const resetPassword = async (
 	return 'Password has been successfully rest'
 }
 
+/**
+ * Activate account
+ *
+ * @param resetToken
+ */
 export const activateAccount = async (resetToken: string) => {
 	const user = await userServices.findOne({resetToken})
 
