@@ -1,4 +1,10 @@
 import mongoose from 'mongoose'
+import {IUser} from './user.interface'
+import {Document} from 'mongoose'
+
+interface UserDocument extends Document, IUser {
+	id: string
+}
 
 const userSchema = new mongoose.Schema(
 	{
@@ -40,4 +46,6 @@ const userSchema = new mongoose.Schema(
 	{timestamps: true},
 )
 
-export const User = mongoose.model('user', userSchema)
+const User = mongoose.model<UserDocument>('user', userSchema)
+
+export default User

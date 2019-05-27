@@ -1,14 +1,10 @@
-import {createUser} from '../mockDB/db'
-import {
-	UserInterface,
-	UserRole,
-	UserStatus,
-} from '../resources/user/user.interface'
+import {IUser, UserRole, UserStatus} from '../resources/user/user.interface'
+import {create} from '../resources/user/user.service'
 import createLogger from '../utils/logger'
 
 const logger = createLogger(module)
 
-const mockUser1: UserInterface = {
+const mockUser1: IUser = {
 	id: undefined,
 	firstName: 'fName1',
 	lastName: 'lName1',
@@ -18,7 +14,7 @@ const mockUser1: UserInterface = {
 	status: UserStatus.Active,
 }
 
-const mockUser2: UserInterface = {
+const mockUser2: IUser = {
 	id: undefined,
 	firstName: 'fName2',
 	lastName: 'lName2',
@@ -30,6 +26,6 @@ const mockUser2: UserInterface = {
 
 export const seed = () => {
 	logger.debug(`Database seeded`)
-	createUser(mockUser1)
-	createUser(mockUser2)
+	create(mockUser1)
+	create(mockUser2)
 }

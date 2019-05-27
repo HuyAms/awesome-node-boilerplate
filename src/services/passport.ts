@@ -7,7 +7,7 @@
 import passport from 'passport'
 import * as localStrategy from 'passport-local'
 import bcrypt from 'bcryptjs'
-import {findUserWithEmail} from '../mockDB/db'
+import {findById} from '../resources/user/user.service'
 import apiError, {ErrorCode} from '../utils/apiError'
 
 const LocalStrategy = localStrategy.Strategy
@@ -24,7 +24,7 @@ passport.use(
 		async (email, password, done) => {
 			try {
 				// Check if provided email belongs to an user
-				const user = await findUserWithEmail(email)
+				const user = await findById(email)
 				if (!user) {
 					return done(
 						apiError.unauthorized(
