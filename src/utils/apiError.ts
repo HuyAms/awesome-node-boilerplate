@@ -14,11 +14,14 @@ export enum ErrorCode {
 export class ApiError extends Error {
 	errorCode?: ErrorCode
 	status?: number
+	name: string
 
 	constructor(message: string, status?: number, errorCode?: ErrorCode) {
 		super(message)
 		this.status = status
 		this.errorCode = errorCode
+		this.name = this.constructor.name
+		Error.captureStackTrace(this, this.constructor)
 	}
 }
 
