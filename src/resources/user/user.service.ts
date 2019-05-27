@@ -8,6 +8,8 @@ import {IUser} from './user.interface'
  */
 export const findById = async (id: string): Promise<IUser> => {
 	const user = await User.findById(id)
+		.lean()
+		.exec()
 	return user
 }
 
