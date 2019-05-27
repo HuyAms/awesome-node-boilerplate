@@ -44,10 +44,10 @@ export const getMe: RequestHandler = (req, res) => {
  * @param res
  * @param next
  */
-export const getMany: RequestHandler = (req, res, next) => {
+export const getMany: RequestHandler = async (req, res, next) => {
 	try {
-		const users = services.findMany({})
-		return users
+		const users = await services.findMany({})
+		return res.json(successResponse(users))
 	} catch (e) {
 		return next(e)
 	}
