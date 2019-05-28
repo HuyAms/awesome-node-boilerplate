@@ -5,7 +5,6 @@ import createLogger from '../utils/logger'
 const logger = createLogger(module)
 
 const mockUser1: IUser = {
-	id: undefined,
 	firstName: 'fName1',
 	lastName: 'lName1',
 	email: 'user@gmail.com',
@@ -15,7 +14,6 @@ const mockUser1: IUser = {
 }
 
 const mockUser2: IUser = {
-	id: undefined,
 	firstName: 'fName2',
 	lastName: 'lName2',
 	email: 'admin@gmail.com',

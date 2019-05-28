@@ -1,46 +1,33 @@
 import User from './user.model'
 import {IUser} from './user.interface'
+import {UserDocument} from './user.model'
 
 /**
  * Find user by id
  *
  * @param id
  */
-export const findById = async (id: string): Promise<IUser> => {
-	const user = await User.findById(id)
-		.lean()
-		.exec()
+export const findById = async (id: string): Promise<UserDocument> => {
+	const user = await User.findById(id).exec()
 	return user
 }
 
 /**
  * Find one user with condition
  *
- * @param conditions
  */
-export const findOne = async (conditions: any): Promise<IUser> => {
-	const user = await User.findOne(conditions)
+export const getOne = async (): Promise<UserDocument> => {
+	const user = await User.findOne().exec()
 	return user
 }
 
 /**
  * Find many users with condition
  *
- * @param conditions
  */
-export const findMany = async (conditions: any): Promise<IUser[]> => {
-	const users = await User.find(conditions)
+export const getMany = async (): Promise<UserDocument[]> => {
+	const users = await User.find().exec()
 	return users
-}
-
-/**
- * Create user
- *
- * @param userCreate
- */
-export const create = async (userCreate: IUser): Promise<IUser> => {
-	const createdUser = await User.create(userCreate)
-	return createdUser
 }
 
 /**
@@ -49,8 +36,11 @@ export const create = async (userCreate: IUser): Promise<IUser> => {
  * @param id
  * @param userUpdate
  */
-export const update = async (id: string, userUpdate: IUser): Promise<IUser> => {
-	const updatedUser = await User.findOneAndUpdate({_id: id}, userUpdate)
+export const updateOne = async (
+	id: string,
+	userUpdate: IUser,
+): Promise<UserDocument> => {
+	const updatedUser = await User.findByIdAndUpdate(id, userUpdate).exec()
 	return updatedUser
 }
 
@@ -59,7 +49,7 @@ export const update = async (id: string, userUpdate: IUser): Promise<IUser> => {
  *
  * @param id
  */
-export const remove = async (id: string): Promise<IUser> => {
-	const removedUser = await User.findOneAndRemove({_id: id})
+export const deleteOne = async (id: string): Promise<UserDocument> => {
+	const removedUser = await User.findByIdAndDelete(id).exec()
 	return removedUser
 }

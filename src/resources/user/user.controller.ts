@@ -46,7 +46,7 @@ export const getMe: RequestHandler = (req, res) => {
  */
 export const getMany: RequestHandler = async (req, res, next) => {
 	try {
-		const users = await services.findMany({})
+		const users = await services.getMany()
 		return res.json(successResponse(users))
 	} catch (e) {
 		return next(e)
@@ -73,7 +73,7 @@ export const getOne: RequestHandler = async (req, res, next) => {
 export const updateOne: RequestHandler = async (req, res, next) => {
 	try {
 		const {user, body} = req
-		const updatedUser = await services.update(user.id, body)
+		const updatedUser = await services.updateOne(user.id, body)
 		return res.json(successResponse(updatedUser, true))
 	} catch (e) {
 		return next(e)
@@ -89,7 +89,7 @@ export const updateOne: RequestHandler = async (req, res, next) => {
 export const deleteOne: RequestHandler = async (req, res, next) => {
 	try {
 		const {user} = req
-		const removedUser = await services.remove(user.id)
+		const removedUser = await services.deleteOne(user.id)
 		return res.json(successResponse(removedUser, true))
 	} catch (e) {
 		return next(e)

@@ -1,9 +1,10 @@
 import mongoose from 'mongoose'
 import {IUser} from './user.interface'
 import {Document} from 'mongoose'
+import bcrypt from 'bcryptjs'
 
-interface UserDocument extends Document, IUser {
-	id: string
+export interface UserDocument extends Document, IUser {
+	checkPassword: (password: string) => boolean
 }
 
 const userSchema = new mongoose.Schema(
@@ -14,13 +15,11 @@ const userSchema = new mongoose.Schema(
 			unique: true,
 			trim: true,
 		},
-
 		password: {
 			type: String,
 			required: true,
 			minlength: 5,
 		},
-
 		firstName: {
 			type: String,
 			required: true,
@@ -48,6 +47,30 @@ const userSchema = new mongoose.Schema(
 	},
 	{timestamps: true},
 )
+
+/**
+ * Password hash middleware.
+ */
+userSchema.pre<UserDocument>('save', function(next) {
+	if (!this.isModified('password')) {
+		return next()
+	}
+
+	const salt = bcrypt.genSaltSync(10)
+	this.password = bcrypt.hashSync(this.password, salt)
+	next()
+})
+
+/**
+ * Check user's password
+ *
+ * @param plainPassword
+ */
+userSchema.methods.checkPassword = function(plainPassword: string) {
+	const hashPassword = this.password
+
+	return bcrypt.compareSync(plainPassword, hashPassword)
+}
 
 const User = mongoose.model<UserDocument>('user', userSchema)
 

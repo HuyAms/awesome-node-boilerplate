@@ -4,8 +4,9 @@ export enum ErrorCode {
 	passwordNotCorrect = 1,
 	emailNotCorrect = 2,
 	emailNotFound = 3,
-	resetTokenInvalid = 4,
-	notActiveUser = 5,
+	emailNotUnique = 4,
+	resetTokenInvalid = 5,
+	notActiveUser = 6,
 }
 
 /**

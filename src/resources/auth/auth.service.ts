@@ -4,32 +4,40 @@ import {Message, sendEmail} from '../../services/mail'
 import config from '../../config'
 import {newToken} from '../../utils/auth'
 import createLogger from '../../utils/logger'
-import * as userServices from '../user/user.service'
 import {Token} from './auth.interface'
 import apiError, {ErrorCode} from '../../utils/apiError'
-import bcrypt from 'bcryptjs'
+import User from '../user/user.model'
 
 const logger = createLogger(module)
 
 /**
  * Sign up user
  *
- * @param userCreate
+ * @param newUser
  * @param activateUserPath
  */
 export const signup = async (
-	userCreate: IUser,
+	newUser: IUser,
 	activateUserPath: string,
 ): Promise<Token> => {
+	// Check if email is unique
+	const existingUser = User.findOne({email: newUser.email})
+	if (existingUser) {
+		return Promise.reject(
+			apiError.badRequest(
+				'Email has been already exits',
+				ErrorCode.emailNotUnique,
+			),
+		)
+	}
+
 	// Generate reset token
 	const {resetToken, resetTokenExp} = generateResetToken()
-	userCreate.resetToken = resetToken
-	userCreate.resetTokenExp = resetTokenExp
+	newUser.resetToken = resetToken
+	newUser.resetTokenExp = resetTokenExp
 
 	// Save user to the database
-	const user = await userServices.create(userCreate)
-
-	logger.debug('Save user: ', user.email)
+	const user = await User.create(newUser)
 
 	// Send an email to user, containing the activation link
 	const activateUserUrl = `${activateUserPath}/${user.resetToken}`
@@ -66,7 +74,7 @@ export const forgotPassword = async (
 
 	logger.debug(`Forgot password email: ${email}`)
 
-	const user: IUser = await userServices.findOne({email})
+	const user = await User.findOne({email}).exec()
 
 	if (!user) {
 		return Promise.reject(
@@ -83,7 +91,7 @@ export const forgotPassword = async (
 	user.resetTokenExp = resetTokenExp
 
 	// Save user to the database
-	await userServices.update(user.id, user)
+	await user.save()
 
 	// Send an email to user, containing the reset password token
 	const resetUrl = `${resetUrlPath}/${user.resetToken}`
@@ -115,10 +123,10 @@ export const resetPassword = async (
 	resetToken: string,
 	password: string,
 ): Promise<string> => {
-	const user = await userServices.findOne({resetToken})
+	const user = await User.findOne({resetToken})
 
 	if (!user) {
-		Promise.reject(
+		return Promise.reject(
 			apiError.notFound(
 				'Cannot find user with provided token',
 				ErrorCode.resetTokenInvalid,
@@ -126,13 +134,13 @@ export const resetPassword = async (
 		)
 	}
 
-	logger.debug('Reset password of user: %o', user)
+	logger.debug(`Reset password of user with email ${user.email}`)
 
 	// Check if expire time is over
 	const {resetTokenExp} = user
 
 	if (Date.now() > resetTokenExp) {
-		Promise.reject(
+		return Promise.reject(
 			apiError.badRequest(
 				'Token is already expired',
 				ErrorCode.resetTokenInvalid,
@@ -141,19 +149,18 @@ export const resetPassword = async (
 	}
 
 	// Check if user sends a password that is exact to be old one
-	const oldPassword = user.password
-	if (bcrypt.compareSync(password, oldPassword)) {
+	if (user.checkPassword(password)) {
 		return Promise.reject(
 			apiError.badRequest('New password should not match with old one'),
 		)
 	}
 
 	// Save new user passsword
-	// and remove reset token and expired time
+	// and deleteOne reset token and expired time
 	user.password = password
 	user.resetTokenExp = null
 	user.resetToken = null
-	await userServices.update(user.id, user)
+	await user.save()
 
 	// Send an email to notify user that password has been reset
 	const successMessage: Message = {
@@ -176,7 +183,7 @@ export const resetPassword = async (
  * @param resetToken
  */
 export const activateAccount = async (resetToken: string) => {
-	const user = await userServices.findOne({resetToken})
+	const user = await User.findOne({resetToken}).exec()
 
 	if (!user) {
 		return Promise.reject(
@@ -201,11 +208,11 @@ export const activateAccount = async (resetToken: string) => {
 	}
 
 	// Activation user
-	// and remove reset token and expired time
+	// and deleteOne reset token and expired time
 	user.status = UserStatus.Active
 	user.resetTokenExp = null
 	user.resetToken = null
-	await userServices.update(user.id, user)
+	await user.save()
 
 	return 'Active user successfully'
 }

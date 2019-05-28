@@ -4,6 +4,7 @@ import {newToken} from '../../utils/auth'
 import {successResponse} from '../../utils/apiResponse'
 import createLogger from '../../utils/logger'
 import * as services from './auth.service'
+import {UserDocument} from '../user/user.model'
 
 const logger = createLogger(module)
 
@@ -39,7 +40,8 @@ export const signup: RequestHandler = async (req, res, next) => {
  */
 export const signin: RequestHandler = (req, res, next) => {
 	logger.debug('Sign in with: %o', req.body)
-	passport.authenticate('local', (error, user) => {
+
+	passport.authenticate('local', (error: Error, user: UserDocument) => {
 		if (error) {
 			return next(error)
 		}

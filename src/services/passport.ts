@@ -6,7 +6,6 @@
 
 import passport from 'passport'
 import * as localStrategy from 'passport-local'
-import bcrypt from 'bcryptjs'
 import {findById} from '../resources/user/user.service'
 import apiError, {ErrorCode} from '../utils/apiError'
 
@@ -37,7 +36,7 @@ const initPassport = () => {
 						)
 					}
 					// Check if provided password matches with user's password
-					if (bcrypt.compareSync(password, user.password)) {
+					if (user.checkPassword(password)) {
 						return done(null, user)
 					} else {
 						return done(
