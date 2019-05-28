@@ -210,9 +210,8 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 			from: config.mailSender,
 			to: user.email,
 			subject: 'You password has been reset',
-			text: `This is a confirmation message for account ${
-				user.email
-			}. Your password has just been changed`,
+			html: `<p>This is a confirmation message for account ${user.email}. <br />
+			Your password has just been changed</p>`,
 		}
 
 		await sendEmail(successMessage)
