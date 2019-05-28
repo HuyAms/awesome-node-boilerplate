@@ -1,6 +1,9 @@
 import User from './user.model'
 import {IUser} from './user.interface'
 import {UserDocument} from './user.model'
+import createLogger from '../../utils/logger'
+
+const logger = createLogger(module)
 
 /**
  * Find user by id
@@ -9,15 +12,6 @@ import {UserDocument} from './user.model'
  */
 export const findById = async (id: string): Promise<UserDocument> => {
 	const user = await User.findById(id).exec()
-	return user
-}
-
-/**
- * Find one user with condition
- *
- */
-export const getOne = async (): Promise<UserDocument> => {
-	const user = await User.findOne().exec()
 	return user
 }
 
@@ -40,6 +34,8 @@ export const updateOne = async (
 	id: string,
 	userUpdate: IUser,
 ): Promise<UserDocument> => {
+	logger.debug(`Update user> %o`, userUpdate)
+
 	const updatedUser = await User.findByIdAndUpdate(id, userUpdate).exec()
 	return updatedUser
 }

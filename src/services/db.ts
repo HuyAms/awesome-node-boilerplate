@@ -2,6 +2,8 @@ import mongoose from 'mongoose'
 import config from '../config'
 
 const connectDb = (url = config.dbUrl, opts = {}) => {
+	mongoose.set('debug', true)
+
 	return mongoose.connect(url, {...opts, useNewUrlParser: true})
 }
 

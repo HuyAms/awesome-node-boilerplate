@@ -25,7 +25,7 @@ const mockUser2: IUser = {
 const mockUsers = [mockUser1, mockUser2]
 
 const cleanDB = () => {
-	return User.remove({})
+	return User.deleteMany({})
 }
 
 const createUsers = () => {
