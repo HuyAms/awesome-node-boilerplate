@@ -45,7 +45,7 @@ export const signup: RequestHandler = async (req, res, next) => {
 		logger.debug('Save user: ', user.email)
 
 		// Send an email to user, containing the activation link
-		const activeUrl = `http://${req.headers.host}/auth/active/${
+		const activeUrl = `${req.protocol}://${req.hostname}/auth/active/${
 			user.resetToken
 		}`
 
@@ -126,7 +126,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 		await saveUser(user)
 
 		// Send an email to user, containing the reset password token
-		const resetUrl = `http://${req.headers.host}/auth/password/reset/${
+		const resetUrl = `${req.protocol}://${req.hostname}/auth/password/reset/${
 			user.resetToken
 		}`
 
