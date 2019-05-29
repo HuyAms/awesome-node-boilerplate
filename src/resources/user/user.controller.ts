@@ -22,6 +22,8 @@ export const params: RequestParamHandler = async (req, res, next, id) => {
 		}
 
 		req.user = user
+
+		next()
 	} catch (e) {
 		return next(error)
 	}

@@ -2,6 +2,7 @@ import UserModel from './user.model'
 import {User} from './user.interface'
 import {UserDocument} from './user.model'
 import createLogger from '../../utils/logger'
+import * as _ from 'lodash'
 
 const logger = createLogger(module)
 
@@ -34,9 +35,14 @@ export const updateOne = async (
 	id: string,
 	userUpdate: User,
 ): Promise<UserDocument> => {
-	logger.debug(`Update user> %o`, userUpdate)
+	logger.debug(`Update user: %o`, userUpdate)
 
-	const updatedUser = await UserModel.findByIdAndUpdate(id, userUpdate).exec()
+	const user = await UserModel.findById(id).exec()
+
+	_.merge(user, userUpdate)
+
+	const updatedUser = await user.save()
+
 	return updatedUser
 }
 
