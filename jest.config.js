@@ -21,12 +21,12 @@ module.exports = {
 	testPathIgnorePatterns: ['/node_modules/', '/dist/'],
 	// configure minimum threshold enforcement for coverage results
 	// https://jestjs.io/docs/en/configuration#coveragethreshold-object
-	coverageThreshold: {
-		global: {
-			branches: 80,
-			functions: 80,
-			lines: 80,
-			statements: -10,
-		},
-	},
+	// coverageThreshold: {
+	// 	global: {
+	// 		branches: 80,
+	// 		functions: 80,
+	// 		lines: 80,
+	// 		statements: -10,
+	// 	},
+	// },
 }

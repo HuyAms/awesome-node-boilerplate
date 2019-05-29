@@ -1,4 +1,4 @@
-const config = {
+export const config = {
 	seed: false,
 	loggerLevel: 'debug',
 	secrets: {
@@ -6,5 +6,3 @@ const config = {
 	},
 	mailSender: 'test<noreply@test.com>',
 }
-
-export default config
