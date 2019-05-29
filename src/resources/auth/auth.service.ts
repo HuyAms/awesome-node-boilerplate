@@ -56,7 +56,7 @@ export const signup = async (
 
 	await sendEmail(message)
 
-	logger.debug('Send reset password link to email: ', user.email)
+	logger.debug(`Send activation link to email: ${user.email}`)
 
 	const token = newToken(user)
 
@@ -112,7 +112,7 @@ export const forgotPassword = async (
 
 	await sendEmail(message)
 
-	logger.debug('Send reset password link to email: ', user.email)
+	logger.debug(`Send reset password link to email: ${user.email}`)
 
 	return 'Please check your email'
 }
@@ -121,7 +121,7 @@ export const forgotPassword = async (
  * Reset password
  *
  * @param resetToken
- * @param password
+ * @param password`
  */
 export const resetPassword = async (
 	resetToken: string,
@@ -196,7 +196,7 @@ export const activateAccount = async (resetToken: string) => {
 		)
 	}
 
-	logger.debug(`Activation user with email ${user.email}`)
+	logger.debug(`Activate user with email ${user.email}`)
 
 	// Check if expire time is over
 	const {resetTokenExp} = user
