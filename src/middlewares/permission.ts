@@ -61,7 +61,7 @@ export const checkUserStatus: RequestHandler = (req, res, next) => {
 	} else {
 		return next(
 			apiError.unauthorized(
-				'UserModel has not been activated',
+				'User has not been activated',
 				ErrorCode.notActiveUser,
 			),
 		)

@@ -14,9 +14,9 @@ components:
       - user
 
     #-------------------------------
-    # UserModel
+    # User
 
-    User:  # Can be referenced as '#/components/schemas/UserModel'
+    User:  # Can be referenced as '#/components/schemas/User'
       type: object
       properties:
         id:
@@ -53,7 +53,7 @@ components:
     # UserUpdate
 
     UserUpdate: # Can be referenced as '#/components/requestBodies/UserUpdate'
-      description: UserModel to update
+      description: User to update
       required: true
       content:
         application/json:
