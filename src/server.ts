@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 const dotEnvResult = dotenv.config()
 
 import express from 'express'
+import chalk from 'chalk'
 import middlewares from './middlewares/global'
 import {errorHandler} from './middlewares/errorHandler'
 import swagger from './middlewares/swagger'
@@ -74,7 +75,11 @@ export const start = async () => {
 		await connectDb()
 
 		app.listen(port, () => {
-			logger.info(`App is running on port ${port} in ${env} mode`)
+			logger.info(
+				`App is running on port ${chalk.yellow(
+					port as string,
+				)} in ${chalk.yellow(env)} mode`,
+			)
 		})
 	} catch (e) {
 		logger.error(e.message)

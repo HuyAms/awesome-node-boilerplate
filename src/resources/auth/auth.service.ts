@@ -21,7 +21,8 @@ export const signup = async (
 	activateUserPath: string,
 ): Promise<Token> => {
 	// Check if email is unique
-	const existingUser = User.findOne({email: newUser.email})
+	const existingUser = await User.findOne({email: newUser.email}).exec()
+
 	if (existingUser) {
 		return Promise.reject(
 			apiError.badRequest(
