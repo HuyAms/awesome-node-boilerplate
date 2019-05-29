@@ -28,7 +28,7 @@ const readUser = protect([Permission.UserRead])
  *       default:
  *         $ref: '#/components/responses/ErrorResponse'
  */
-router.route('/').get(userController.getMany)
+router.route('/').get(readUser, userController.getMany)
 
 /**
  * @swagger

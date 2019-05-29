@@ -6,6 +6,8 @@ import * as _ from 'lodash'
 
 const logger = createLogger(module)
 
+const excludeFields = '-password -resetToken -resetTokenExp'
+
 /**
  * Find user by id
  *
@@ -13,7 +15,7 @@ const logger = createLogger(module)
  */
 export const findById = async (id: string): Promise<UserDocument> => {
 	const user = await UserModel.findById(id)
-		.select('-password -resetToken -resetTokenExp')
+		.select(excludeFields)
 		.exec()
 	return user
 }
@@ -24,7 +26,7 @@ export const findById = async (id: string): Promise<UserDocument> => {
  */
 export const getMany = async (): Promise<UserDocument[]> => {
 	const users = await UserModel.find()
-		.select('-password -resetToken -resetTokenExp')
+		.select(excludeFields)
 		.exec()
 	return users
 }
@@ -56,6 +58,8 @@ export const updateOne = async (
  * @param id
  */
 export const deleteOne = async (id: string): Promise<UserDocument> => {
-	const removedUser = await UserModel.findByIdAndDelete(id).exec()
+	const removedUser = await UserModel.findByIdAndDelete(id)
+		.select(excludeFields)
+		.exec()
 	return removedUser
 }

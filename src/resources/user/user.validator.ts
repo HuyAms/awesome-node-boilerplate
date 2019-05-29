@@ -10,9 +10,9 @@ export const validateUpdateUser = () => {
 		body('email', 'Invalid email')
 			.isEmail()
 			.normalizeEmail(),
-		body('password', 'Password must be at least 5 chars long').isLength({
-			min: 5,
-		}),
+		body('password', 'Not allow to update user password')
+			.not()
+			.exists(),
 		body('firstName', 'First name must be string at least 2 chars long')
 			.isString()
 			.isLength({min: 2}),
