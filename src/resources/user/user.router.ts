@@ -57,7 +57,6 @@ router.param('id', userController.params)
 
 router
 	.route('/:id')
-
 	/**
 	 * @swagger
 	 *

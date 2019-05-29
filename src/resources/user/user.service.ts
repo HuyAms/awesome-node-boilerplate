@@ -2,6 +2,7 @@ import UserModel from './user.model'
 import {User} from './user.interface'
 import {UserDocument} from './user.model'
 import createLogger from '../../utils/logger'
+import apiError from '../../utils/apiError'
 import * as _ from 'lodash'
 
 const logger = createLogger(module)
@@ -17,6 +18,11 @@ export const findById = async (id: string): Promise<UserDocument> => {
 	const user = await UserModel.findById(id)
 		.select(excludeFields)
 		.exec()
+
+	if (!user) {
+		return Promise.reject(apiError.notFound('Cannot find user with that id'))
+	}
+
 	return user
 }
 
@@ -44,6 +50,10 @@ export const updateOne = async (
 	logger.debug(`Update user: %o`, userUpdate)
 
 	const user = await UserModel.findById(id).exec()
+
+	if (!user) {
+		return Promise.reject(apiError.notFound('Cannot find user with that id'))
+	}
 
 	_.merge(user, userUpdate)
 

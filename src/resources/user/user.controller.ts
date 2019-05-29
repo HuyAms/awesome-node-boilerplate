@@ -1,8 +1,6 @@
 import {RequestHandler, RequestParamHandler} from 'express'
 import * as services from './user.service'
-import apiError from '../../utils/apiError'
 import {successResponse} from '../../utils/apiResponse'
-import {error} from 'winston'
 
 /**
  * Find user with req.params.id
@@ -17,15 +15,11 @@ export const params: RequestParamHandler = async (req, res, next, id) => {
 	try {
 		const user = await services.findById(id)
 
-		if (!user) {
-			return next(apiError.notFound('Cannot find user with that id'))
-		}
-
 		req.user = user
 
 		next()
 	} catch (e) {
-		return next(error)
+		return next(e)
 	}
 }
 
