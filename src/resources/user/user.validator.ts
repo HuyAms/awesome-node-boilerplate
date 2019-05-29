@@ -1,5 +1,5 @@
 import {body} from 'express-validator/check'
-import {returnValidationError} from '../../middlewares/validator'
+import {handleValidationError} from '../../middlewares/validator'
 import {UserRole} from './user.interface'
 
 /**
@@ -20,6 +20,6 @@ export const validateUpdateUser = () => {
 			.isString()
 			.isLength({min: 2}),
 		body('role', 'Invalid role').isIn([UserRole.User, UserRole.Admin]),
-		returnValidationError,
+		handleValidationError,
 	]
 }

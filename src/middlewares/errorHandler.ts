@@ -1,5 +1,6 @@
-import {ApiError} from '../utils/apiError'
 import {ErrorRequestHandler} from 'express'
+import chalk from 'chalk'
+import {ApiError} from '../utils/apiError'
 import httpStatus from 'http-status'
 import createLogger from '../utils/logger'
 import {errorResponse} from '../utils/apiResponse'
@@ -40,7 +41,7 @@ const sendError: ErrorRequestHandler = (err, req, res, next) => {
 	if (status === httpStatus.INTERNAL_SERVER_ERROR) {
 		logger.error(err)
 	} else {
-		logger.debug(`[ERROR]: ${message}`)
+		logger.debug(`${chalk.red('[ERROR]:')} ${message}`)
 	}
 
 	res.status(status).json(errorResponse(err))

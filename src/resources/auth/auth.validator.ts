@@ -1,5 +1,5 @@
 import {body, param} from 'express-validator/check'
-import {returnValidationError} from '../../middlewares/validator'
+import {handleValidationError} from '../../middlewares/validator'
 
 /**
  * Middleware to validate sign up request
@@ -21,7 +21,7 @@ export const validateSignUp = () => {
 		body('status', 'Not allow to set user status')
 			.not()
 			.exists(),
-		returnValidationError,
+		handleValidationError,
 	]
 }
 
@@ -37,7 +37,7 @@ export const validateSignIn = () => {
 		body('password', 'Password must be at least 5 chars long').isLength({
 			min: 5,
 		}),
-		returnValidationError,
+		handleValidationError,
 	]
 }
 
@@ -51,7 +51,7 @@ export const validateForgetPassword = () => {
 			.exists()
 			.isEmail()
 			.normalizeEmail(),
-		returnValidationError,
+		handleValidationError,
 	]
 }
 
@@ -79,7 +79,7 @@ export const validateResetPassword = () => {
 		).custom((value, {req}) => {
 			return value === req.body.password
 		}),
-		returnValidationError,
+		handleValidationError,
 	]
 }
 
@@ -92,6 +92,6 @@ export const validateActivateAccount = () => {
 		param('resetToken', 'Invalid token')
 			.isString()
 			.isLength({min: 10}),
-		returnValidationError,
+		handleValidationError,
 	]
 }

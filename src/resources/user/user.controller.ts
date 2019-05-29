@@ -42,7 +42,8 @@ export const getMe: RequestHandler = (req, res) => {
  */
 export const getMany: RequestHandler = async (req, res, next) => {
 	try {
-		const users = await services.getMany()
+		const {field, sort} = req.query
+		const users = await services.getMany(field, sort)
 		return res.json(successResponse(users))
 	} catch (e) {
 		return next(e)
