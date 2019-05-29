@@ -49,8 +49,8 @@ export const signup = async (
 		from: config.mailSender,
 		to: user.email,
 		subject: 'Activate your account',
-		text: `To active your account, please click the following link: \n \n
-				${activateUserUrl}
+		html: `<p>To active your account, please click the following link:</p>
+				<a href=${activateUserUrl}>${activateUserUrl}</a>
 			`,
 	}
 
@@ -103,10 +103,11 @@ export const forgotPassword = async (
 		from: config.mailSender,
 		to: user.email,
 		subject: 'Reset password',
-		text: `You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n
-          Please click on the following link, or paste this into your browser to complete the process:\n\n
-          ${resetUrl}
-          If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+		html: `<p>You are receiving this email because you (or someone else) have requested the reset of the password for your account.
+					<br />
+					Please click on the following link, or paste this into your browser to complete the process:</p>
+					<a href=${resetUrl}>${resetUrl}</a>
+					<p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`,
 	}
 
 	await sendEmail(message)
@@ -161,8 +162,7 @@ export const resetPassword = async (
 	// Save new user passsword
 	// and deleteOne reset token and expired time
 	user.password = password
-	user.resetTokenExp = null
-	user.resetToken = null
+	user.clearResetToken()
 	await user.save()
 
 	// Send an email to notify user that password has been reset
@@ -170,9 +170,8 @@ export const resetPassword = async (
 		from: config.mailSender,
 		to: user.email,
 		subject: 'You password has been reset',
-		text: `This is a confirmation message for account ${
-			user.email
-		}. Your password has just been changed`,
+		html: `<p>This is a confirmation message for account ${user.email}. <br />
+			Your password has just been changed</p>`,
 	}
 
 	await sendEmail(successMessage)
@@ -213,8 +212,7 @@ export const activateAccount = async (resetToken: string) => {
 	// Activation user
 	// and deleteOne reset token and expired time
 	user.status = UserStatus.Active
-	user.resetTokenExp = null
-	user.resetToken = null
+	user.clearResetToken()
 	await user.save()
 
 	return 'Active user successfully'

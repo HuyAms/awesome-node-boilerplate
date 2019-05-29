@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs'
 
 export interface UserDocument extends Document, User {
 	checkPassword: (password: string) => boolean
+	clearResetToken: () => void
 }
 
 const userSchema = new mongoose.Schema(
@@ -70,6 +71,11 @@ userSchema.methods.checkPassword = function(plainPassword: string) {
 	const hashPassword = this.password
 
 	return bcrypt.compareSync(plainPassword, hashPassword)
+}
+
+userSchema.methods.clearResetToken = function() {
+	this.resetToken = null
+	this.resetTokenExp = null
 }
 
 const User = mongoose.model<UserDocument>('user', userSchema)

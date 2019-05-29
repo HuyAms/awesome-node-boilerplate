@@ -16,7 +16,7 @@ export const signup: RequestHandler = async (req, res, next) => {
 	try {
 		const newUser = req.body
 
-		const activateUserPath = `${req.headers.host}/auth/active`
+		const activateUserPath = `${req.protocol}://${req.hostname}/auth/active`
 
 		const token = await services.signup(newUser, activateUserPath)
 
@@ -61,7 +61,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	const {email} = req.body
 
 	try {
-		const resetUrlPath = `${req.headers.host}/auth/password/reset`
+		const resetUrlPath = `${req.protocol}://${req.hostname}/auth/password/reset`
 		const message = await services.forgotPassword(email, resetUrlPath)
 
 		return res.json(successResponse(message, true))
