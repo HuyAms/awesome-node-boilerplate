@@ -33,11 +33,15 @@ const createUsers = () => {
 }
 
 export const seed = async () => {
-	await cleanDB()
+	try {
+		await cleanDB()
 
-	logger.debug(`Database cleaned`)
+		logger.debug(`Database cleaned`)
 
-	await Promise.all(createUsers())
+		await Promise.all(createUsers())
 
-	logger.debug(`Database seeded`)
+		logger.debug(`Database seeded`)
+	} catch (e) {
+		logger.error('Seed database error: ‰o', e)
+	}
 }

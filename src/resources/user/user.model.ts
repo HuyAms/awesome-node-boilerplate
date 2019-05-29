@@ -78,6 +78,6 @@ userSchema.methods.clearResetToken = function() {
 	this.resetTokenExp = null
 }
 
-const User = mongoose.model<UserDocument>('user', userSchema)
+const UserModel = mongoose.model<UserDocument>('user', userSchema)
 
-export default User
+export default UserModel

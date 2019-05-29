@@ -42,7 +42,10 @@ initPassport()
  * Seed data for dev
  */
 if (config.seed) {
-	seed()
+	app.get('/seed', (_, res) => {
+		seed()
+		res.send('Database seeded')
+	})
 }
 
 /**
