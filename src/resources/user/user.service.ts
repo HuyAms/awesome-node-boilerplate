@@ -12,7 +12,9 @@ const logger = createLogger(module)
  * @param id
  */
 export const findById = async (id: string): Promise<UserDocument> => {
-	const user = await UserModel.findById(id).exec()
+	const user = await UserModel.findById(id)
+		.select('-password -resetToken -resetTokenExp')
+		.exec()
 	return user
 }
 
@@ -21,7 +23,9 @@ export const findById = async (id: string): Promise<UserDocument> => {
  *
  */
 export const getMany = async (): Promise<UserDocument[]> => {
-	const users = await UserModel.find().exec()
+	const users = await UserModel.find()
+		.select('-password -resetToken -resetTokenExp')
+		.exec()
 	return users
 }
 
