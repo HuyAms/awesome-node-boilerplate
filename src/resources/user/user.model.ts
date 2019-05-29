@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import {IUser} from './user.interface'
+import {User} from './user.interface'
 import {Document} from 'mongoose'
 import bcrypt from 'bcryptjs'
 
-export interface UserDocument extends Document, IUser {
+export interface UserDocument extends Document, User {
 	checkPassword: (password: string) => boolean
 }
 

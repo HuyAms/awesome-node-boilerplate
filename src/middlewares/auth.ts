@@ -6,7 +6,7 @@ import {findById} from '../resources/user/user.service'
 /**
  * Middleware to check user's token
  *
- * - User has valid permission
+ * - UserModel has valid permission
  *   - Find user from database and attach to req.user
  *
  * @param req

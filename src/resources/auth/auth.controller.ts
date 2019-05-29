@@ -2,11 +2,8 @@ import passport from 'passport'
 import {RequestHandler} from 'express'
 import {newToken} from '../../utils/auth'
 import {successResponse} from '../../utils/apiResponse'
-import createLogger from '../../utils/logger'
 import * as services from './auth.service'
 import {UserDocument} from '../user/user.model'
-
-const logger = createLogger(module)
 
 /**
  * Sign up new user
@@ -16,8 +13,6 @@ const logger = createLogger(module)
  * @param next
  */
 export const signup: RequestHandler = async (req, res, next) => {
-	logger.debug('Sign up with: %o', req.body)
-
 	try {
 		const newUser = req.body
 
@@ -39,8 +34,6 @@ export const signup: RequestHandler = async (req, res, next) => {
  * @param next
  */
 export const signin: RequestHandler = (req, res, next) => {
-	logger.debug('Sign in with: %o', req.body)
-
 	passport.authenticate('local', (error: Error, user: UserDocument) => {
 		if (error) {
 			return next(error)
@@ -66,7 +59,6 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	// Check if email that user submitted belongs to an user
 
 	const {email} = req.body
-	logger.debug(`Forgot password email: ${email}`)
 
 	try {
 		const resetUrlPath = `${req.headers.host}/auth/password/reset`

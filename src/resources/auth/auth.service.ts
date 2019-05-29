@@ -1,4 +1,4 @@
-import {IUser, UserStatus} from '../user/user.interface'
+import {User, UserStatus} from '../user/user.interface'
 import {generateResetToken} from '../../utils/util'
 import {Message, sendEmail} from '../../services/mail'
 import config from '../../config'
@@ -6,7 +6,7 @@ import {newToken} from '../../utils/auth'
 import createLogger from '../../utils/logger'
 import {Token} from './auth.interface'
 import apiError, {ErrorCode} from '../../utils/apiError'
-import User from '../user/user.model'
+import UserModel from '../user/user.model'
 
 const logger = createLogger(module)
 
@@ -17,11 +17,13 @@ const logger = createLogger(module)
  * @param activateUserPath
  */
 export const signup = async (
-	newUser: IUser,
+	newUser: User,
 	activateUserPath: string,
 ): Promise<Token> => {
+	logger.debug('Sign up with: %o', newUser)
+
 	// Check if email is unique
-	const existingUser = await User.findOne({email: newUser.email}).exec()
+	const existingUser = await UserModel.findOne({email: newUser.email}).exec()
 
 	if (existingUser) {
 		return Promise.reject(
@@ -38,7 +40,7 @@ export const signup = async (
 	newUser.resetTokenExp = resetTokenExp
 
 	// Save user to the database
-	const user = await User.create(newUser)
+	const user = await UserModel.create(newUser)
 
 	// Send an email to user, containing the activation link
 	const activateUserUrl = `${activateUserPath}/${user.resetToken}`
@@ -75,7 +77,7 @@ export const forgotPassword = async (
 
 	logger.debug(`Forgot password email: ${email}`)
 
-	const user = await User.findOne({email}).exec()
+	const user = await UserModel.findOne({email}).exec()
 
 	if (!user) {
 		return Promise.reject(
@@ -124,7 +126,7 @@ export const resetPassword = async (
 	resetToken: string,
 	password: string,
 ): Promise<string> => {
-	const user = await User.findOne({resetToken})
+	const user = await UserModel.findOne({resetToken}).exec()
 
 	if (!user) {
 		return Promise.reject(
@@ -184,7 +186,7 @@ export const resetPassword = async (
  * @param resetToken
  */
 export const activateAccount = async (resetToken: string) => {
-	const user = await User.findOne({resetToken}).exec()
+	const user = await UserModel.findOne({resetToken}).exec()
 
 	if (!user) {
 		return Promise.reject(

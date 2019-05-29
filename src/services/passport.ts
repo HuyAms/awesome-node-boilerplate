@@ -6,8 +6,11 @@
 
 import passport from 'passport'
 import * as localStrategy from 'passport-local'
-import {findById} from '../resources/user/user.service'
 import apiError, {ErrorCode} from '../utils/apiError'
+import UserModel from '../resources/user/user.model'
+import createLogger from '../utils/logger'
+
+const logger = createLogger(module)
 
 const LocalStrategy = localStrategy.Strategy
 
@@ -25,7 +28,9 @@ const initPassport = () => {
 			async (email, password, done) => {
 				try {
 					// Check if provided email belongs to an user
-					const user = await findById(email)
+					logger.debug(`Sign in with email: ${email}`)
+
+					const user = await UserModel.findOne({email}).exec()
 					if (!user) {
 						return done(
 							apiError.unauthorized(

@@ -7,7 +7,7 @@ import {validateUpdateUser} from './user.validator'
  * @swagger
  *
  * tags:
- * - name: User
+ * - name: UserModel
  */
 const router = Router()
 
@@ -20,7 +20,7 @@ const readUser = protect([Permission.UserRead])
  * /api/users:
  *   get:
  *     tags:
- *       - User
+ *       - UserModel
  *     summary: Get all users
  *     responses:
  *       '200':
@@ -36,7 +36,7 @@ router.route('/').get(userController.getMany)
  * /api/users/me:
  *   get:
  *     tags:
- *       - User
+ *       - UserModel
  *     summary: Get my profile
  *     responses:
  *       '200':
@@ -64,7 +64,7 @@ router
 	 * /api/users/{:id}:
 	 *   get:
 	 *     tags:
-	 *       - User
+	 *       - UserModel
 	 *     summary: Get one user
 	 *     responses:
 	 *       '200':
@@ -80,7 +80,7 @@ router
 	 * /api/users/{:id}:
 	 *   put:
 	 *     tags:
-	 *       - User
+	 *       - UserModel
 	 *     summary: Update one user
 	 *     requestBody:
 	 *       $ref: '#/components/requestBodies/UserUpdate'
@@ -98,7 +98,7 @@ router
 	 * /api/users/{:id}:
 	 *   delete:
 	 *     tags:
-	 *       - User
+	 *       - UserModel
 	 *     summary: Delete one user
 	 *     responses:
 	 *       '200':

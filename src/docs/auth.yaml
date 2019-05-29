@@ -39,7 +39,7 @@ components:
     # AuthSignUp
 
     AuthSignUp: # Can be referenced as '#/components/requestBodies/AuthSignUp'
-      description: User to sign up
+      description: UserModel to sign up
       required: true
       content:
         application/json:
@@ -71,7 +71,7 @@ components:
     # AuthSignIn
 
     AuthSignIn: # Can be referenced as '#/components/requestBodies/AuthSignIn'
-      description: User to sign in
+      description: UserModel to sign in
       required: true
       content:
         application/json:

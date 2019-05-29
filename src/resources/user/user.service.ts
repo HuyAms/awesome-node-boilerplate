@@ -1,5 +1,5 @@
-import User from './user.model'
-import {IUser} from './user.interface'
+import UserModel from './user.model'
+import {User} from './user.interface'
 import {UserDocument} from './user.model'
 import createLogger from '../../utils/logger'
 
@@ -11,7 +11,7 @@ const logger = createLogger(module)
  * @param id
  */
 export const findById = async (id: string): Promise<UserDocument> => {
-	const user = await User.findById(id).exec()
+	const user = await UserModel.findById(id).exec()
 	return user
 }
 
@@ -20,7 +20,7 @@ export const findById = async (id: string): Promise<UserDocument> => {
  *
  */
 export const getMany = async (): Promise<UserDocument[]> => {
-	const users = await User.find().exec()
+	const users = await UserModel.find().exec()
 	return users
 }
 
@@ -32,11 +32,11 @@ export const getMany = async (): Promise<UserDocument[]> => {
  */
 export const updateOne = async (
 	id: string,
-	userUpdate: IUser,
+	userUpdate: User,
 ): Promise<UserDocument> => {
 	logger.debug(`Update user> %o`, userUpdate)
 
-	const updatedUser = await User.findByIdAndUpdate(id, userUpdate).exec()
+	const updatedUser = await UserModel.findByIdAndUpdate(id, userUpdate).exec()
 	return updatedUser
 }
 
@@ -46,6 +46,6 @@ export const updateOne = async (
  * @param id
  */
 export const deleteOne = async (id: string): Promise<UserDocument> => {
-	const removedUser = await User.findByIdAndDelete(id).exec()
+	const removedUser = await UserModel.findByIdAndDelete(id).exec()
 	return removedUser
 }
