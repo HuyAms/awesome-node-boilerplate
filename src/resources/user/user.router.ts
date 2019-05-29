@@ -22,6 +22,9 @@ const readUser = protect([Permission.UserRead])
  *     tags:
  *       - User
  *     summary: Get all users
+ *     parameters:
+ *       - $ref: '#/components/parameters/field'
+ *       - $ref: '#/components/parameters/sort'
  *     responses:
  *       '200':
  *         $ref: '#/components/responses/UsersResponse'
