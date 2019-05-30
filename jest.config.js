@@ -12,10 +12,9 @@ module.exports = {
 	clearMocks: true,
 	moduleDirectories: ['node_modules', 'src'],
 	moduleFileExtensions: ['ts', 'js', 'node', 'json'],
-	// Where Jest detectes test files
-	testMatch: [
-		'<rootDir>/src/**/tests/**/*.{ts,js}',
-		'<rootDir>/src/**/?(*.)(spec|test).{ts,js}',
+	setupFilesAfterEnv: [
+		'<rootDir>/src/test/setup.ts',
+		'<rootDir>/src/test/customMatcher.ts',
 	],
 	testEnvironment: 'node',
 	testPathIgnorePatterns: ['/node_modules/', '/dist/'],

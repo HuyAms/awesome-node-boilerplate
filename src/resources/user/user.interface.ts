@@ -6,7 +6,7 @@ export interface User {
 	role: UserRole
 	resetToken?: string
 	resetTokenExp?: number
-	status: UserStatus
+	status?: UserStatus
 }
 
 export enum UserStatus {
