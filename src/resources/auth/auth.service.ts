@@ -50,8 +50,7 @@ export const signup = async (
 		to: user.email,
 		subject: 'Activate your account',
 		html: `<p>To active your account, please click the following link:</p>
-				<a href=${activateUserUrl}>${activateUserUrl}</a>
-			`,
+				<a href=${activateUserUrl}>${activateUserUrl}</a>`,
 	}
 
 	await sendEmail(message)
@@ -127,30 +126,18 @@ export const resetPassword = async (
 	resetToken: string,
 	password: string,
 ): Promise<string> => {
-	const user = await UserModel.findOne({resetToken}).exec()
+	const user = await UserModel.findOne({resetToken})
+		.where('resetTokenExp')
+		.gt(Date.now())
+		.exec()
 
 	if (!user) {
 		return Promise.reject(
-			apiError.notFound(
-				'Cannot find user with provided token',
-				ErrorCode.resetTokenInvalid,
-			),
+			apiError.notFound('Invalid reset token', ErrorCode.resetTokenInvalid),
 		)
 	}
 
 	logger.debug(`Reset password of user with email ${user.email}`)
-
-	// Check if expire time is over
-	const {resetTokenExp} = user
-
-	if (Date.now() > resetTokenExp) {
-		return Promise.reject(
-			apiError.badRequest(
-				'Token is already expired',
-				ErrorCode.resetTokenInvalid,
-			),
-		)
-	}
 
 	// Check if user sends a password that is exact to be old one
 	if (user.checkPassword(password)) {
@@ -185,7 +172,10 @@ export const resetPassword = async (
  * @param resetToken
  */
 export const activateAccount = async (resetToken: string) => {
-	const user = await UserModel.findOne({resetToken}).exec()
+	const user = await UserModel.findOne({resetToken})
+		.where('resetTokenExp')
+		.gt(Date.now())
+		.exec()
 
 	if (!user) {
 		return Promise.reject(
@@ -197,17 +187,6 @@ export const activateAccount = async (resetToken: string) => {
 	}
 
 	logger.debug(`Activate user with email ${user.email}`)
-
-	// Check if expire time is over
-	const {resetTokenExp} = user
-	if (Date.now() > resetTokenExp) {
-		return Promise.reject(
-			apiError.badRequest(
-				'Token is already expired',
-				ErrorCode.resetTokenInvalid,
-			),
-		)
-	}
 
 	// Activation user
 	// and deleteOne reset token and expired time
