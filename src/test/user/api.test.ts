@@ -24,16 +24,16 @@ describe('[USERS API]', () => {
 		token = newToken(user1)
 	})
 
-	describe('GET api/users/:id', () => {
+	describe('GET /api/users/:id', () => {
 		it('should return 200 with found user', async () => {
 			// Action
-			const res = await apiRequest
+			const result = await apiRequest
 				.get(`/api/users/${user2.id}`)
 				.set('Authorization', `Bearer ${token}`)
 
 			// Expect
-			expect(res.status).toEqual(httpStatus.OK)
-			expect(res.body.data).toEqualUser(user2)
+			expect(result.status).toEqual(httpStatus.OK)
+			expect(result.body.data).toEqualUser(user2)
 		})
 
 		it('should return 400 when user not found', async () => {
@@ -47,6 +47,18 @@ describe('[USERS API]', () => {
 
 			// Expect
 			expect(res.status).toEqual(httpStatus.NOT_FOUND)
+		})
+	})
+
+	describe('Authentication', () => {
+		it('should return 401 when no or invalid jwt', async () => {
+			// Action
+			const results = await Promise.all([apiRequest.get('/api/users')])
+
+			// Expect
+			results.forEach(res =>
+				expect(res.status).toEqual(httpStatus.UNAUTHORIZED),
+			)
 		})
 	})
 })
