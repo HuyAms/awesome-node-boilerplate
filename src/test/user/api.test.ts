@@ -21,7 +21,7 @@ describe('[USERS API]', () => {
 			}),
 		)
 
-		token = newToken(user1)
+		token = `Bearer ${newToken(user1)}`
 	})
 
 	describe('GET /api/users/:id', () => {
@@ -29,7 +29,7 @@ describe('[USERS API]', () => {
 			// Action
 			const result = await apiRequest
 				.get(`/api/users/${user2.id}`)
-				.set('Authorization', `Bearer ${token}`)
+				.set('Authorization', token)
 
 			// Expect
 			expect(result.status).toEqual(httpStatus.OK)
@@ -43,7 +43,7 @@ describe('[USERS API]', () => {
 			// Action
 			const res = await apiRequest
 				.get(`/api/users/${mockId}`)
-				.set('Authorization', `Bearer ${token}`)
+				.set('Authorization', token)
 
 			// Expect
 			expect(res.status).toEqual(httpStatus.NOT_FOUND)
@@ -51,9 +51,18 @@ describe('[USERS API]', () => {
 	})
 
 	describe('Authentication', () => {
-		it('should return 401 when no or invalid jwt', async () => {
+		it('should return 401 when there is no or invalid token', async () => {
+			// Arrange
+			const mockId = createMockId()
+
 			// Action
-			const results = await Promise.all([apiRequest.get('/api/users')])
+			const results = await Promise.all([
+				apiRequest.get('/api/users'),
+				apiRequest.get('/api/users/me'),
+				apiRequest.get(`/api/users/${mockId}`),
+				apiRequest.put(`/api/users/${mockId}`),
+				apiRequest.delete(`/api/users/${mockId}`),
+			])
 
 			// Expect
 			results.forEach(res =>
