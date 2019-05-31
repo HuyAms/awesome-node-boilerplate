@@ -1,53 +1,57 @@
-import _ from 'lodash'
 import httpStatus from 'http-status'
 import {addUser} from '../utils/db'
 import {createMockId} from '../utils/mock'
-import {newToken} from '../../utils/auth'
-import {apiRequest} from '../utils/common'
+import {apiRequest, getRolesWithPermisison, siginUser} from '../utils/common'
 import {UserDocument} from '../../resources/user/user.model'
-import {UserStatus} from '../../resources/user/user.interface'
+import {UserRole, UserStatus} from '../../resources/user/user.interface'
 import {ErrorCode} from '../../utils/apiError'
+import {Permission} from '../../middlewares/permission'
 
 describe('[USERS API]', () => {
-	let user1: UserDocument
-	let user2: UserDocument
-	// let users: UserDocument[]
-	let token: string
+	let users: UserDocument[]
+	let dummyUser: UserDocument
 
 	beforeEach(async () => {
 		// Arrange
-		;[user1, user2] = await Promise.all(
-			_.times(3, () => {
-				return addUser()
-			}),
-		)
 
-		token = `Bearer ${newToken(user1)}`
+		;[dummyUser] = users = await Promise.all([
+			addUser(),
+			addUser(UserRole.User),
+			addUser(UserRole.Admin),
+		])
 	})
 
 	describe('GET /api/users/:id', () => {
-		it('should return 200 with found user', async () => {
-			// Action
-			const result = await apiRequest
-				.get(`/api/users/${user2.id}`)
-				.set('Authorization', token)
+		getRolesWithPermisison(Permission.UserRead).forEach(role => {
+			it(`[${role}]. should return 200 with found user`, async () => {
+				// Arrange
+				const user = users.find(user => user.role === role)
+				const token = siginUser(user)
 
-			// Expect
-			expect(result.status).toEqual(httpStatus.OK)
-			expect(result.body.data).toEqualUser(user2)
-		})
+				// Action
+				const result = await apiRequest
+					.get(`/api/users/${dummyUser.id}`)
+					.set('Authorization', token)
 
-		it('should return 400 when user not found', async () => {
-			// Arrange
-			const mockId = createMockId()
+				// Expect
+				expect(result.status).toEqual(httpStatus.OK)
+				expect(result.body.data).toEqualUser(dummyUser)
+			})
 
-			// Action
-			const res = await apiRequest
-				.get(`/api/users/${mockId}`)
-				.set('Authorization', token)
+			it(`[${role}]. should return 404 when user not found`, async () => {
+				// Arrange
+				const user = users.find(user => user.role === role)
+				const token = siginUser(user)
+				const mockId = createMockId()
 
-			// Expect
-			expect(res.status).toEqual(httpStatus.NOT_FOUND)
+				// Action
+				const res = await apiRequest
+					.get(`/api/users/${mockId}`)
+					.set('Authorization', token)
+
+				// Expect
+				expect(res.status).toEqual(httpStatus.NOT_FOUND)
+			})
 		})
 	})
 
@@ -77,15 +81,23 @@ describe('[USERS API]', () => {
 				const mockId = createMockId()
 
 				const noAccessRightUser = await addUser(undefined, userStatus)
-				const noAccessRightToken = `Bearer ${newToken(noAccessRightUser)}`
+				const noAccessRightToken = siginUser(noAccessRightUser)
 
 				// Action
 				const results = await Promise.all([
 					apiRequest.get('/api/users').set('Authorization', noAccessRightToken),
-					apiRequest.get('/api/users/me').set('Authorization', noAccessRightToken),
-					apiRequest.get(`/api/users/${mockId}`).set('Authorization', noAccessRightToken),
-					apiRequest.put(`/api/users/${mockId}`).set('Authorization', noAccessRightToken),
-					apiRequest.delete(`/api/users/${mockId}`).set('Authorization', noAccessRightToken),
+					apiRequest
+						.get('/api/users/me')
+						.set('Authorization', noAccessRightToken),
+					apiRequest
+						.get(`/api/users/${mockId}`)
+						.set('Authorization', noAccessRightToken),
+					apiRequest
+						.put(`/api/users/${mockId}`)
+						.set('Authorization', noAccessRightToken),
+					apiRequest
+						.delete(`/api/users/${mockId}`)
+						.set('Authorization', noAccessRightToken),
 				])
 
 				// Expect

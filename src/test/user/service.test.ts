@@ -4,7 +4,7 @@ import {createMockId} from '../utils/mock'
 import {getUserById} from '../../resources/user/user.service'
 import {ApiError} from '../../utils/apiError'
 
-describe('User Service', () => {
+describe('[User Service]', () => {
 	let user: UserDocument
 
 	beforeEach(async done => {

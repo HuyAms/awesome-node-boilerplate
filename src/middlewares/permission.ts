@@ -14,7 +14,7 @@ export enum Permission {
 
 type PermissionRole = {[key in UserRole]: Permission[]}
 
-const permissionRole: PermissionRole = {
+export const permissionRole: PermissionRole = {
 	[UserRole.Admin]: [Permission.UserRead, Permission.UserWrite],
 	[UserRole.User]: [Permission.UserRead],
 }
