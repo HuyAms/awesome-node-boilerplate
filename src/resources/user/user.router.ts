@@ -56,7 +56,6 @@ router.route('/me').get(readUser, userController.getMe)
  *   parameters:
  *     - $ref: '#/components/parameters/id'
  */
-router.param('id', userController.params)
 
 router
 	.route('/:id')

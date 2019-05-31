@@ -1,7 +1,7 @@
 import {RequestHandler} from 'express'
 import {getTokenFromRequest, verifyToken} from '../utils/auth'
 import apiError from '../utils/apiError'
-import {findById} from '../resources/user/user.service'
+import {getUserById} from '../resources/user/user.service'
 
 /**
  * Middleware to check user's token
@@ -26,7 +26,7 @@ export const checkToken: RequestHandler = async (req, res, next) => {
 
 	let user
 	try {
-		user = await findById(payload.id)
+		user = await getUserById(payload.id)
 	} catch (e) {
 		return next(apiError.unauthorized('Cannot find user with that token'))
 	}

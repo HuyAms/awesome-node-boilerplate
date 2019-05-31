@@ -1,7 +1,7 @@
 import {UserDocument} from '../../resources/user/user.model'
 import {createUser} from '../utils/db'
 import {createMockId, createMockUser} from '../utils/mock'
-import {findById} from '../../resources/user/user.service'
+import {getUserById} from '../../resources/user/user.service'
 import {ApiError} from '../../utils/apiError'
 
 describe('User Service', () => {
@@ -14,11 +14,11 @@ describe('User Service', () => {
 		done()
 	})
 
-	describe('findById', () => {
+	describe('getUserById', () => {
 		it('should return correct user', async () => {
 			try {
 				// Action
-				const foundUser = await findById(user.id)
+				const foundUser = await getUserById(user.id)
 
 				// Expect
 				expect(foundUser).toEqualUser(user)
@@ -33,7 +33,7 @@ describe('User Service', () => {
 				const mockId = createMockId()
 
 				// Action
-				const foundUser = await findById(mockId)
+				const foundUser = await getUserById(mockId)
 
 				// Expect
 				expect(foundUser).toBeUndefined()

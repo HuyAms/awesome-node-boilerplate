@@ -6,10 +6,4 @@ declare global {
 			toEqualUser(user: UserDocument): R
 		}
 	}
-
-	namespace Express {
-		interface Request {
-			foundUser?: any
-		}
-	}
 }
