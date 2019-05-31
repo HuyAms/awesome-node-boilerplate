@@ -57,7 +57,7 @@ describe('[USERS API]', () => {
 
 	describe('GET /api/users/me', () => {
 		getRolesWithPermisison(Permission.UserRead).forEach(role => {
-			it(`[${role}]. should return 200 with found user`, async () => {
+			it(`[${role}]. should return 200 with my profile`, async () => {
 				// Arrange
 				const user = users.find(user => user.role === role)
 				const token = siginUser(user)
@@ -70,6 +70,27 @@ describe('[USERS API]', () => {
 				// Expect
 				expect(result.status).toEqual(httpStatus.OK)
 				expect(result.body.data).toEqualUser(user)
+			})
+		})
+	})
+
+	describe('GET /api/users', () => {
+		getRolesWithPermisison(Permission.UserRead).forEach(role => {
+			it(`[${role}]. should return 200 with all users`, async () => {
+				// Arrange
+				const user = users.find(user => user.role === role)
+				const token = siginUser(user)
+
+				// Action
+				const result = await apiRequest
+					.get('/api/users')
+					.set('Authorization', token)
+
+				// Expect
+				expect(result.status).toEqual(httpStatus.OK)
+
+				const {data} = result.body
+				expect(data.length).toEqual(users.length)
 			})
 		})
 	})
