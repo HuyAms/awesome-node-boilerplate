@@ -1,7 +1,12 @@
 import httpStatus from 'http-status'
 import {addUser} from '../utils/db'
 import {createMockId} from '../utils/mock'
-import {apiRequest, getRolesWithPermisison, siginUser} from '../utils/common'
+import {
+	apiRequest,
+	getRolesWithoutPermission,
+	getRolesWithPermisison,
+	siginUser,
+} from '../utils/common'
 import {UserDocument} from '../../resources/user/user.model'
 import {UserRole, UserStatus} from '../../resources/user/user.interface'
 import {ErrorCode} from '../../utils/apiError'
@@ -91,6 +96,56 @@ describe('[USERS API]', () => {
 
 				const {data} = result.body
 				expect(data.length).toEqual(users.length)
+			})
+		})
+	})
+
+	describe('DELETE /api/users/:id', () => {
+		getRolesWithPermisison(Permission.UserWrite).forEach(role => {
+			it(`[${role}]. should return 200 with deleted user`, async () => {
+				// Arrange
+				const user = users.find(user => user.role === role)
+				const token = siginUser(user)
+
+				// Action
+				const result = await apiRequest
+					.del(`/api/users/${dummyUser.id}`)
+					.set('Authorization', token)
+
+				// Expect
+				expect(result.status).toEqual(httpStatus.OK)
+				expect(result.body.data).toEqualUser(dummyUser)
+			})
+
+			it(`[${role}]. should return 404 when delete user not found`, async () => {
+				// Arrange
+				const user = users.find(user => user.role === role)
+				const token = siginUser(user)
+				const mockId = createMockId()
+
+				// Action
+				const res = await apiRequest
+					.del(`/api/users/${mockId}`)
+					.set('Authorization', token)
+
+				// Expect
+				expect(res.status).toEqual(httpStatus.NOT_FOUND)
+			})
+		})
+
+		getRolesWithoutPermission(Permission.UserWrite).forEach(role => {
+			it(`[${role}]. should return 401 when user does not have UserWrite permission`, async () => {
+				// Arrange
+				const user = users.find(user => user.role === role)
+				const token = siginUser(user)
+
+				// Action
+				const result = await apiRequest
+					.del(`/api/users/${dummyUser.id}`)
+					.set('Authorization', token)
+
+				// Expect
+				expect(result.status).toEqual(httpStatus.FORBIDDEN)
 			})
 		})
 	})

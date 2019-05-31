@@ -8,7 +8,7 @@ export const createMockId = () => {
 	return id.toHexString()
 }
 
-export const createMockUser = (role: UserRole, status: UserStatus): User => ({
+export const createMockUser = (role: UserRole, status?: UserStatus): User => ({
 	firstName: faker.name.findName(),
 	lastName: faker.name.lastName(),
 	email: faker.internet.email(),
