@@ -81,7 +81,6 @@ export const deleteOne: RequestHandler = async (req, res, next) => {
 		const removedUser = await services.deleteOne(id)
 
 		return res.json(successResponse(removedUser, true))
-
 	} catch (e) {
 		return next(e)
 	}

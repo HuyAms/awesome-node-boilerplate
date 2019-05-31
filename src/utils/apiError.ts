@@ -53,6 +53,16 @@ export const unauthorized = (
 }
 
 /**
+ * Throw Forbidden (403)
+ *
+ * @param message
+ * @param errorCode
+ */
+export const forbidden = (message = 'Forbidden', errorCode?: ErrorCode) => {
+	return new ApiError(message, httpStatus.FORBIDDEN, errorCode)
+}
+
+/**
  * Throw Not found (404)
  *
  * @param message
@@ -92,6 +102,7 @@ export default {
 	badRequest,
 	unauthorized,
 	notFound,
+	forbidden,
 	unsupportedMediaType,
 	internalServer,
 }

@@ -39,7 +39,7 @@ const checkPermission = (permissions?: [Permission]) => {
 		if (hasPermission) {
 			return next()
 		} else {
-			return next(apiError.unauthorized())
+			return next(apiError.forbidden())
 		}
 	}
 }
@@ -60,7 +60,7 @@ export const checkUserStatus: RequestHandler = (req, res, next) => {
 		return next()
 	} else {
 		return next(
-			apiError.unauthorized(
+			apiError.forbidden(
 				'User has not been activated',
 				ErrorCode.notActiveUser,
 			),
