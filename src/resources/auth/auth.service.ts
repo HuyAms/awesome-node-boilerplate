@@ -59,7 +59,7 @@ export const signup = async (
 
 	const token = newToken(user)
 
-	return {token}
+	return Promise.resolve({token})
 }
 
 /**
@@ -71,7 +71,7 @@ export const signup = async (
 export const forgotPassword = async (
 	email: string,
 	resetUrlPath: string,
-): Promise<string> => {
+): Promise<void> => {
 	// Check if email that user submitted belongs to an user
 
 	logger.debug(`Forgot password email: ${email}`)
@@ -113,7 +113,7 @@ export const forgotPassword = async (
 
 	logger.debug(`Send reset password link to email: ${user.email}`)
 
-	return 'Please check your email'
+	return Promise.resolve()
 }
 
 /**
@@ -125,7 +125,7 @@ export const forgotPassword = async (
 export const resetPassword = async (
 	resetToken: string,
 	password: string,
-): Promise<string> => {
+): Promise<void> => {
 	const user = await UserModel.findOne({resetToken})
 		.where('resetTokenExp')
 		.gt(Date.now())
@@ -163,7 +163,7 @@ export const resetPassword = async (
 
 	await sendEmail(successMessage)
 
-	return 'Password has been successfully rest'
+	return Promise.resolve()
 }
 
 /**
@@ -171,7 +171,7 @@ export const resetPassword = async (
  *
  * @param resetToken
  */
-export const activateAccount = async (resetToken: string) => {
+export const activateAccount = async (resetToken: string): Promise<void> => {
 	const user = await UserModel.findOne({resetToken})
 		.where('resetTokenExp')
 		.gt(Date.now())
@@ -194,5 +194,5 @@ export const activateAccount = async (resetToken: string) => {
 	user.clearResetToken()
 	await user.save()
 
-	return 'Active user successfully'
+	return Promise.resolve()
 }

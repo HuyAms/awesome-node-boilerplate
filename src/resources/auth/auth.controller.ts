@@ -62,7 +62,9 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 
 	try {
 		const resetUrlPath = `${req.protocol}://${req.hostname}/auth/password/reset`
-		const message = await services.forgotPassword(email, resetUrlPath)
+		await services.forgotPassword(email, resetUrlPath)
+
+		const message = 'Please check your email'
 
 		return res.json(successResponse(message, true))
 	} catch (error) {
@@ -84,7 +86,9 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 	const {password} = req.body
 
 	try {
-		const message = await services.resetPassword(resetToken, password)
+		await services.resetPassword(resetToken, password)
+
+		const message = 'Password has been successfully rest'
 
 		return res.json(successResponse(message, true))
 	} catch (error) {
@@ -106,7 +110,9 @@ export const activateAccount: RequestHandler = async (req, res, next) => {
 	const {resetToken} = req.params
 
 	try {
-		const message = await services.activateAccount(resetToken)
+		await services.activateAccount(resetToken)
+
+		const message = 'Active user successfully'
 
 		return res.json(successResponse(message, true))
 	} catch (error) {

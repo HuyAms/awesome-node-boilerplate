@@ -23,7 +23,7 @@ export const findById = async (id: string): Promise<UserDocument> => {
 		return Promise.reject(apiError.notFound('Cannot find user with that id'))
 	}
 
-	return user
+	return Promise.resolve(user)
 }
 
 /**
@@ -34,7 +34,7 @@ export const getMany = async (): Promise<UserDocument[]> => {
 	const users = await UserModel.find()
 		.select(excludeFields)
 		.exec()
-	return users
+	return Promise.resolve(users)
 }
 
 /**
@@ -59,7 +59,7 @@ export const updateOne = async (
 
 	const updatedUser = await user.save()
 
-	return updatedUser
+	return Promise.resolve(updatedUser)
 }
 
 /**
@@ -71,5 +71,5 @@ export const deleteOne = async (id: string): Promise<UserDocument> => {
 	const removedUser = await UserModel.findByIdAndDelete(id)
 		.select(excludeFields)
 		.exec()
-	return removedUser
+	return Promise.resolve(removedUser)
 }
