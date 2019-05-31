@@ -39,7 +39,12 @@ const checkPermission = (permissions?: [Permission]) => {
 		if (hasPermission) {
 			return next()
 		} else {
-			return next(apiError.forbidden())
+			return next(
+				apiError.forbidden(
+					'User has no permission to perform this action',
+					ErrorCode.invalidPermission,
+				),
+			)
 		}
 	}
 }

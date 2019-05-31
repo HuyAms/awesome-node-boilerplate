@@ -1,6 +1,6 @@
 import {UserDocument} from '../../resources/user/user.model'
-import {createUser} from '../utils/db'
-import {createMockId, createMockUser} from '../utils/mock'
+import {addUser} from '../utils/db'
+import {createMockId} from '../utils/mock'
 import {getUserById} from '../../resources/user/user.service'
 import {ApiError} from '../../utils/apiError'
 
@@ -9,8 +9,7 @@ describe('User Service', () => {
 
 	beforeEach(async done => {
 		// Arrange
-		const mockUser = createMockUser()
-		user = await createUser(mockUser)
+		user = await addUser()
 		done()
 	})
 

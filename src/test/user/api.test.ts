@@ -1,10 +1,12 @@
 import _ from 'lodash'
 import httpStatus from 'http-status'
-import {createUser} from '../utils/db'
-import {createMockId, createMockUser} from '../utils/mock'
+import {addUser} from '../utils/db'
+import {createMockId} from '../utils/mock'
 import {newToken} from '../../utils/auth'
 import {apiRequest} from '../utils/common'
 import {UserDocument} from '../../resources/user/user.model'
+import {UserStatus} from '../../resources/user/user.interface'
+import {ErrorCode} from '../../utils/apiError'
 
 describe('[USERS API]', () => {
 	let user1: UserDocument
@@ -15,9 +17,8 @@ describe('[USERS API]', () => {
 	beforeEach(async () => {
 		// Arrange
 		;[user1, user2] = await Promise.all(
-			_.times(10, () => {
-				const mockUser = createMockUser()
-				return createUser(mockUser)
+			_.times(3, () => {
+				return addUser()
 			}),
 		)
 
@@ -50,8 +51,8 @@ describe('[USERS API]', () => {
 		})
 	})
 
-	describe('Authentication', () => {
-		it('should return 401 when there is no or invalid token', async () => {
+	describe('Authentication and Authorization', () => {
+		it('should return 401 when there is no token', async () => {
 			// Arrange
 			const mockId = createMockId()
 
@@ -69,5 +70,31 @@ describe('[USERS API]', () => {
 				expect(res.status).toEqual(httpStatus.UNAUTHORIZED),
 			)
 		})
+
+		const testAuthorization = (userStatus: UserStatus) => {
+			it(`should return 403 when user status is ${userStatus}`, async () => {
+				// Arrange
+				const mockId = createMockId()
+
+				const noAccessRightUser = await addUser(undefined, userStatus)
+				const noAccessRightToken = `Bearer ${newToken(noAccessRightUser)}`
+
+				// Action
+				const results = await Promise.all([
+					apiRequest.get('/api/users').set('Authorization', noAccessRightToken),
+					apiRequest.get('/api/users/me').set('Authorization', noAccessRightToken),
+					apiRequest.get(`/api/users/${mockId}`).set('Authorization', noAccessRightToken),
+					apiRequest.put(`/api/users/${mockId}`).set('Authorization', noAccessRightToken),
+					apiRequest.delete(`/api/users/${mockId}`).set('Authorization', noAccessRightToken),
+				])
+
+				// Expect
+				results.forEach(res => {
+					expect(res.status).toEqual(httpStatus.FORBIDDEN)
+					expect(res.body.errorCode).toEqual(ErrorCode.notActiveUser)
+				})
+			})
+		}
+		;[UserStatus.Initial, UserStatus.Disabled].forEach(testAuthorization)
 	})
 })
