@@ -15,7 +15,7 @@ export const params: RequestParamHandler = async (req, res, next, id) => {
 	try {
 		const user = await services.findById(id)
 
-		req.user = user
+		req.foundUser = user
 
 		next()
 	} catch (e) {
@@ -57,8 +57,8 @@ export const getMany: RequestHandler = async (req, res, next) => {
  * @param res
  */
 export const getOne: RequestHandler = async (req, res, next) => {
-	const {user} = req
-	return res.json(successResponse(user))
+	const {foundUser} = req
+	return res.json(successResponse(foundUser))
 }
 
 /**
@@ -69,8 +69,8 @@ export const getOne: RequestHandler = async (req, res, next) => {
  */
 export const updateOne: RequestHandler = async (req, res, next) => {
 	try {
-		const {user, body} = req
-		const updatedUser = await services.updateOne(user.id, body)
+		const {foundUser, body} = req
+		const updatedUser = await services.updateOne(foundUser.id, body)
 		return res.json(successResponse(updatedUser, true))
 	} catch (e) {
 		return next(e)
@@ -85,8 +85,8 @@ export const updateOne: RequestHandler = async (req, res, next) => {
  */
 export const deleteOne: RequestHandler = async (req, res, next) => {
 	try {
-		const {user} = req
-		const removedUser = await services.deleteOne(user.id)
+		const {foundUser} = req
+		const removedUser = await services.deleteOne(foundUser.id)
 		return res.json(successResponse(removedUser, true))
 	} catch (e) {
 		return next(e)

@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"build": "babel src --out-dir dist --extensions .ts",
-		"dev": "nodemon --exec ts-node src/index.ts",
+		"dev": "nodemon --exec ts-node --files src/index.ts",
 		"restart": "rimraf dist && npm run build && npm start",
 		"start": "node dist/index.js",
 		"test": "jest --coverage",
