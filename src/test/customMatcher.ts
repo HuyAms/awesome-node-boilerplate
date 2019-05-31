@@ -2,8 +2,10 @@ import {UserDocument} from '../resources/user/user.model'
 
 expect.extend({
 	toEqualUser(received: UserDocument, expected: UserDocument) {
+		const receivedId = received.id || received._id.toString()
+		const expectedId = expected.id || expected._id.toString()
 		const pass =
-			received.id === expected.id &&
+			receivedId === expectedId &&
 			received.firstName === expected.firstName &&
 			received.lastName === expected.lastName &&
 			received.role === expected.role &&

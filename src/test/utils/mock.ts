@@ -1,5 +1,5 @@
 import faker from 'faker'
-import {User, UserRole} from '../../resources/user/user.interface'
+import {User, UserRole, UserStatus} from '../../resources/user/user.interface'
 import {Types} from 'mongoose'
 
 export const createMockId = () => {
@@ -8,10 +8,14 @@ export const createMockId = () => {
 	return id.toHexString()
 }
 
-export const createMockUser = (role: UserRole = UserRole.User): User => ({
+export const createMockUser = (
+	role: UserRole = UserRole.User,
+	status: UserStatus = UserStatus.Active,
+): User => ({
 	firstName: faker.name.findName(),
 	lastName: faker.name.lastName(),
 	email: faker.internet.email(),
 	password: faker.internet.password(),
-	role: UserRole.Admin,
+	role,
+	status,
 })

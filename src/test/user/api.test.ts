@@ -13,7 +13,7 @@ describe('[USERS API]', () => {
 	let token: string
 
 	beforeEach(async () => {
-		// Create 10 users
+		// Arrange
 		;[user1, user2] = await Promise.all(
 			_.times(10, () => {
 				const mockUser = createMockUser()
@@ -26,21 +26,26 @@ describe('[USERS API]', () => {
 
 	describe('GET api/users/:id', () => {
 		it('should return 200 with found user', async () => {
-			console.log('USER2 ID: ', user2.id)
+			// Action
 			const res = await apiRequest
 				.get(`/api/users/${user2.id}`)
 				.set('Authorization', `Bearer ${token}`)
 
+			// Expect
 			expect(res.status).toEqual(httpStatus.OK)
 			expect(res.body.data).toEqualUser(user2)
 		})
 
 		it('should return 400 when user not found', async () => {
+			// Arrange
 			const mockId = createMockId()
+
+			// Action
 			const res = await apiRequest
 				.get(`/api/users/${mockId}`)
 				.set('Authorization', `Bearer ${token}`)
 
+			// Expect
 			expect(res.status).toEqual(httpStatus.NOT_FOUND)
 		})
 	})

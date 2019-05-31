@@ -13,7 +13,7 @@ module.exports = {
 	moduleDirectories: ['node_modules', 'src'],
 	moduleFileExtensions: ['ts', 'js', 'node', 'json'],
 	setupFilesAfterEnv: [
-		'<rootDir>/src/test/setup.ts',
+		'<rootDir>/src/test/testSetup.ts',
 		'<rootDir>/src/test/customMatcher.ts',
 	],
 	testEnvironment: 'node',

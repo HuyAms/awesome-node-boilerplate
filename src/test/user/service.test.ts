@@ -8,6 +8,7 @@ describe('User Service', () => {
 	let user: UserDocument
 
 	beforeEach(async done => {
+		// Arrange
 		const mockUser = createMockUser()
 		user = await createUser(mockUser)
 		done()
@@ -16,8 +17,10 @@ describe('User Service', () => {
 	describe('findById', () => {
 		it('should return correct user', async () => {
 			try {
+				// Action
 				const foundUser = await findById(user.id)
 
+				// Expect
 				expect(foundUser).toEqualUser(user)
 			} catch (e) {
 				expect(e).toBeUndefined()
@@ -26,9 +29,13 @@ describe('User Service', () => {
 
 		it('should return error when user not found', async () => {
 			try {
+				// Arrange
 				const mockId = createMockId()
 
+				// Action
 				const foundUser = await findById(mockId)
+
+				// Expect
 				expect(foundUser).toBeUndefined()
 			} catch (e) {
 				expect(e).toBeInstanceOf(ApiError)
