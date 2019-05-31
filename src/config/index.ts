@@ -1,8 +1,8 @@
 import * as _ from 'lodash'
 
-import devConfig from './dev'
-import prodConfig from './prod'
-import testConfig from './test'
+import {config as devConfig} from './devConfig'
+import {config as prodConfig} from './prodConfig'
+import {config as testConfig} from './testConfig'
 
 const env = process.env.NODE_ENV || 'development'
 
