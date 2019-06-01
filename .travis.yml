@@ -1,0 +1,11 @@
+language: node_js
+services: mongodb
+cache:
+  directories:
+  - "node_modules"
+install:
+  - npm install
+script:
+  - npm run test
+notifications:
+  slack: kentsclub:uHb84aeLAKMA5ofu25d5N8tq
