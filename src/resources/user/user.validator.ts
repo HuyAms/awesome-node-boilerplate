@@ -1,6 +1,6 @@
 import {body} from 'express-validator/check'
-import {returnValidationError} from '../../middlewares/errorHandler'
-import {UserRole} from './user.model'
+import {returnValidationError} from '../../middlewares/validator'
+import {UserRole} from './user.interface'
 
 /**
  * Middleware to validate update user request
@@ -10,9 +10,9 @@ export const validateUpdateUser = () => {
 		body('email', 'Invalid email')
 			.isEmail()
 			.normalizeEmail(),
-		body('password', 'Password must be at least 5 chars long').isLength({
-			min: 5,
-		}),
+		body('password', 'Not allow to update user password')
+			.not()
+			.exists(),
 		body('firstName', 'First name must be string at least 2 chars long')
 			.isString()
 			.isLength({min: 2}),

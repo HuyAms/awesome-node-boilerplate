@@ -13,12 +13,16 @@ components:
         * 1 - passwordNotCorrect
         * 2 - emailNotCorrect
         * 3 - emailNotFound
-        * 4 - resetTokenInvalid
+        * 4 - emailNotUnique
+        * 5 - resetTokenInvalid
+        * 6 - notActiveUser
       enum:
       - 1
       - 2
       - 3
       - 4
+      - 5
+      - 6
 
     #-------------------------------
     # Error response

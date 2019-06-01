@@ -141,6 +141,12 @@ components:
                       lastName:
                         type: string
                         minLength: 2
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
                       email:
                         type: string
                         format: email

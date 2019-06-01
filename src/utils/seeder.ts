@@ -1,11 +1,10 @@
-import {createUser} from '../mockDB/db'
-import {UserModel, UserRole, UserStatus} from '../resources/user/user.model'
+import {User, UserRole, UserStatus} from '../resources/user/user.interface'
+import UserModel from '../resources/user/user.model'
 import createLogger from '../utils/logger'
 
 const logger = createLogger(module)
 
-const mockUser1: UserModel = {
-	id: undefined,
+const mockUser1: User = {
 	firstName: 'fName1',
 	lastName: 'lName1',
 	email: 'user@gmail.com',
@@ -14,8 +13,7 @@ const mockUser1: UserModel = {
 	status: UserStatus.Active,
 }
 
-const mockUser2: UserModel = {
-	id: undefined,
+const mockUser2: User = {
 	firstName: 'fName2',
 	lastName: 'lName2',
 	email: 'admin@gmail.com',
@@ -24,8 +22,26 @@ const mockUser2: UserModel = {
 	status: UserStatus.Active,
 }
 
-export const seed = () => {
-	logger.debug(`Database seeded`)
-	createUser(mockUser1)
-	createUser(mockUser2)
+const mockUsers = [mockUser1, mockUser2]
+
+const cleanDB = () => {
+	return UserModel.deleteMany({})
+}
+
+const createUsers = () => {
+	return mockUsers.map(mockUser => UserModel.create(mockUser))
+}
+
+export const seed = async () => {
+	try {
+		await cleanDB()
+
+		logger.debug(`Database cleaned`)
+
+		await Promise.all(createUsers())
+
+		logger.debug(`Database seeded`)
+	} catch (e) {
+		logger.error('Seed database error: ‰o', e)
+	}
 }

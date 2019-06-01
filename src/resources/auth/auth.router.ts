@@ -75,7 +75,7 @@ router
 /**
  * @swagger
  *
- * /auth/password/reset/{:resetToken}:
+ * /auth/password/reset/{resetToken}:
  *   post:
  *     tags:
  *       - Authentication
@@ -97,7 +97,7 @@ router
 /**
  * @swagger
  *
- * /auth/active/{:resetToken}:
+ * /auth/active/{resetToken}:
  *   get:
  *     tags:
  *       - Authentication

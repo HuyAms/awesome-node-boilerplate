@@ -4,21 +4,25 @@ export enum ErrorCode {
 	passwordNotCorrect = 1,
 	emailNotCorrect = 2,
 	emailNotFound = 3,
-	resetTokenInvalid = 4,
-	notActiveUser = 5,
+	emailNotUnique = 4,
+	resetTokenInvalid = 5,
+	notActiveUser = 6,
 }
 
 /**
  * Api Error
  */
 export class ApiError extends Error {
-	errorCode?: ErrorCode
-	status?: number
+	readonly errorCode?: ErrorCode
+	readonly status?: number
+	readonly name: string
 
 	constructor(message: string, status?: number, errorCode?: ErrorCode) {
 		super(message)
 		this.status = status
 		this.errorCode = errorCode
+		this.name = this.constructor.name
+		Error.captureStackTrace(this, this.constructor)
 	}
 }
 

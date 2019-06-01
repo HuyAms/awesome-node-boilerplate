@@ -49,7 +49,7 @@ router.route('/me').get(readUser, userController.getMe)
 /**
  * @swagger
  *
- * /api/users/{:id}:
+ * /api/users/{id}:
  *   parameters:
  *     - $ref: '#/components/parameters/id'
  */
@@ -57,11 +57,10 @@ router.param('id', userController.params)
 
 router
 	.route('/:id')
-
 	/**
 	 * @swagger
 	 *
-	 * /api/users/{:id}:
+	 * /api/users/{id}:
 	 *   get:
 	 *     tags:
 	 *       - User
@@ -77,7 +76,7 @@ router
 	/**
 	 * @swagger
 	 *
-	 * /api/users/{:id}:
+	 * /api/users/{id}:
 	 *   put:
 	 *     tags:
 	 *       - User
@@ -95,7 +94,7 @@ router
 	/**
 	 * @swagger
 	 *
-	 * /api/users/{:id}:
+	 * /api/users/{id}:
 	 *   delete:
 	 *     tags:
 	 *       - User

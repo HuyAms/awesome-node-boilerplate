@@ -4,12 +4,16 @@ import fs from 'fs'
 import path from 'path'
 import config from '../config'
 import * as _ from 'lodash'
+import chalk from 'chalk'
 
 const logDir = 'log'
 
-const logFormat = format.printf(
-	info => `${info.timestamp} ${info.level} [${info.label}]: ${info.message}`,
-)
+const logFormat = format.printf(info => {
+	const {timestamp, level, label, message, stack} = info
+	return `${timestamp} ${level} [${chalk.magenta(label)}]: ${
+		stack ? stack : message
+	} \n`
+})
 
 // Create the log directory if it does not exist
 if (!fs.existsSync(logDir)) {
@@ -33,11 +37,19 @@ const getLogger = (module: NodeModule | string): Logger => {
 		format: format.combine(
 			format.label({label: path}),
 			format.timestamp({format: 'YYYY-MM-DD HH:mm:ss'}),
+			format.errors({stack: true}),
 			format.splat(),
 		),
 		transports: [
 			new transports.Console({
-				format: format.combine(format.colorize(), logFormat),
+				format: format.combine(
+					format(info => {
+						info.level = info.level.toUpperCase()
+						return info
+					})(),
+					format.colorize(),
+					logFormat,
+				),
 			}),
 			new transports.File({
 				filename,
@@ -50,6 +62,23 @@ const getLogger = (module: NodeModule | string): Logger => {
 
 getLogger(module).info(`Logging initialized at ${config.loggerLevel} level`)
 
+/**
+ * Logger for mongoose
+ */
+export const mongooseLogger = (
+	collectionName: any,
+	method: any,
+	query: any,
+) => {
+	getLogger('moongose').debug(
+		`${collectionName}.${method}: ${chalk.cyan('%o')}`,
+		query,
+	)
+}
+
+/**
+ * Logger stream for morgan
+ */
 export const morganStream: StreamOptions = {
 	write(message) {
 		getLogger('morgan').debug(message)

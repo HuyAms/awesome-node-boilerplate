@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 import {NextFunction, Request, RequestHandler, Response} from 'express'
 import {checkToken} from './auth'
-import {UserRole, UserStatus} from '../resources/user/user.model'
+import {UserRole, UserStatus} from '../resources/user/user.interface'
 import apiError, {ErrorCode} from '../utils/apiError'
 
 /**

@@ -2,10 +2,13 @@ import dotenv from 'dotenv'
 const dotEnvResult = dotenv.config()
 
 import express from 'express'
+import chalk from 'chalk'
 import middlewares from './middlewares/global'
 import {errorHandler} from './middlewares/errorHandler'
 import swagger from './middlewares/swagger'
 import config from './config'
+import connectDb from './services/db'
+import initPassport from './services/passport'
 import {seed} from './utils/seeder'
 
 import userRouter from './resources/user/user.router'
@@ -33,13 +36,16 @@ app.use(middlewares)
  * Passport
  *
  */
-import './services/passport'
+initPassport()
 
 /**
  * Seed data for dev
  */
 if (config.seed) {
-	seed()
+	app.get('/seed', (_, res) => {
+		seed()
+		res.send('Database seeded')
+	})
 }
 
 /**
@@ -62,14 +68,21 @@ app.get('/', (req, res) => {
 app.use(errorHandler)
 
 /**
+ * Connect database
  * Start Express server
  */
 const {port, env} = config
 
-export const start = () => {
+export const start = async () => {
 	try {
+		await connectDb()
+
 		app.listen(port, () => {
-			logger.info(`App is running on port ${port} in ${env} mode`)
+			logger.info(
+				`App is running on port ${chalk.yellow(
+					port as string,
+				)} in ${chalk.yellow(env)} mode`,
+			)
 		})
 	} catch (e) {
 		logger.error(e.message)
