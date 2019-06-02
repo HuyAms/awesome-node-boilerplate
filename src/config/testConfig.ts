@@ -4,8 +4,8 @@ const config = {
 	secrets: {
 		jwt: 'jwttest',
 	},
-	mailSender: 'test<noreply@test.com>',
-	dbUrl: 'mongodb://localhost:27017/node-boilerplate-test',
+	mailSender: 'tests<noreply@tests.com>',
+	dbUrl: 'mongodb://localhost:27017/node-boilerplate-tests',
 }
 
 export default config

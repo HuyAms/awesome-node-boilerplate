@@ -1,18 +1,18 @@
 import httpStatus from 'http-status'
-import {addUser} from '../utils/db'
-import {createMockId} from '../utils/mock'
+import {addUser} from '../../utils/db'
+import {createMockId} from '../../utils/mock'
 import {
 	apiRequest,
 	getRoleWithoutPermission,
 	getRoleWithPermisison,
 	siginUser,
 	sortArrayByField,
-} from '../utils/common'
-import {UserDocument} from '../../resources/user/user.model'
-import {UserRole, UserStatus} from '../../resources/user/user.interface'
-import {ErrorCode} from '../../utils/apiError'
-import {Permission} from '../../middlewares/permission'
-import {Sort} from '../../middlewares/validator'
+} from '../../utils/common'
+import {UserDocument} from '../../../resources/user/user.model'
+import {UserRole, UserStatus} from '../../../resources/user/user.interface'
+import {ErrorCode} from '../../../utils/apiError'
+import {Permission} from '../../../middlewares/permission'
+import {Sort} from '../../../middlewares/validator'
 
 describe('[USERS API]', () => {
 	const sortFields = ['firstName', 'lastName', 'email']

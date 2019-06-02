@@ -1,8 +1,8 @@
-import {UserDocument} from '../../resources/user/user.model'
-import {addUser} from '../utils/db'
-import {createMockId} from '../utils/mock'
-import {getUserById} from '../../resources/user/user.service'
-import {ApiError} from '../../utils/apiError'
+import {UserDocument} from '../../../resources/user/user.model'
+import {addUser} from '../../utils/db'
+import {createMockId} from '../../utils/mock'
+import {getUserById} from '../../../resources/user/user.service'
+import {ApiError} from '../../../utils/apiError'
 
 describe('[User Service]', () => {
 	let user: UserDocument

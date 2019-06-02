@@ -28,7 +28,7 @@ beforeEach(async done => {
 
 	/*
 	If the mongoose connection is closed,
-	start it up using the test url and database name
+	start it up using the tests url and database name
 	*/
 	const disconnectedState = 0
 	if (mongoose.connection.readyState === disconnectedState) {

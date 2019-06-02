@@ -6,7 +6,7 @@ cache:
 install:
   - npm install
 script:
-  - npm run test
+  - npm run tests
 notifications:
   slack: kentsclub:uHb84aeLAKMA5ofu25d5N8tq
   email: false
