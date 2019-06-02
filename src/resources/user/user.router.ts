@@ -1,7 +1,7 @@
 import {Router} from 'express'
 import * as userController from './user.controller'
 import {Permission, protect} from '../../middlewares/permission'
-import {validateUpdateUser} from './user.validator'
+import {validateGetUsers, validateUpdateUser} from './user.validator'
 
 /**
  * @swagger
@@ -31,7 +31,7 @@ const readUser = protect([Permission.UserRead])
  *       default:
  *         $ref: '#/components/responses/ErrorResponse'
  */
-router.route('/').get(readUser, userController.getMany)
+router.route('/').get(readUser, validateGetUsers(), userController.getMany)
 
 /**
  * @swagger

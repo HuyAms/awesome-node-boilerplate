@@ -36,8 +36,7 @@ export const getMany = async (
 	const query = UserModel.find().select(excludeFields)
 
 	if (field) {
-		const sortValue = sort === Sort.asc ? 1 : -1
-		query.sort({[field]: sortValue})
+		query.sort({[field]: sort})
 	}
 
 	const users = await query.exec()

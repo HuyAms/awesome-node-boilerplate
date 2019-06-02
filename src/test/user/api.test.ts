@@ -6,15 +6,18 @@ import {
 	getRolesWithoutPermission,
 	getRolesWithPermisison,
 	siginUser,
+	sortArrayByField,
 } from '../utils/common'
 import {UserDocument} from '../../resources/user/user.model'
 import {UserRole, UserStatus} from '../../resources/user/user.interface'
 import {ErrorCode} from '../../utils/apiError'
 import {Permission} from '../../middlewares/permission'
+import {Sort} from '../../middlewares/validator'
 
 describe('[USERS API]', () => {
 	let users: UserDocument[]
 	let dummyUser: UserDocument
+	const sortFields = ['firstName', 'lastName', 'email']
 
 	beforeEach(async () => {
 		// Arrange
@@ -96,6 +99,40 @@ describe('[USERS API]', () => {
 
 				const {data} = result.body
 				expect(data.length).toEqual(users.length)
+			})
+
+			const testUsersSortedByField = async (field: string, sort: Sort) => {
+				// Arrange
+				const user = users.find(user => user.role === role)
+				const token = siginUser(user)
+
+				// Action
+				const result = await apiRequest
+					.get('/api/users')
+					.query({field, sort})
+					.set('Authorization', token)
+
+				// Expect
+				expect(result.status).toEqual(httpStatus.OK)
+
+				const {data} = result.body
+				expect(data.length).toEqual(users.length)
+
+				const sortedUsers = sortArrayByField(users, field, sort)
+
+				data.forEach((user: UserDocument, index: number) => {
+					expect(user).toEqualUser(sortedUsers[index])
+				})
+			}
+
+			sortFields.forEach(field => {
+				it(`[${role}]. should return 200 with field ${field} sorted asc`, async () => {
+					await testUsersSortedByField(field, Sort.asc)
+				})
+
+				it(`[${role}]. should return 200 with field ${field} sorted desc`, async () => {
+					await testUsersSortedByField(field, Sort.desc)
+				})
 			})
 		})
 	})
