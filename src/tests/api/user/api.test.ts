@@ -3,6 +3,7 @@ import {addUser} from '../../utils/db'
 import {createMockId} from '../../utils/mock'
 import {
 	apiRequest,
+	findUserWithRoleAndSignIn,
 	getRoleWithoutPermission,
 	getRoleWithPermisison,
 	siginUser,
@@ -36,8 +37,7 @@ describe('[USERS API]', () => {
 	describe('GET /api/users/:id', () => {
 		it(`[${roleWithUserRead}]. should return 200 with found user`, async () => {
 			// Arrange
-			const user = users.find(user => user.role === roleWithUserRead)
-			const token = siginUser(user)
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
 
 			// Action
 			const result = await apiRequest
@@ -51,8 +51,8 @@ describe('[USERS API]', () => {
 
 		it(`[${roleWithUserRead}]. should return 404 when user not found`, async () => {
 			// Arrange
-			const user = users.find(user => user.role === roleWithUserRead)
-			const token = siginUser(user)
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
+
 			const mockId = createMockId()
 
 			// Action
@@ -68,8 +68,7 @@ describe('[USERS API]', () => {
 	describe('GET /api/users/me', () => {
 		it(`[${roleWithUserRead}]. should return 200 with my profile`, async () => {
 			// Arrange
-			const user = users.find(user => user.role === roleWithUserRead)
-			const token = siginUser(user)
+			const {user, token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
 
 			// Action
 			const result = await apiRequest
@@ -85,8 +84,7 @@ describe('[USERS API]', () => {
 	describe('GET /api/users', () => {
 		it(`[${roleWithUserRead}]. should return 200 with all users`, async () => {
 			// Arrange
-			const user = users.find(user => user.role === roleWithUserRead)
-			const token = siginUser(user)
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
 
 			// Action
 			const result = await apiRequest
@@ -102,8 +100,7 @@ describe('[USERS API]', () => {
 
 		const testUsersSortedByField = async (field: string, sort: Sort) => {
 			// Arrange
-			const user = users.find(user => user.role === roleWithUserRead)
-			const token = siginUser(user)
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
 
 			// Action
 			const result = await apiRequest
@@ -133,13 +130,28 @@ describe('[USERS API]', () => {
 				await testUsersSortedByField(field, Sort.desc)
 			})
 		})
+
+		it(`[${roleWithUserRead}]. should return 400 when sort field is invalid`, async () => {
+			// Arrange
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
+
+			const sortField = 'invalidSortField'
+
+			// Action
+			const result = await apiRequest
+				.get('/api/users')
+				.query({field: sortField})
+				.set('Authorization', token)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+		})
 	})
 
 	describe('DELETE /api/users/:id', () => {
 		it(`[${roleWithUserWrite}]. should return 200 with deleted user`, async () => {
 			// Arrange
-			const user = users.find(user => user.role === roleWithUserWrite)
-			const token = siginUser(user)
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserWrite)
 
 			// Action
 			const result = await apiRequest
@@ -153,8 +165,7 @@ describe('[USERS API]', () => {
 
 		it(`[${roleWithUserWrite}]. should return 404 when delete user not found`, async () => {
 			// Arrange
-			const user = users.find(user => user.role === roleWithUserWrite)
-			const token = siginUser(user)
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserWrite)
 			const mockId = createMockId()
 
 			// Action
@@ -168,8 +179,7 @@ describe('[USERS API]', () => {
 
 		it(`[${roleWithoutUserWrite}]. should return 401 when user does not have UserWrite permission`, async () => {
 			// Arrange
-			const user = users.find(user => user.role === roleWithoutUserWrite)
-			const token = siginUser(user)
+			const {token} = findUserWithRoleAndSignIn(users, roleWithoutUserWrite)
 
 			// Action
 			const result = await apiRequest

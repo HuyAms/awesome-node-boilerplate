@@ -20,6 +20,21 @@ export const siginUser = (user: UserDocument) => {
 }
 
 /**
+ * Find one user with role and sign in
+ *
+ * @param users
+ * @param role
+ */
+export const findUserWithRoleAndSignIn = (
+	users: UserDocument[],
+	role: UserRole,
+) => {
+	const user = users.find(user => user.role === role)
+	const token = siginUser(user)
+	return {token, user}
+}
+
+/**
  * Get one user role that includes permission
  *
  * @param permission
