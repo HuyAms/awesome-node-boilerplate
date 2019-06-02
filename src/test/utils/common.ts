@@ -20,26 +20,26 @@ export const siginUser = (user: UserDocument) => {
 }
 
 /**
- * Get all user roles that includes permission
+ * Get one user role that includes permission
  *
  * @param permission
  */
-export const getRolesWithPermisison = (permission: Permission) => {
+export const getRoleWithPermisison = (permission: Permission) => {
 	const userRoles = enumToValues(UserRole) as UserRole[]
-	return userRoles.filter(role => {
+	return userRoles.find(role => {
 		const permissions = permissionRole[role]
 		return permissions.includes(permission)
 	})
 }
 
 /**
- * Get all user roles does not include permisson
+ * Get one user role does not include permission
  *
  * @param permission
  */
-export const getRolesWithoutPermission = (permission: Permission) => {
+export const getRoleWithoutPermission = (permission: Permission) => {
 	const userRoles = enumToValues(UserRole) as UserRole[]
-	return userRoles.filter((role: UserRole) => {
+	return userRoles.find((role: UserRole) => {
 		const permissions = permissionRole[role]
 		return !permissions.includes(permission)
 	})
