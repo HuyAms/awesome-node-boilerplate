@@ -1,4 +1,4 @@
-import {body} from 'express-validator/check'
+import {body, query} from 'express-validator/check'
 import {handleValidationError} from '../../middlewares/validator'
 import {UserRole} from './user.interface'
 
@@ -20,6 +20,25 @@ export const validateUpdateUser = () => {
 			.isString()
 			.isLength({min: 2}),
 		body('role', 'Invalid role').isIn([UserRole.User, UserRole.Admin]),
+		handleValidationError,
+	]
+}
+
+/**
+ * Middleware to validate get users request
+ */
+export const validateGetUsers = () => {
+	return [
+		query('field', 'Invalid field query')
+			.optional()
+			.isIn([
+				'firstName',
+				'lastName',
+				'email',
+				'role',
+				'createdAt',
+				'updatedAt',
+			]),
 		handleValidationError,
 	]
 }
