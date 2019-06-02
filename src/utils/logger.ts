@@ -69,9 +69,11 @@ export const mongooseLogger = (
 	collectionName: any,
 	method: any,
 	query: any,
+	doc: any,
 ) => {
 	getLogger('moongose').debug(
-		`${collectionName}.${method}: ${chalk.cyan('%o')}`,
+		`${collectionName}.${method}: ${chalk.yellow('%o')} \n ${chalk.cyan('%o')}`,
+		doc,
 		query,
 	)
 }

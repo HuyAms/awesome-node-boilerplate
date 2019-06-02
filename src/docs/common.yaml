@@ -77,10 +77,27 @@ components:
     id: # Can be referenced as '#/components/parameters/id'
       in: path
       name: id
+      description: Model id
       required: true
       schema:
         type: string
-        description: Model id
+
+    field: # Can be referenced as '#/components/parameters/field'
+      in: query
+      name: field
+      description: Field to sort
+      schema:
+        type: string
+
+    sort: # Can be referenced as '#/components/parameters/sort'
+      in: query
+      name: sort
+      description: Sorting direction
+      schema:
+        type: string
+        enum:
+          - desc
+          - asc
 
 #-------------------------------
 # Reusable responses

@@ -1,9 +1,9 @@
-import UserModel from './user.model'
+import UserModel, {UserDocument} from './user.model'
 import {User} from './user.interface'
-import {UserDocument} from './user.model'
 import createLogger from '../../utils/logger'
 import apiError from '../../utils/apiError'
 import * as _ from 'lodash'
+import {Sort} from '../../middlewares/validator'
 
 const logger = createLogger(module)
 
@@ -30,10 +30,19 @@ export const findById = async (id: string): Promise<UserDocument> => {
  * Find many users with condition
  *
  */
-export const getMany = async (): Promise<UserDocument[]> => {
-	const users = await UserModel.find()
-		.select(excludeFields)
-		.exec()
+export const getMany = async (
+	field?: string,
+	sort: Sort = Sort.asc,
+): Promise<UserDocument[]> => {
+	const query = UserModel.find().select(excludeFields)
+
+	if (field) {
+		const sortValue = sort === Sort.asc ? 1 : -1
+		query.sort({[field]: sortValue})
+	}
+
+	const users = await query.exec()
+
 	return Promise.resolve(users)
 }
 
