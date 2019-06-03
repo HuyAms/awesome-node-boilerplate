@@ -16,11 +16,12 @@ import config from '../../config'
 export const signup: RequestHandler = async (req, res, next) => {
 	const newUser = req.body
 
-	const host = `${req.protocol}://${req.hostname}`
+	const host =
+		config.clientHost || config.isDev
+			? `${req.protocol}://${req.hostname}`
+			: `${req.protocol}://${req.hostname}:${config.port}`
 
-	const activateUserPath = config.isDev
-		? `${host}:${config.port}/auth/active`
-		: `${host}/auth/active`
+	const activateUserPath = `${host}/auth/active`
 
 	try {
 		const token = await services.signup(newUser, activateUserPath)
@@ -65,11 +66,12 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 
 	const {email} = req.body
 
-	const host = `${req.protocol}://${req.hostname}`
+	const host =
+		config.clientHost || config.isDev
+			? `${req.protocol}://${req.hostname}`
+			: `${req.protocol}://${req.hostname}:${config.port}`
 
-	const resetUrlPath = config.isDev
-		? `${host}:${config.port}/auth/password/reset`
-		: `${host}/auth/password/reset`
+	const resetUrlPath = `${host}/auth/password/reset`
 
 	try {
 		await services.forgotPassword(email, resetUrlPath)

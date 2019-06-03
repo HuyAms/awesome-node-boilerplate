@@ -12,6 +12,7 @@ const baseConfig = {
 	isProd: env === 'production',
 	isTest: env === 'test',
 	port: process.env.PORT || 3000,
+	clientHost: process.env.CLIENT_HOST,
 	secrets: {
 		jwt: process.env.JWT_SECRET,
 		jwtExp: process.env.JWT_EXP || '100d',
