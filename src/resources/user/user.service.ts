@@ -72,8 +72,6 @@ export const updateOne = async (
 }
 
 /**
- * Remove user with id
- *
  * @param id
  */
 export const deleteOne = async (id: string): Promise<UserDocument> => {

@@ -2,10 +2,14 @@ import mongoose from 'mongoose'
 import {User} from './user.interface'
 import {Document} from 'mongoose'
 import bcrypt from 'bcryptjs'
+import uuid from 'uuid/v4'
 
 export interface UserDocument extends Document, User {
 	checkPassword: (password: string) => boolean
+
 	clearResetToken: () => void
+
+	revokeOldToken: () => void
 }
 
 const userSchema = new mongoose.Schema(
@@ -45,6 +49,7 @@ const userSchema = new mongoose.Schema(
 		},
 		resetToken: String,
 		resetTokenExp: Date,
+		tokenId: String,
 	},
 	{timestamps: true},
 )
@@ -59,6 +64,9 @@ userSchema.pre<UserDocument>('save', function(next) {
 
 	const salt = bcrypt.genSaltSync(10)
 	this.password = bcrypt.hashSync(this.password, salt)
+
+	this.revokeOldToken()
+
 	next()
 })
 
@@ -76,6 +84,10 @@ userSchema.methods.checkPassword = function(plainPassword: string) {
 userSchema.methods.clearResetToken = function() {
 	this.resetToken = null
 	this.resetTokenExp = null
+}
+
+userSchema.methods.revokeOldToken = function() {
+	this.tokenId = uuid()
 }
 
 const UserModel = mongoose.model<UserDocument>('user', userSchema)
