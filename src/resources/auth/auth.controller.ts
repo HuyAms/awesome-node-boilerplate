@@ -4,6 +4,7 @@ import {newToken} from '../../utils/auth'
 import {successResponse} from '../../utils/apiResponse'
 import * as services from './auth.service'
 import {UserDocument} from '../user/user.model'
+import config from '../../config'
 
 /**
  * Sign up new user
@@ -13,11 +14,15 @@ import {UserDocument} from '../user/user.model'
  * @param next
  */
 export const signup: RequestHandler = async (req, res, next) => {
+	const newUser = req.body
+
+	const host = `${req.protocol}://${req.hostname}`
+
+	const activateUserPath = config.isDev
+		? `${host}:${config.port}/auth/active`
+		: `${host}/auth/active`
+
 	try {
-		const newUser = req.body
-
-		const activateUserPath = `${req.protocol}://${req.hostname}/auth/active`
-
 		const token = await services.signup(newUser, activateUserPath)
 
 		return res.json(successResponse(token))
@@ -60,8 +65,13 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 
 	const {email} = req.body
 
+	const host = `${req.protocol}://${req.hostname}`
+
+	const resetUrlPath = config.isDev
+		? `${host}:${config.port}/auth/password/reset`
+		: `${host}/auth/password/reset`
+
 	try {
-		const resetUrlPath = `${req.protocol}://${req.hostname}/auth/password/reset`
 		await services.forgotPassword(email, resetUrlPath)
 
 		const message = 'Please check your email'
