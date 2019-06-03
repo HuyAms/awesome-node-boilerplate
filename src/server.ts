@@ -41,8 +41,7 @@ console.log(
 	'PATH: ',
 	path.resolve(__dirname, '../node_modules/bootstrap/dist/css'),
 ),
-
-initPassport()
+	initPassport()
 
 if (config.seed) {
 	app.get('/seed', (_, res) => {
