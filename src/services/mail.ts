@@ -5,7 +5,7 @@
 import sgMail from '@sendgrid/mail'
 import config from '../config/index'
 
-sgMail.setApiKey(config.apiKeys.sendGrid)
+sgMail.setApiKey(config.secrets.sendGrid)
 
 export interface Message {
 	from: string
