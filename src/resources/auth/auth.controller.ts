@@ -61,7 +61,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	const {email} = req.body
 
 	try {
-		const resetUrlPath = `${req.protocol}://${req.hostname}/auth/password/reset`
+		const resetUrlPath = `${req.protocol}://${req.hostname}/auth/reset`
 		await services.forgotPassword(email, resetUrlPath)
 
 		const message = 'Please check your email'
@@ -70,6 +70,17 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	} catch (error) {
 		return next(error)
 	}
+}
+
+/**
+ * @param req
+ * @param res
+ * @param next
+ */
+export const getForgotPassword: RequestHandler = (req, res, next) => {
+	res.render('auth/forgot', {
+		title: 'Forgot password',
+	})
 }
 
 /**
@@ -94,6 +105,17 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 	} catch (error) {
 		return next(error)
 	}
+}
+
+/**
+ * @param req
+ * @param res
+ * @param next
+ */
+export const getResetPassword: RequestHandler = (req, res, next) => {
+	res.render('auth/reset', {
+		title: 'Password Reset',
+	})
 }
 
 /**

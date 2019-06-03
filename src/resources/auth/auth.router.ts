@@ -55,7 +55,7 @@ router.route('/signin').post(validateSignIn(), authController.signin)
 /**
  * @swagger
  *
- * /auth/password/forgot:
+ * /auth/forgot:
  *   post:
  *     tags:
  *       - Authentication
@@ -69,13 +69,14 @@ router.route('/signin').post(validateSignIn(), authController.signin)
  *         $ref: '#/components/responses/ErrorResponse'
  */
 router
-	.route('/password/forgot')
+	.route('/forgot')
+	.get(authController.getForgotPassword)
 	.post(validateForgetPassword(), authController.forgotPassword)
 
 /**
  * @swagger
  *
- * /auth/password/reset/{resetToken}:
+ * /auth/reset/{resetToken}:
  *   post:
  *     tags:
  *       - Authentication
@@ -91,7 +92,8 @@ router
  *         $ref: '#/components/responses/ErrorResponse'
  */
 router
-	.route('/password/reset/:resetToken')
+	.route('/reset/:resetToken')
+	.get(authController.getResetPassword)
 	.post(validateResetPassword(), authController.resetPassword)
 
 /**

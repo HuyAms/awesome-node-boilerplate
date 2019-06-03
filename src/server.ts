@@ -1,6 +1,7 @@
 import dotenv from 'dotenv'
 const dotEnvResult = dotenv.config()
 
+import path from 'path'
 import express from 'express'
 import chalk from 'chalk'
 import middlewares from './middlewares/global'
@@ -20,27 +21,29 @@ const logger = createLogger(module)
 export const app = express()
 
 /**
- * Dotenv
+ * General setup
  */
 
 if (!config.isProd && dotEnvResult.error) {
 	logger.error('Please create .env file at root folder')
 }
 
-/**
- * Global middlewares
- */
 app.use(middlewares)
 
-/**
- * Passport
- *
- */
+app.set('view engine', 'pug')
+app.set('views', 'views')
+app.use(
+	'/bootstrap',
+	express.static(path.resolve(__dirname, '../node_modules/bootstrap/dist')),
+)
+
+console.log(
+	'PATH: ',
+	path.resolve(__dirname, '../node_modules/bootstrap/dist/css'),
+),
+
 initPassport()
 
-/**
- * Seed data for dev
- */
 if (config.seed) {
 	app.get('/seed', (_, res) => {
 		seed()
@@ -60,10 +63,6 @@ app.use('/api-docs', swagger)
 app.get('/', (req, res) => {
 	res.redirect('/api-docs')
 })
-
-/**
- * Error Handler
- */
 
 app.use(errorHandler)
 
