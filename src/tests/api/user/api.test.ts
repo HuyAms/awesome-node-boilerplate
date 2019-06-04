@@ -16,7 +16,7 @@ import {Permission} from '../../../middlewares/permission'
 import {Sort} from '../../../middlewares/validator'
 
 describe('[USERS API]', () => {
-	const sortFields = ['firstName', 'lastName', 'email']
+	const sortFields = ['firstName', 'lastName', 'email', 'role']
 	const roleWithUserRead = getRoleWithPermisison(Permission.UserRead)
 	const roleWithUserWrite = getRoleWithPermisison(Permission.UserWrite)
 	const roleWithoutUserWrite = getRoleWithoutPermission(Permission.UserWrite)
