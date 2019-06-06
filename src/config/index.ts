@@ -12,12 +12,11 @@ const baseConfig = {
 	isProd: env === 'production',
 	isTest: env === 'test',
 	port: process.env.PORT || 3000,
+	clientHost: process.env.CLIENT_HOST,
 	secrets: {
 		jwt: process.env.JWT_SECRET,
 		jwtExp: process.env.JWT_EXP || '100d',
 		resetTokenExp: process.env.RESET_TOKEN_EXP || 3600000, // 1 hour
-	},
-	apiKeys: {
 		sendGrid: process.env.SENDGRID_API_KEY,
 	},
 	requestLimiter: {
