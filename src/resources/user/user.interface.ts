@@ -4,9 +4,10 @@ export interface User {
 	email: string
 	password: string
 	role: UserRole
+	status: UserStatus
 	resetToken?: string
 	resetTokenExp?: number
-	status: UserStatus
+	tokenId?: string
 }
 
 export enum UserStatus {

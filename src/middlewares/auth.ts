@@ -1,7 +1,7 @@
 import {RequestHandler} from 'express'
 import {getTokenFromRequest, verifyToken} from '../utils/auth'
 import apiError from '../utils/apiError'
-import {findById} from '../resources/user/user.service'
+import UserModel from '../resources/user/user.model'
 
 /**
  * Middleware to check user's token
@@ -20,18 +20,22 @@ export const checkToken: RequestHandler = async (req, res, next) => {
 
 	try {
 		payload = await verifyToken(token)
+
+		const {id, tokenId} = payload
+		const user = await UserModel.findOne({_id: id, tokenId})
+
+		req.user = user
+
+		if (!user) {
+			return next(
+				apiError.unauthorized(
+					'Cannot find user with this token. This token may have been blacklisted',
+				),
+			)
+		}
+
+		next()
 	} catch (e) {
 		return next(apiError.unauthorized('Invalid token'))
 	}
-
-	let user
-	try {
-		user = await findById(payload.id)
-	} catch (e) {
-		return next(apiError.unauthorized('Cannot find user with that token'))
-	}
-
-	req.user = user
-
-	next()
 }

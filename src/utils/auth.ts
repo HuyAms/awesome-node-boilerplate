@@ -11,7 +11,9 @@ import {UserDocument} from '../resources/user/user.model'
 export const newToken = (user: UserDocument) => {
 	const {secrets} = config
 
-	return jwt.sign({id: user.id}, secrets.jwt, {
+	const {id, tokenId} = user
+
+	return jwt.sign({id, tokenId}, secrets.jwt, {
 		expiresIn: secrets.jwtExp,
 	})
 }

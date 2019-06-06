@@ -114,6 +114,6 @@ router
  */
 router
 	.route('/active/:resetToken')
-	.get(validateActivateAccount(), authController.activateAccount)
+	.get(validateActivateAccount(), authController.getActivateAccount)
 
 export default router
