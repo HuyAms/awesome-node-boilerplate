@@ -1,6 +1,7 @@
 import httpStatus from 'http-status'
+import * as _ from 'lodash'
 import {addUser} from '../../utils/db'
-import {createMockId} from '../../utils/mock'
+import {createMockId, createMockUser} from '../../utils/mock'
 import {
 	apiRequest,
 	findUserWithRoleAndSignIn,
@@ -184,6 +185,54 @@ describe('[USERS API]', () => {
 			// Action
 			const result = await apiRequest
 				.del(`/api/users/${dummyUser.id}`)
+				.set('Authorization', token)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.FORBIDDEN)
+		})
+	})
+
+	describe('PUT /api/users/:id', () => {
+		it(`[${roleWithUserWrite}]. should return 200 with updated user`, async () => {
+			// Arrange
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserWrite)
+			const {email, firstName, lastName} = createMockUser(UserRole.Admin)
+
+			const updatedInfo = {email, firstName, lastName}
+			const updatedUser = _.merge(dummyUser, updatedInfo)
+
+			// Action
+			const result = await apiRequest
+				.put(`/api/users/${dummyUser.id}`)
+				.set('Authorization', token)
+				.send(updatedInfo)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.OK)
+			expect(result.body.data).toEqualUser(updatedUser)
+		})
+
+		it(`[${roleWithUserWrite}]. should return 404 when updated user not found`, async () => {
+			// Arrange
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserWrite)
+			const mockId = createMockId()
+
+			// Action
+			const res = await apiRequest
+				.del(`/api/users/${mockId}`)
+				.set('Authorization', token)
+
+			// Expect
+			expect(res.status).toEqual(httpStatus.NOT_FOUND)
+		})
+
+		it(`[${roleWithoutUserWrite}]. should return 401 when user does not have UserWrite permission`, async () => {
+			// Arrange
+			const {token} = findUserWithRoleAndSignIn(users, roleWithoutUserWrite)
+
+			// Action
+			const result = await apiRequest
+				.put(`/api/users/${dummyUser.id}`)
 				.set('Authorization', token)
 
 			// Expect
