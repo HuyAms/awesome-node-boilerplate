@@ -11,7 +11,7 @@ export const createMockId = () => {
 export const createMockUser = (role: UserRole, status?: UserStatus): User => ({
 	firstName: faker.name.firstName(),
 	lastName: faker.name.lastName(),
-	email: faker.internet.email(),
+	email: faker.internet.email().toLowerCase(),
 	password: faker.internet.password(),
 	role,
 	status,
