@@ -14,12 +14,16 @@ export const validateUpdateUser = () => {
 			.not()
 			.exists(),
 		body('firstName', 'First name must be string at least 2 chars long')
+			.optional()
 			.isString()
 			.isLength({min: 2}),
 		body('lastName', 'Last name must be string at least 2 chars long')
+			.optional()
 			.isString()
 			.isLength({min: 2}),
-		body('role', 'Invalid role').isIn([UserRole.User, UserRole.Admin]),
+		body('role', 'Invalid role')
+			.optional()
+			.isIn([UserRole.User, UserRole.Admin]),
 		handleValidationError,
 	]
 }
