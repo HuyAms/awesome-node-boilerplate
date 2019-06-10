@@ -1,3 +1,5 @@
+const mongoPort = process.env.MONGO_PORT || 27017
+
 const config = {
 	seed: false,
 	loggerLevel: 'debug',
@@ -5,7 +7,7 @@ const config = {
 		jwt: 'jwttest',
 	},
 	mailSender: 'test<noreply@test.com>',
-	dbUrl: 'mongodb://localhost:27017/node-boilerplate-test',
+	dbUrl: `mongodb://localhost:${mongoPort}/node-boilerplate-dev`,
 }
 
 export default config
