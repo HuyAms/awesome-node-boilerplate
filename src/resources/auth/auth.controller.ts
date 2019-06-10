@@ -18,8 +18,8 @@ export const signup: RequestHandler = async (req, res, next) => {
 
 	const host =
 		config.clientHost || config.isDev
-			? `${req.protocol}://${req.hostname}`
-			: `${req.protocol}://${req.hostname}:${config.port}`
+			? `${req.protocol}://${req.hostname}:${config.port}`
+			: `${req.protocol}://${req.hostname}`
 
 	const activateUserPath = `${host}/auth/active`
 
@@ -68,8 +68,8 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 
 	const host =
 		config.clientHost || config.isDev
-			? `${req.protocol}://${req.hostname}`
-			: `${req.protocol}://${req.hostname}:${config.port}`
+			? `${req.protocol}://${req.hostname}:${config.port}`
+			: `${req.protocol}://${req.hostname}`
 
 	const resetUrlPath = `${host}/auth/password/reset`
 
@@ -82,6 +82,17 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 	} catch (error) {
 		return next(error)
 	}
+}
+
+/**
+ * @param req
+ * @param res
+ * @param next
+ */
+export const getForgotPassword: RequestHandler = (req, res, next) => {
+	return res.render('auth/forgot', {
+		title: 'Forgot password',
+	})
 }
 
 /**
@@ -109,6 +120,17 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 }
 
 /**
+ * @param req
+ * @param res
+ * @param next
+ */
+export const getResetPassword: RequestHandler = (req, res, next) => {
+	return res.render('auth/reset', {
+		title: 'Password Reset',
+	})
+}
+
+/**
  * Activate account
  *
  * Verify reset token from request param
@@ -118,15 +140,15 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
  * @param res
  * @param next
  */
-export const activateAccount: RequestHandler = async (req, res, next) => {
+export const getActivateAccount: RequestHandler = async (req, res, next) => {
 	const {resetToken} = req.params
 
 	try {
 		await services.activateAccount(resetToken)
 
-		const message = 'Active user successfully'
-
-		return res.json(successResponse(message, true))
+		return res.render('auth/activate', {
+			message: 'Activate user successfully',
+		})
 	} catch (error) {
 		return next(error)
 	}

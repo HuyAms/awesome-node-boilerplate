@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+    .row.justify-content-center.mt-5
+        form.col-3(method='POST')
+            legend.text-center Reset Password
+            .form-group.row
+                input.form-control(type='password', name='password', id='password', placeholder='New password', required)
+                small.form-text.text-muted Password must be at least 6 characters long
+            .form-group.row
+                input.form-control(type='password', name='passwordConfirmation', id='confirm', placeholder='Password confirmation', required)
+            .row
+                button.col-12.btn.btn-primary(type='submit') Change password

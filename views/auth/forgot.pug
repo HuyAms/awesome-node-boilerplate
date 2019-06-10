@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+    .row.justify-content-center.mt-5
+        form.col-3(method='POST')
+            legend.text-center Forgot Password
+            .form-group.row
+                input.form-control(type='email', name='email', id='email', placeholder='Email', required)
+            .row
+                button.col-12.btn.btn-primary(type='submit') Reset password
