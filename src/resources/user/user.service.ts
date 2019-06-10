@@ -2,6 +2,7 @@ import UserModel, {UserDocument} from './user.model'
 import {User} from './user.interface'
 import createLogger from '../../utils/logger'
 import apiError from '../../utils/apiError'
+import * as _ from 'lodash'
 import {Sort} from '../../middlewares/validator'
 
 const logger = createLogger(module)
@@ -22,7 +23,7 @@ export const getUserById = async (id: string): Promise<UserDocument> => {
 		return Promise.reject(apiError.notFound('Cannot find user with that id'))
 	}
 
-	return user
+	return Promise.resolve(user)
 }
 
 /**
@@ -41,7 +42,7 @@ export const getMany = async (
 
 	const users = await query.exec()
 
-	return users
+	return Promise.resolve(users)
 }
 
 /**
@@ -56,30 +57,25 @@ export const updateOne = async (
 ): Promise<UserDocument> => {
 	logger.debug(`Update user: %o`, userUpdate)
 
-	const updatedUser = await UserModel.findByIdAndUpdate(id, userUpdate, {
-		new: true,
-	}).exec()
+	const user = await UserModel.findById(id).exec()
 
-	if (!updatedUser) {
+	if (!user) {
 		return Promise.reject(apiError.notFound('Cannot find user with that id'))
 	}
 
-	return updatedUser
+	_.merge(user, userUpdate)
+
+	const updatedUser = await user.save()
+
+	return Promise.resolve(updatedUser)
 }
 
 /**
- * Remove user with id
- *
  * @param id
  */
 export const deleteOne = async (id: string): Promise<UserDocument> => {
 	const removedUser = await UserModel.findByIdAndDelete(id)
 		.select(excludeFields)
 		.exec()
-
-	if (!removedUser) {
-		return Promise.reject(apiError.notFound('Cannot find user with that id'))
-	}
-
-	return removedUser
+	return Promise.resolve(removedUser)
 }

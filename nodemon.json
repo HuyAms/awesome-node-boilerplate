@@ -7,7 +7,12 @@
 	},
 
 	"runOnChangeOnly": false,
-	"watch": ["src/**/*.ts", "src/**/*.graphql", "src/**/*.gql"],
+	"watch": [
+		"src/**/*.ts",
+		"src/**/*.graphql",
+		"src/**/*.gql",
+		"views/**/*.pug"
+	],
 	"env": {
 		"NODE_ENV": "development"
 	},

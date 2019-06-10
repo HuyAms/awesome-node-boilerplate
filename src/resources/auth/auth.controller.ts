@@ -4,6 +4,7 @@ import {newToken} from '../../utils/auth'
 import {successResponse} from '../../utils/apiResponse'
 import * as services from './auth.service'
 import {UserDocument} from '../user/user.model'
+import config from '../../config'
 
 /**
  * Sign up new user
@@ -13,11 +14,16 @@ import {UserDocument} from '../user/user.model'
  * @param next
  */
 export const signup: RequestHandler = async (req, res, next) => {
+	const newUser = req.body
+
+	const host =
+		config.clientHost || config.isDev
+			? `${req.protocol}://${req.hostname}:${config.port}`
+			: `${req.protocol}://${req.hostname}`
+
+	const activateUserPath = `${host}/auth/active`
+
 	try {
-		const newUser = req.body
-
-		const activateUserPath = `${req.protocol}://${req.hostname}/auth/active`
-
 		const token = await services.signup(newUser, activateUserPath)
 
 		return res.json(successResponse(token))
@@ -60,14 +66,33 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 
 	const {email} = req.body
 
+	const host =
+		config.clientHost || config.isDev
+			? `${req.protocol}://${req.hostname}:${config.port}`
+			: `${req.protocol}://${req.hostname}`
+
+	const resetUrlPath = `${host}/auth/password/reset`
+
 	try {
-		const resetUrlPath = `${req.protocol}://${req.hostname}/auth/password/reset`
-		const message = await services.forgotPassword(email, resetUrlPath)
+		await services.forgotPassword(email, resetUrlPath)
+
+		const message = 'Please check your email'
 
 		return res.json(successResponse(message, true))
 	} catch (error) {
 		return next(error)
 	}
+}
+
+/**
+ * @param req
+ * @param res
+ * @param next
+ */
+export const getForgotPassword: RequestHandler = (req, res, next) => {
+	return res.render('auth/forgot', {
+		title: 'Forgot password',
+	})
 }
 
 /**
@@ -84,12 +109,25 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
 	const {password} = req.body
 
 	try {
-		const message = await services.resetPassword(resetToken, password)
+		await services.resetPassword(resetToken, password)
+
+		const message = 'Password has been successfully rest'
 
 		return res.json(successResponse(message, true))
 	} catch (error) {
 		return next(error)
 	}
+}
+
+/**
+ * @param req
+ * @param res
+ * @param next
+ */
+export const getResetPassword: RequestHandler = (req, res, next) => {
+	return res.render('auth/reset', {
+		title: 'Password Reset',
+	})
 }
 
 /**
@@ -102,13 +140,15 @@ export const resetPassword: RequestHandler = async (req, res, next) => {
  * @param res
  * @param next
  */
-export const activateAccount: RequestHandler = async (req, res, next) => {
+export const getActivateAccount: RequestHandler = async (req, res, next) => {
 	const {resetToken} = req.params
 
 	try {
-		const message = await services.activateAccount(resetToken)
+		await services.activateAccount(resetToken)
 
-		return res.json(successResponse(message, true))
+		return res.render('auth/activate', {
+			message: 'Activate user successfully',
+		})
 	} catch (error) {
 		return next(error)
 	}

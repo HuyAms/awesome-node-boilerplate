@@ -50,8 +50,7 @@ export const signup = async (
 		to: user.email,
 		subject: 'Activate your account',
 		html: `<p>To active your account, please click the following link:</p>
-				<a href=${activateUserUrl}>${activateUserUrl}</a>
-			`,
+				<a href=${activateUserUrl}>${activateUserUrl}</a>`,
 	}
 
 	await sendEmail(message)
@@ -60,7 +59,7 @@ export const signup = async (
 
 	const token = newToken(user)
 
-	return {token}
+	return Promise.resolve({token})
 }
 
 /**
@@ -72,7 +71,7 @@ export const signup = async (
 export const forgotPassword = async (
 	email: string,
 	resetUrlPath: string,
-): Promise<string> => {
+): Promise<void> => {
 	// Check if email that user submitted belongs to an user
 
 	logger.debug(`Forgot password email: ${email}`)
@@ -114,7 +113,7 @@ export const forgotPassword = async (
 
 	logger.debug(`Send reset password link to email: ${user.email}`)
 
-	return 'Please check your email'
+	return Promise.resolve()
 }
 
 /**
@@ -126,31 +125,19 @@ export const forgotPassword = async (
 export const resetPassword = async (
 	resetToken: string,
 	password: string,
-): Promise<string> => {
-	const user = await UserModel.findOne({resetToken}).exec()
+): Promise<void> => {
+	const user = await UserModel.findOne({resetToken})
+		.where('resetTokenExp')
+		.gt(Date.now())
+		.exec()
 
 	if (!user) {
 		return Promise.reject(
-			apiError.notFound(
-				'Cannot find user with provided token',
-				ErrorCode.resetTokenInvalid,
-			),
+			apiError.notFound('Invalid reset token', ErrorCode.resetTokenInvalid),
 		)
 	}
 
 	logger.debug(`Reset password of user with email ${user.email}`)
-
-	// Check if expire time is over
-	const {resetTokenExp} = user
-
-	if (Date.now() > resetTokenExp) {
-		return Promise.reject(
-			apiError.badRequest(
-				'Token is already expired',
-				ErrorCode.resetTokenInvalid,
-			),
-		)
-	}
 
 	// Check if user sends a password that is exact to be old one
 	if (user.checkPassword(password)) {
@@ -176,7 +163,7 @@ export const resetPassword = async (
 
 	await sendEmail(successMessage)
 
-	return 'Password has been successfully rest'
+	return Promise.resolve()
 }
 
 /**
@@ -184,8 +171,11 @@ export const resetPassword = async (
  *
  * @param resetToken
  */
-export const activateAccount = async (resetToken: string) => {
-	const user = await UserModel.findOne({resetToken}).exec()
+export const activateAccount = async (resetToken: string): Promise<void> => {
+	const user = await UserModel.findOne({resetToken})
+		.where('resetTokenExp')
+		.gt(Date.now())
+		.exec()
 
 	if (!user) {
 		return Promise.reject(
@@ -198,22 +188,11 @@ export const activateAccount = async (resetToken: string) => {
 
 	logger.debug(`Activate user with email ${user.email}`)
 
-	// Check if expire time is over
-	const {resetTokenExp} = user
-	if (Date.now() > resetTokenExp) {
-		return Promise.reject(
-			apiError.badRequest(
-				'Token is already expired',
-				ErrorCode.resetTokenInvalid,
-			),
-		)
-	}
-
 	// Activation user
 	// and deleteOne reset token and expired time
 	user.status = UserStatus.Active
 	user.clearResetToken()
 	await user.save()
 
-	return 'Active user successfully'
+	return Promise.resolve()
 }
