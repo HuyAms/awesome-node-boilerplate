@@ -13,6 +13,8 @@ const baseConfig = {
 	isTest: env === 'test',
 	port: process.env.PORT || 3000,
 	clientHost: process.env.CLIENT_HOST,
+	mailSender: process.env.MAIL_SENDER,
+	dbUrl: process.env.DATABASE_URL,
 	secrets: {
 		jwt: process.env.JWT_SECRET,
 		jwtExp: process.env.JWT_EXP || '100d',
