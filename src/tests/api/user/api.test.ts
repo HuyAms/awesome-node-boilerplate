@@ -240,6 +240,27 @@ describe('[USERS API]', () => {
 		})
 	})
 
+	describe('PUT /api/users/me', () => {
+		it(`[${roleWithUserWrite}]. should return 200 with updated my profile`, async () => {
+			// Arrange
+			const {token, user} = findUserWithRoleAndSignIn(users, roleWithUserRead)
+			const {email, firstName, lastName} = createMockUser()
+
+			const updatedInfo = {email, firstName, lastName}
+			const updatedUser = _.merge(user, updatedInfo)
+
+			// Action
+			const result = await apiRequest
+				.put(`/api/users/me`)
+				.set('Authorization', token)
+				.send(updatedInfo)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.OK)
+			expect(result.body.data).toEqualUser(updatedUser)
+		})
+	})
+
 	describe('Authentication and Authorization', () => {
 		it('should return 401 when there is no token', async () => {
 			// Arrange
@@ -249,6 +270,7 @@ describe('[USERS API]', () => {
 			const results = await Promise.all([
 				apiRequest.get('/api/users'),
 				apiRequest.get('/api/users/me'),
+				apiRequest.put('/api/users/me'),
 				apiRequest.get(`/api/users/${mockId}`),
 				apiRequest.put(`/api/users/${mockId}`),
 				apiRequest.delete(`/api/users/${mockId}`),
@@ -273,6 +295,9 @@ describe('[USERS API]', () => {
 					apiRequest.get('/api/users').set('Authorization', noAccessRightToken),
 					apiRequest
 						.get('/api/users/me')
+						.set('Authorization', noAccessRightToken),
+					apiRequest
+						.put('/api/users/me')
 						.set('Authorization', noAccessRightToken),
 					apiRequest
 						.get(`/api/users/${mockId}`)

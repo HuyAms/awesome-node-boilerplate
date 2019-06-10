@@ -1,9 +1,6 @@
 import {body, param} from 'express-validator/check'
 import {handleValidationError} from '../../middlewares/validator'
 
-/**
- * Middleware to validate sign up request
- */
 export const validateSignUp = () => {
 	return [
 		body('email', 'Invalid email')
@@ -25,9 +22,6 @@ export const validateSignUp = () => {
 	]
 }
 
-/**
- * Middleware to validate sign in request
- */
 export const validateSignIn = () => {
 	return [
 		body('email', 'Invalid email')
@@ -41,10 +35,6 @@ export const validateSignIn = () => {
 	]
 }
 
-/**
- * Middleware to validate forget password reset
- *
- */
 export const validateForgetPassword = () => {
 	return [
 		body('email', 'Invalid email')
@@ -55,10 +45,6 @@ export const validateForgetPassword = () => {
 	]
 }
 
-/**
- * Middleware to valide reset password token
- *
- */
 export const validateResetPassword = () => {
 	return [
 		param('resetToken', 'Invalid token')
@@ -83,10 +69,6 @@ export const validateResetPassword = () => {
 	]
 }
 
-/**
- * Middleware to valide activate account
- *
- */
 export const validateActivateAccount = () => {
 	return [
 		param('resetToken', 'Invalid token')

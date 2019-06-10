@@ -1,7 +1,11 @@
 import {Router} from 'express'
 import * as userController from './user.controller'
 import {Permission, protect} from '../../middlewares/permission'
-import {validateGetUsers, validateUpdateUser} from './user.validator'
+import {
+	validateGetUsers,
+	validateUpdateMe,
+	validateUpdateUser,
+} from './user.validator'
 
 /**
  * @swagger
@@ -33,21 +37,40 @@ const readUser = protect([Permission.UserRead])
  */
 router.route('/').get(readUser, validateGetUsers(), userController.getMany)
 
-/**
- * @swagger
- *
- * /api/users/me:
- *   get:
- *     tags:
- *       - User
- *     summary: Get my profile
- *     responses:
- *       '200':
- *         $ref: '#/components/responses/UserResponse'
- *       default:
- *         $ref: '#/components/responses/ErrorResponse'
- */
-router.route('/me').get(readUser, userController.getMe)
+router
+	.route('/me')
+	/**
+	 * @swagger
+	 *
+	 * /api/users/me:
+	 *   get:
+	 *     tags:
+	 *       - User
+	 *     summary: Get my profile
+	 *     responses:
+	 *       '200':
+	 *         $ref: '#/components/responses/UserResponse'
+	 *       default:
+	 *         $ref: '#/components/responses/ErrorResponse'
+	 */
+	.get(readUser, userController.getMe)
+	/**
+	 * @swagger
+	 *
+	 * /api/users/me:
+	 *   put:
+	 *     tags:
+	 *       - User
+	 *     summary: Update my profile
+	 *     requestBody:
+	 *       $ref: '#/components/requestBodies/UserUpdate'
+	 *     responses:
+	 *       '201':
+	 *         $ref: '#/components/responses/UserResponse'
+	 *       default:
+	 *         $ref: '#/components/responses/ErrorResponse'
+	 */
+	.put(readUser, validateUpdateMe(), userController.updateMe)
 
 /**
  * @swagger

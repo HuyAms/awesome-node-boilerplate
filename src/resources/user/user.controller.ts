@@ -13,6 +13,25 @@ export const getMe: RequestHandler = (req, res) => {
 }
 
 /**
+ * Update me
+ *
+ * @param req
+ * @param res
+ */
+export const updateMe: RequestHandler = async (req, res, next) => {
+	try {
+		const {body} = req
+		const {id} = req.user
+
+		const updatedUser = await services.updateOne(id, body)
+
+		return res.json(successResponse(updatedUser, true))
+	} catch (e) {
+		return next(e)
+	}
+}
+
+/**
  * Get users
  *
  * @param req
@@ -58,7 +77,7 @@ export const getOne: RequestHandler = async (req, res, next) => {
 export const updateOne: RequestHandler = async (req, res, next) => {
 	try {
 		const {body} = req
-		const id = req.params.id
+		const {id} = req.params
 
 		const updatedUser = await services.updateOne(id, body)
 
