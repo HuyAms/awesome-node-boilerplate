@@ -77,5 +77,10 @@ export const deleteOne = async (id: string): Promise<UserDocument> => {
 	const removedUser = await UserModel.findByIdAndDelete(id)
 		.select(excludeFields)
 		.exec()
+
+	if (!removedUser) {
+		return Promise.reject(apiError.notFound('Cannot find user with that id'))
+	}
+
 	return Promise.resolve(removedUser)
 }
