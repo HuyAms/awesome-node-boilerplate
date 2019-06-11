@@ -1,4 +1,5 @@
 import {Router} from 'express'
+import passport from 'passport'
 import * as authController from './auth.controller'
 import {
 	validateSignIn,
@@ -7,6 +8,7 @@ import {
 	validateResetPassword,
 	validateActivateAccount,
 } from './auth.validator'
+import {checkToken} from '../../middlewares/auth'
 
 /**
  * @swagger
@@ -51,6 +53,20 @@ router.route('/signup').post(validateSignUp(), authController.signup)
  *         $ref: '#/components/responses/ErrorResponse'
  */
 router.route('/signin').post(validateSignIn(), authController.signin)
+
+router
+	.route('/google')
+	.get(
+		checkToken(true),
+		passport.authenticate('google', {scope: 'profile email'}),
+	)
+
+router
+	.route('/google/callback')
+	.get(
+		passport.authenticate('google', {session: false}),
+		authController.handleGoogleCallback,
+	)
 
 /**
  * @swagger

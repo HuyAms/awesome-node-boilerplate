@@ -53,6 +53,19 @@ export const signin: RequestHandler = (req, res, next) => {
 }
 
 /**
+ * Handle callback if success Google authentication
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export const handleGoogleCallback: RequestHandler = (req, res, next) => {
+	const {user} = req
+	const token = newToken(user)
+	return res.json(successResponse({token}))
+}
+
+/**
  * Forget password
  * Save a reset password token and reset password expire to user model
  * Send user a link that has the reset password token
