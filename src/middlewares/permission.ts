@@ -74,5 +74,5 @@ export const checkUserStatus: RequestHandler = (req, res, next) => {
  * @param permissions
  */
 export const protect = (permissions: [Permission]) => {
-	return [checkToken, checkUserStatus, checkPermission(permissions)]
+	return [checkToken(), checkUserStatus, checkPermission(permissions)]
 }
