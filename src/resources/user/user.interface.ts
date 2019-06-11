@@ -11,6 +11,10 @@ export interface User {
 	googleId?: string
 }
 
+export enum OathProvider {
+	Google = 'google',
+}
+
 export enum UserStatus {
 	Initial = 'initial',
 	Active = 'active',

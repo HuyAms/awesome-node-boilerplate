@@ -1,4 +1,4 @@
-import {User, UserStatus} from '../user/user.interface'
+import {OathProvider, User, UserStatus} from '../user/user.interface'
 import {generateResetToken} from '../../utils/util'
 import {Message, sendEmail} from '../../services/mail'
 import config from '../../config'
@@ -6,7 +6,7 @@ import {newToken} from '../../utils/auth'
 import createLogger from '../../utils/logger'
 import {Token} from './auth.interface'
 import apiError, {ErrorCode} from '../../utils/apiError'
-import UserModel from '../user/user.model'
+import UserModel, {UserDocument} from '../user/user.model'
 
 const logger = createLogger(module)
 
@@ -171,7 +171,9 @@ export const resetPassword = async (
  *
  * @param resetToken
  */
-export const activateAccount = async (resetToken: string): Promise<void> => {
+export const activateAccount = async (
+	resetToken: string,
+): Promise<UserDocument> => {
 	const user = await UserModel.findOne({resetToken})
 		.where('resetTokenExp')
 		.gt(Date.now())
@@ -192,7 +194,19 @@ export const activateAccount = async (resetToken: string): Promise<void> => {
 	// and deleteOne reset token and expired time
 	user.status = UserStatus.Active
 	user.clearResetToken()
-	await user.save()
 
-	return Promise.resolve()
+	return await user.save()
+}
+
+export const unLinkOath = async (
+	userId: string,
+	provider: OathProvider,
+): Promise<UserDocument> => {
+	const user = await UserModel.findById(userId)
+
+	user.unlinkOathProvider(provider)
+
+	logger.debug(`Unlink ${provider} from user with email ${user.email}`)
+
+	return await user.save()
 }

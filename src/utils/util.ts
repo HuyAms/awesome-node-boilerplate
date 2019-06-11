@@ -15,3 +15,9 @@ export const generateResetToken = () => {
 		throw Error('Invalid reset token exp')
 	}
 }
+
+export const enumToValues = (enumObject: any, isNumberEnum?: boolean) => {
+	return Object.keys(enumObject)
+		.map(k => enumObject[k])
+		.filter(val => typeof val === (!isNumberEnum ? 'string' : 'number'))
+}

@@ -1,6 +1,5 @@
-import mongoose from 'mongoose'
-import {User} from './user.interface'
-import {Document} from 'mongoose'
+import mongoose, {Document} from 'mongoose'
+import {OathProvider, User} from './user.interface'
 import bcrypt from 'bcryptjs'
 import uuid from 'uuid/v4'
 
@@ -8,6 +7,8 @@ export interface UserDocument extends Document, User {
 	checkPassword: (password: string) => boolean
 
 	clearResetToken: () => void
+
+	unlinkOathProvider: (provider: OathProvider) => void
 
 	revokeOldToken: () => void
 }
@@ -85,6 +86,16 @@ userSchema.methods.checkPassword = function(plainPassword: string) {
 userSchema.methods.clearResetToken = function() {
 	this.resetToken = null
 	this.resetTokenExp = null
+}
+
+userSchema.methods.unlinkOathProvider = function(provider: OathProvider) {
+	switch (provider) {
+		case OathProvider.Google:
+			this.googleId = null
+			break
+		default:
+			break
+	}
 }
 
 userSchema.methods.revokeOldToken = function() {

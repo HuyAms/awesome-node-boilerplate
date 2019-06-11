@@ -29,6 +29,16 @@ components:
         type: string
         description: Password reset token
 
+    provider: # Can be referenced as '#/components/parameters/provider'
+      in: path
+      name: provider
+      required: true
+      schema:
+        type: string
+        enum:
+        - google
+        description: Oath provider
+
 #-------------------------------
 # Reusable bodies
 #-------------------------------

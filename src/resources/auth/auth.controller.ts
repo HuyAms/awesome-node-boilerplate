@@ -166,3 +166,18 @@ export const getActivateAccount: RequestHandler = async (req, res, next) => {
 		return next(error)
 	}
 }
+
+export const getOathUnLink: RequestHandler = async (req, res, next) => {
+	const {provider} = req.params
+	const {id} = req.user
+
+	try {
+		await services.unLinkOath(id, provider)
+
+		const message = `Unlink ${provider} successfully`
+
+		return res.json(successResponse(message, true))
+	} catch (error) {
+		return next(error)
+	}
+}
