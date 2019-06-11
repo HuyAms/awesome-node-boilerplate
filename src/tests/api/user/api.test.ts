@@ -214,12 +214,12 @@ describe('[USERS API]', () => {
 
 		it(`[${roleWithUserWrite}]. should return 404 when updated user not found`, async () => {
 			// Arrange
-			const {token} = findUserWithRoleAndSignIn(users, roleWithUserWrite)
 			const mockId = createMockId()
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserWrite)
 
 			// Action
 			const res = await apiRequest
-				.del(`/api/users/${mockId}`)
+				.put(`/api/users/${mockId}`)
 				.set('Authorization', token)
 
 			// Expect
@@ -238,15 +238,45 @@ describe('[USERS API]', () => {
 			// Expect
 			expect(result.status).toEqual(httpStatus.FORBIDDEN)
 		})
+
+		it(`[${roleWithoutUserWrite}]. should return 400 when user try to change their own email`, async () => {
+			// Arrange
+			const {token} = findUserWithRoleAndSignIn(users, roleWithoutUserWrite)
+			const {email} = createMockUser()
+
+			// Action
+			const result = await apiRequest
+				.put('/api/users/me')
+				.set('Authorization', token)
+				.send({email})
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+		})
+
+		it(`[${roleWithoutUserWrite}]. should return 400 when user try to change their own password`, async () => {
+			// Arrange
+			const {token} = findUserWithRoleAndSignIn(users, roleWithoutUserWrite)
+			const {password} = createMockUser()
+
+			// Action
+			const result = await apiRequest
+				.put('/api/users/me')
+				.set('Authorization', token)
+				.send({password})
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+		})
 	})
 
 	describe('PUT /api/users/me', () => {
 		it(`[${roleWithUserWrite}]. should return 200 with updated my profile`, async () => {
 			// Arrange
 			const {token, user} = findUserWithRoleAndSignIn(users, roleWithUserRead)
-			const {email, firstName, lastName} = createMockUser()
+			const {firstName, lastName} = createMockUser()
 
-			const updatedInfo = {email, firstName, lastName}
+			const updatedInfo = {firstName, lastName}
 			const updatedUser = _.merge(user, updatedInfo)
 
 			// Action
