@@ -28,10 +28,13 @@ export const validateUpdateUser = () => {
 
 export const validateUpdateMe = () => {
 	return [
-		body('email', 'Invalid email')
+		body('email', 'Not allow to update existing user email')
 			.optional()
 			.isEmail()
-			.normalizeEmail(),
+			.normalizeEmail()
+			.custom((value, {req}) => {
+				return value !== req.body.email
+			}),
 		body('password', 'Not allow to update user password')
 			.not()
 			.exists(),
