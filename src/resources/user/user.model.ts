@@ -22,7 +22,6 @@ const userSchema = new mongoose.Schema(
 		},
 		password: {
 			type: String,
-			required: true,
 			minlength: 5,
 		},
 		firstName: {
@@ -50,6 +49,8 @@ const userSchema = new mongoose.Schema(
 		resetToken: String,
 		resetTokenExp: Date,
 		tokenId: String,
+
+		googleId: String,
 	},
 	{timestamps: true},
 )

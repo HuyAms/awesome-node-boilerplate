@@ -2,12 +2,13 @@ export interface User {
 	firstName: string
 	lastName: string
 	email: string
-	password: string
-	role: UserRole
-	status: UserStatus
+	password?: string
+	role?: UserRole
+	status?: UserStatus
 	resetToken?: string
 	resetTokenExp?: number
 	tokenId?: string
+	googleId?: string
 }
 
 export enum UserStatus {
