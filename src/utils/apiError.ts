@@ -1,12 +1,15 @@
 import httpStatus from 'http-status'
 
 export enum ErrorCode {
-	passwordNotCorrect = 1,
-	emailNotCorrect = 2,
-	emailNotFound = 3,
-	emailNotUnique = 4,
-	resetTokenInvalid = 5,
-	notActiveUser = 6,
+	// Auth: 1xx
+	passwordNotCorrect = 101,
+	emailNotCorrect = 102,
+	emailNotFound = 103,
+	emailNotUnique = 104,
+	resetTokenInvalid = 105,
+	notActiveUser = 106,
+	googleAccountLinked = 107,
+	googleAccountHasBeenTaken = 108,
 }
 
 /**
