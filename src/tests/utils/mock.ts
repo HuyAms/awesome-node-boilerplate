@@ -1,6 +1,7 @@
 import faker from 'faker'
 import {User, UserRole, UserStatus} from '../../resources/user/user.interface'
 import {Types} from 'mongoose'
+import {normalizeEmail} from 'validator'
 
 export const createMockId = () => {
 	const ObjectId = Types.ObjectId
@@ -14,7 +15,7 @@ export const createMockUser = (
 ): User => ({
 	firstName: faker.name.firstName(),
 	lastName: faker.name.lastName(),
-	email: faker.internet.email().toLowerCase(),
+	email: normalizeEmail(faker.internet.email()) as string,
 	password: faker.internet.password(),
 	role,
 	status,
