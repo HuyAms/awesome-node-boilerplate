@@ -8,7 +8,7 @@ export enum ErrorCode {
 	emailNotUnique = 104,
 	resetTokenInvalid = 105,
 	notActiveUser = 106,
-	googleAccountLinked = 107,
+	googleAccountHasBeenLinked = 107,
 	googleAccountHasBeenTaken = 108,
 }
 

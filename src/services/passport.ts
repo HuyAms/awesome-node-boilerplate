@@ -96,7 +96,7 @@ const initPassport = () => {
 							return done(
 								apiError.badRequest(
 									'Google account has been linked',
-									ErrorCode.googleAccountLinked,
+									ErrorCode.googleAccountHasBeenLinked,
 								),
 								false,
 							)
