@@ -15,10 +15,6 @@ export const validateCommonQueries = () => {
 		query('sort', 'Invalid sort query')
 			.optional()
 			.isIn([Sort.asc, Sort.desc]),
-		query('field', 'Invalid field query')
-			.optional()
-			.isString(),
-		handleValidationError,
 	]
 }
 

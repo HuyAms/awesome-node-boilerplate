@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`[Permission] permission role 1`] = `
+Object {
+  "admin": Array [
+    "user:read",
+    "user:write",
+  ],
+  "user": Array [
+    "user:read",
+  ],
+}
+`;

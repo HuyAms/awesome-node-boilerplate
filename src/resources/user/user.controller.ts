@@ -1,27 +1,6 @@
-import {RequestHandler, RequestParamHandler} from 'express'
+import {RequestHandler} from 'express'
 import * as services from './user.service'
 import {successResponse} from '../../utils/apiResponse'
-
-/**
- * Find user with req.params.id
- * - If found then attach user to req
- *
- * @param req
- * @param res
- * @param next
- * @param id
- */
-export const params: RequestParamHandler = async (req, res, next, id) => {
-	try {
-		const user = await services.findById(id)
-
-		req.user = user
-
-		next()
-	} catch (e) {
-		return next(e)
-	}
-}
 
 /**
  * Get me
@@ -34,6 +13,25 @@ export const getMe: RequestHandler = (req, res) => {
 }
 
 /**
+ * Update me
+ *
+ * @param req
+ * @param res
+ */
+export const updateMe: RequestHandler = async (req, res, next) => {
+	try {
+		const {body} = req
+		const {id} = req.user
+
+		const updatedUser = await services.updateOne(id, body)
+
+		return res.json(successResponse(updatedUser, true))
+	} catch (e) {
+		return next(e)
+	}
+}
+
+/**
  * Get users
  *
  * @param req
@@ -43,7 +41,9 @@ export const getMe: RequestHandler = (req, res) => {
 export const getMany: RequestHandler = async (req, res, next) => {
 	try {
 		const {field, sort} = req.query
+
 		const users = await services.getMany(field, sort)
+
 		return res.json(successResponse(users))
 	} catch (e) {
 		return next(e)
@@ -57,8 +57,15 @@ export const getMany: RequestHandler = async (req, res, next) => {
  * @param res
  */
 export const getOne: RequestHandler = async (req, res, next) => {
-	const {user} = req
-	return res.json(successResponse(user))
+	try {
+		const id = req.params.id
+
+		const user = await services.getUserById(id)
+
+		return res.json(successResponse(user))
+	} catch (e) {
+		return next(e)
+	}
 }
 
 /**
@@ -69,8 +76,11 @@ export const getOne: RequestHandler = async (req, res, next) => {
  */
 export const updateOne: RequestHandler = async (req, res, next) => {
 	try {
-		const {user, body} = req
-		const updatedUser = await services.updateOne(user.id, body)
+		const {body} = req
+		const {id} = req.params
+
+		const updatedUser = await services.updateOne(id, body)
+
 		return res.json(successResponse(updatedUser, true))
 	} catch (e) {
 		return next(e)
@@ -85,8 +95,10 @@ export const updateOne: RequestHandler = async (req, res, next) => {
  */
 export const deleteOne: RequestHandler = async (req, res, next) => {
 	try {
-		const {user} = req
-		const removedUser = await services.deleteOne(user.id)
+		const id = req.params.id
+
+		const removedUser = await services.deleteOne(id)
+
 		return res.json(successResponse(removedUser, true))
 	} catch (e) {
 		return next(e)

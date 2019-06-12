@@ -8,8 +8,9 @@ export enum ErrorCode {
 	emailNotUnique = 104,
 	resetTokenInvalid = 105,
 	notActiveUser = 106,
-	googleAccountHasBeenLinked = 107,
-	googleAccountHasBeenTaken = 108,
+	notHasPermission = 107,
+	googleAccountHasBeenLinked = 108,
+	googleAccountHasBeenTaken = 109,
 }
 
 /**
@@ -56,6 +57,16 @@ export const unauthorized = (
 }
 
 /**
+ * Throw Forbidden (403)
+ *
+ * @param message
+ * @param errorCode
+ */
+export const forbidden = (message = 'Forbidden', errorCode?: ErrorCode) => {
+	return new ApiError(message, httpStatus.FORBIDDEN, errorCode)
+}
+
+/**
  * Throw Not found (404)
  *
  * @param message
@@ -95,6 +106,7 @@ export default {
 	badRequest,
 	unauthorized,
 	notFound,
+	forbidden,
 	unsupportedMediaType,
 	internalServer,
 }

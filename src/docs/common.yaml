@@ -16,8 +16,9 @@ components:
         * 104 - emailNotUnique
         * 105 - resetTokenInvalid
         * 106 - notActiveUser
-        * 107 - googleAccountHasBeenLinked
-        * 108 - googleAccountHasBeenTaken
+        * 107 - notHasPermission
+        * 108 - googleAccountHasBeenLinked
+        * 109 - googleAccountHasBeenTaken
 
     #-------------------------------
     # Error response

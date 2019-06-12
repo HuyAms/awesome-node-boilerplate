@@ -75,7 +75,10 @@ export const start = async () => {
 			logger.info(
 				`App is running on port ${chalk.yellow(
 					port as string,
-				)} in ${chalk.yellow(env)} mode`,
+				)} in ${chalk.yellow(env)} mode \n
+				http://localhost:${port} \n
+				Press CTRL-C to stop
+				`,
 			)
 		})
 	} catch (e) {
