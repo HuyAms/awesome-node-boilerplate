@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"typeRoots": ["./node_modules/@types", "./src/typings"],
 		"target": "esnext",
 		"moduleResolution": "node",
 		"resolveJsonModule": true,

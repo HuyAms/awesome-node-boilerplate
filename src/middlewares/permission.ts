@@ -14,7 +14,7 @@ export enum Permission {
 
 type PermissionRole = {[key in UserRole]: Permission[]}
 
-const permissionRole: PermissionRole = {
+export const permissionRole: PermissionRole = {
 	[UserRole.Admin]: [Permission.UserRead, Permission.UserWrite],
 	[UserRole.User]: [Permission.UserRead],
 }
@@ -39,7 +39,12 @@ const checkPermission = (permissions?: [Permission]) => {
 		if (hasPermission) {
 			return next()
 		} else {
-			return next(apiError.unauthorized())
+			return next(
+				apiError.forbidden(
+					'User has no permission to perform this action',
+					ErrorCode.invalidPermission,
+				),
+			)
 		}
 	}
 }
@@ -60,7 +65,7 @@ export const checkUserStatus: RequestHandler = (req, res, next) => {
 		return next()
 	} else {
 		return next(
-			apiError.unauthorized(
+			apiError.forbidden(
 				'User has not been activated',
 				ErrorCode.notActiveUser,
 			),

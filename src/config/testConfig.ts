@@ -2,7 +2,7 @@ const mongoPort = process.env.MONGO_PORT || 27017
 
 const config = {
 	seed: false,
-	loggerLevel: 'debug',
+	loggerLevel: 'error',
 	secrets: {
 		jwt: 'jwttest',
 	},

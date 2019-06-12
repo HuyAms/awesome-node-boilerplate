@@ -14,7 +14,7 @@ const excludeFields = '-password -resetToken -resetTokenExp'
  *
  * @param id
  */
-export const findById = async (id: string): Promise<UserDocument> => {
+export const getUserById = async (id: string): Promise<UserDocument> => {
 	const user = await UserModel.findById(id)
 		.select(excludeFields)
 		.exec()
@@ -37,8 +37,7 @@ export const getMany = async (
 	const query = UserModel.find().select(excludeFields)
 
 	if (field) {
-		const sortValue = sort === Sort.asc ? 1 : -1
-		query.sort({[field]: sortValue})
+		query.sort({[field]: sort})
 	}
 
 	const users = await query.exec()
@@ -78,5 +77,10 @@ export const deleteOne = async (id: string): Promise<UserDocument> => {
 	const removedUser = await UserModel.findByIdAndDelete(id)
 		.select(excludeFields)
 		.exec()
+
+	if (!removedUser) {
+		return Promise.reject(apiError.notFound('Cannot find user with that id'))
+	}
+
 	return Promise.resolve(removedUser)
 }
