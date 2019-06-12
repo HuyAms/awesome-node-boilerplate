@@ -10,7 +10,7 @@ import apiError, {ErrorCode} from '../utils/apiError'
 import UserModel from '../resources/user/user.model'
 import createLogger from '../utils/logger'
 import config from '../config'
-import {User} from '../resources/user/user.interface'
+import {User, UserStatus} from '../resources/user/user.interface'
 
 const logger = createLogger(module)
 
@@ -115,7 +115,7 @@ const initPassport = () => {
 							return done(null, existingUser)
 						}
 
-						// If email has been used to sign up, throw error
+						// Create new Google account, if email has been used to sign up, throw error
 						const existingEmailUser = await UserModel.findOne({
 							email: profile.emails[0].value,
 						})
@@ -130,12 +130,12 @@ const initPassport = () => {
 							)
 						}
 
-						// Sign up user with Google account
 						const newUser: User = {
 							firstName: profile.name.givenName,
 							lastName: profile.name.familyName,
 							email: profile.emails[0].value,
 							googleId: profile.id,
+							status: UserStatus.Active,
 						}
 
 						const createdUser = await UserModel.create(newUser)
