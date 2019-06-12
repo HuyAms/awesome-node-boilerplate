@@ -65,7 +65,7 @@ const initPassport = () => {
 	 * Sign in with Google
 	 *
 	 * User has signed in
-	 *  - link user's account with Google
+	 *  - link user's account with Google if it has not been linked
 	 * User has not signed in
 	 *  - sign in user if google account has been used to sign up
 	 * 	- sign up user if google account has not been used to sign up
@@ -79,6 +79,12 @@ const initPassport = () => {
 				passReqToCallback: true,
 			},
 			async (req, accessToken, refreshToken, profile, done) => {
+				const {
+					id: googleId,
+					name: {givenName, familyName},
+					emails: [{value: gmail}],
+				} = profile
+
 				try {
 					if (req.user) {
 						// If google account has been linked, throw error
@@ -99,9 +105,14 @@ const initPassport = () => {
 						// Link google account
 						const user = await UserModel.findById(req.user.id).exec()
 
-						user.googleId = profile.id
-						user.firstName = profile.name.givenName
-						user.lastName = profile.name.familyName
+						user.googleId = googleId
+						user.firstName = givenName
+						user.lastName = familyName
+
+						const {email} = user
+						if (!email) {
+							user.email = gmail
+						}
 
 						const savedUser = await user.save()
 						return done(null, savedUser)
@@ -131,10 +142,10 @@ const initPassport = () => {
 						}
 
 						const newUser: User = {
-							firstName: profile.name.givenName,
-							lastName: profile.name.familyName,
-							email: profile.emails[0].value,
-							googleId: profile.id,
+							firstName: givenName,
+							lastName: familyName,
+							email: gmail,
+							googleId,
 							status: UserStatus.Active,
 						}
 
