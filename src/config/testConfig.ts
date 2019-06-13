@@ -5,6 +5,8 @@ const config = {
 	loggerLevel: 'error',
 	secrets: {
 		jwt: 'jwttest',
+		googleClientId: 'dummyGoogleClientId',
+		googleClientSecret: 'dummyGoogleClientSecret',
 	},
 	mailSender: 'test<noreply@test.com>',
 	dbUrl: `mongodb://localhost:${mongoPort}/node-boilerplate-dev`,
