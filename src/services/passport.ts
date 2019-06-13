@@ -108,7 +108,7 @@ const initPassport = () => {
 						const user = await UserModel.findById(req.user.id).exec()
 						const {email, firstName, lastName} = user
 
-						user.googleId = googleId
+						user.passport.googleId = googleId
 
 						if (!email) {
 							user.email = gmail
@@ -155,7 +155,7 @@ const initPassport = () => {
 							firstName: givenName,
 							lastName: familyName,
 							email: gmail,
-							googleId,
+							passport: {googleId},
 							status: UserStatus.Active,
 						}
 

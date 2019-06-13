@@ -7,7 +7,7 @@ import {Sort} from '../../middlewares/validator'
 
 const logger = createLogger(module)
 
-const excludeFields = '-password -resetToken -resetTokenExp -tokenId -googleId'
+const excludeFields = '-passport'
 
 /**
  * Find user by id

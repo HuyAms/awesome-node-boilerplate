@@ -16,7 +16,9 @@ export const createMockUser = (
 	firstName: faker.name.firstName(),
 	lastName: faker.name.lastName(),
 	email: normalizeEmail(faker.internet.email()) as string,
-	password: faker.internet.password(),
+	passport: {
+		password: faker.internet.password(),
+	},
 	role,
 	status,
 })

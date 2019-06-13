@@ -21,10 +21,6 @@ const userSchema = new mongoose.Schema(
 			unique: true,
 			trim: true,
 		},
-		password: {
-			type: String,
-			minlength: 5,
-		},
 		firstName: {
 			type: String,
 			required: true,
@@ -47,11 +43,19 @@ const userSchema = new mongoose.Schema(
 			enum: ['initial', 'active', 'disabled'],
 			default: 'initial',
 		},
-		resetToken: String,
-		resetTokenExp: Date,
-		tokenId: String,
 
-		googleId: String,
+		passport: {
+			password: {
+				type: String,
+				minlength: 5,
+			},
+
+			tokenId: String,
+			googleId: String,
+
+			resetToken: String,
+			resetTokenExp: Date,
+		},
 	},
 	{timestamps: true},
 )
@@ -65,7 +69,7 @@ userSchema.pre<UserDocument>('save', function(next) {
 	}
 
 	const salt = bcrypt.genSaltSync(10)
-	this.password = bcrypt.hashSync(this.password, salt)
+	this.passport.password = bcrypt.hashSync(this.passport.password, salt)
 
 	this.revokeOldToken()
 
@@ -78,20 +82,20 @@ userSchema.pre<UserDocument>('save', function(next) {
  * @param plainPassword
  */
 userSchema.methods.checkPassword = function(plainPassword: string) {
-	const hashPassword = this.password
+	const hashPassword = this.passport.password
 
 	return bcrypt.compareSync(plainPassword, hashPassword)
 }
 
 userSchema.methods.clearResetToken = function() {
-	this.resetToken = null
-	this.resetTokenExp = null
+	this.passport.resetToken = null
+	this.passport.resetTokenExp = null
 }
 
 userSchema.methods.unlinkOathProvider = function(provider: OathProvider) {
 	switch (provider) {
 		case OathProvider.Google:
-			this.googleId = null
+			this.passport.googleId = null
 			break
 		default:
 			break

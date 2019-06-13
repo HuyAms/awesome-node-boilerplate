@@ -36,14 +36,14 @@ export const signup = async (
 
 	// Generate reset token
 	const {resetToken, resetTokenExp} = generateResetToken()
-	newUser.resetToken = resetToken
-	newUser.resetTokenExp = resetTokenExp
+	newUser.passport.resetToken = resetToken
+	newUser.passport.resetTokenExp = resetTokenExp
 
 	// Save user to the database
 	const user = await UserModel.create(newUser)
 
 	// Send an email to user, containing the activation link
-	const activateUserUrl = `${activateUserPath}/${user.resetToken}`
+	const activateUserUrl = `${activateUserPath}/${user.passport.resetToken}`
 
 	const message: Message = {
 		from: config.mailSender,
@@ -89,14 +89,14 @@ export const forgotPassword = async (
 
 	// Generate reset token
 	const {resetToken, resetTokenExp} = generateResetToken()
-	user.resetToken = resetToken
-	user.resetTokenExp = resetTokenExp
+	user.passport.resetToken = resetToken
+	user.passport.resetTokenExp = resetTokenExp
 
 	// Save user to the database
 	await user.save()
 
 	// Send an email to user, containing the reset password token
-	const resetUrl = `${resetUrlPath}/${user.resetToken}`
+	const resetUrl = `${resetUrlPath}/${user.passport.resetToken}`
 
 	const message: Message = {
 		from: config.mailSender,
@@ -148,7 +148,7 @@ export const resetPassword = async (
 
 	// Save new user passsword
 	// and deleteOne reset token and expired time
-	user.password = password
+	user.passport.password = password
 	user.clearResetToken()
 	await user.save()
 
