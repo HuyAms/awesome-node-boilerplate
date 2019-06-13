@@ -1,5 +1,7 @@
 import {body, param} from 'express-validator/check'
 import {handleValidationError} from '../../middlewares/validator'
+import {OathProvider} from '../user/user.interface'
+import {enumToValues} from '../../utils/util'
 
 export const validateSignUp = () => {
 	return [
@@ -74,6 +76,13 @@ export const validateActivateAccount = () => {
 		param('resetToken', 'Invalid token')
 			.isString()
 			.isLength({min: 10}),
+		handleValidationError,
+	]
+}
+
+export const validateOathUnlink = () => {
+	return [
+		param('provider', 'Invalid Oath provider').isIn(enumToValues(OathProvider)),
 		handleValidationError,
 	]
 }

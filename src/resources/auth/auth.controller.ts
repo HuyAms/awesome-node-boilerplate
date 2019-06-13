@@ -53,6 +53,19 @@ export const signin: RequestHandler = (req, res, next) => {
 }
 
 /**
+ * Handle callback if success Google authentication
+ *
+ * @param req
+ * @param res
+ * @param next
+ */
+export const handleGoogleCallback: RequestHandler = (req, res, next) => {
+	const {user} = req
+	const token = newToken(user)
+	return res.json(successResponse({token}))
+}
+
+/**
  * Forget password
  * Save a reset password token and reset password expire to user model
  * Send user a link that has the reset password token
@@ -149,6 +162,21 @@ export const getActivateAccount: RequestHandler = async (req, res, next) => {
 		return res.render('auth/activate', {
 			message: 'Activate user successfully',
 		})
+	} catch (error) {
+		return next(error)
+	}
+}
+
+export const getOathUnLink: RequestHandler = async (req, res, next) => {
+	const {provider} = req.params
+	const {id} = req.user
+
+	try {
+		await services.unLinkOath(id, provider)
+
+		const message = `Unlink ${provider} successfully`
+
+		return res.json(successResponse(message, true))
 	} catch (error) {
 		return next(error)
 	}

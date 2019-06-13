@@ -8,7 +8,9 @@ const mockUser1: User = {
 	firstName: 'fName1',
 	lastName: 'lName1',
 	email: 'user@gmail.com',
-	password: '123456',
+	passport: {
+		password: '123456',
+	},
 	role: UserRole.User,
 	status: UserStatus.Active,
 }
@@ -17,7 +19,9 @@ const mockUser2: User = {
 	firstName: 'fName2',
 	lastName: 'lName2',
 	email: 'admin@gmail.com',
-	password: '123456',
+	passport: {
+		password: '123456',
+	},
 	role: UserRole.Admin,
 	status: UserStatus.Active,
 }

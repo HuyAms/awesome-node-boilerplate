@@ -19,7 +19,11 @@ const baseConfig = {
 		jwt: process.env.JWT_SECRET,
 		jwtExp: process.env.JWT_EXP || '100d',
 		resetTokenExp: process.env.RESET_TOKEN_EXP || 3600000, // 1 hour
+
 		sendGrid: process.env.SENDGRID_API_KEY,
+
+		googleClientId: process.env.GOOGLE_CLIENT_ID,
+		googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
 	},
 	requestLimiter: {
 		timeLimit: 15 * 60 * 1000, // 15 minutes

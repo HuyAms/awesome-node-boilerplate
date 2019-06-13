@@ -42,7 +42,7 @@ const checkPermission = (permissions?: [Permission]) => {
 			return next(
 				apiError.forbidden(
 					'User has no permission to perform this action',
-					ErrorCode.invalidPermission,
+					ErrorCode.notHasPermission,
 				),
 			)
 		}
@@ -79,5 +79,5 @@ export const checkUserStatus: RequestHandler = (req, res, next) => {
  * @param permissions
  */
 export const protect = (permissions: [Permission]) => {
-	return [checkToken, checkUserStatus, checkPermission(permissions)]
+	return [checkToken(), checkUserStatus, checkPermission(permissions)]
 }

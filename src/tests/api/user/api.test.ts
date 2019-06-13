@@ -1,5 +1,6 @@
 import httpStatus from 'http-status'
-import * as _ from 'lodash'
+import _ from 'lodash'
+import faker from 'faker'
 import {addUser} from '../../utils/db'
 import {createMockId, createMockUser} from '../../utils/mock'
 import {
@@ -18,6 +19,9 @@ import {Sort} from '../../../middlewares/validator'
 
 describe('[USERS API]', () => {
 	const sortFields = ['firstName', 'lastName', 'email', 'role']
+	const notAllowedUpdateUserFields = ['email', 'password']
+	const notAllowedUpdateMeFields = ['email', 'password', 'role']
+
 	const roleWithUserRead = getRoleWithPermisison(Permission.UserRead)
 	const roleWithUserWrite = getRoleWithPermisison(Permission.UserWrite)
 	const roleWithoutUserWrite = getRoleWithoutPermission(Permission.UserWrite)
@@ -196,9 +200,9 @@ describe('[USERS API]', () => {
 		it(`[${roleWithUserWrite}]. should return 200 with updated user`, async () => {
 			// Arrange
 			const {token} = findUserWithRoleAndSignIn(users, roleWithUserWrite)
-			const {email, firstName, lastName} = createMockUser(UserRole.Admin)
+			const {firstName, lastName} = createMockUser(UserRole.Admin)
 
-			const updatedInfo = {email, firstName, lastName}
+			const updatedInfo = {firstName, lastName}
 			const updatedUser = _.merge(dummyUser, updatedInfo)
 
 			// Action
@@ -239,39 +243,34 @@ describe('[USERS API]', () => {
 			expect(result.status).toEqual(httpStatus.FORBIDDEN)
 		})
 
-		it(`[${roleWithoutUserWrite}]. should return 400 when user try to change their own email`, async () => {
-			// Arrange
-			const {token} = findUserWithRoleAndSignIn(users, roleWithoutUserWrite)
-			const {email} = createMockUser()
+		const testNotAllowedUpdateFields = (updateField: string) => {
+			it(`[${roleWithUserWrite}]. should return 400 when try to update ${updateField}`, async () => {
+				// Arrange
+				const {token, user} = findUserWithRoleAndSignIn(
+					users,
+					roleWithUserWrite,
+				)
 
-			// Action
-			const result = await apiRequest
-				.put('/api/users/me')
-				.set('Authorization', token)
-				.send({email})
+				const updateData = {
+					[updateField]: faker.random.word(),
+				}
 
-			// Expect
-			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
-		})
+				// Action
+				const result = await apiRequest
+					.put(`/api/users/${user.id}`)
+					.set('Authorization', token)
+					.send(updateData)
 
-		it(`[${roleWithoutUserWrite}]. should return 400 when user try to change their own password`, async () => {
-			// Arrange
-			const {token} = findUserWithRoleAndSignIn(users, roleWithoutUserWrite)
-			const {password} = createMockUser()
+				// Expect
+				expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+			})
+		}
 
-			// Action
-			const result = await apiRequest
-				.put('/api/users/me')
-				.set('Authorization', token)
-				.send({password})
-
-			// Expect
-			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
-		})
+		notAllowedUpdateUserFields.forEach(testNotAllowedUpdateFields)
 	})
 
 	describe('PUT /api/users/me', () => {
-		it(`[${roleWithUserWrite}]. should return 200 with updated my profile`, async () => {
+		it(`[${roleWithUserWrite}]. should return 200 with my updated profile`, async () => {
 			// Arrange
 			const {token, user} = findUserWithRoleAndSignIn(users, roleWithUserRead)
 			const {firstName, lastName} = createMockUser()
@@ -289,6 +288,26 @@ describe('[USERS API]', () => {
 			expect(result.status).toEqual(httpStatus.OK)
 			expect(result.body.data).toEqualUser(updatedUser)
 		})
+
+		const testNotAllowedUpdateFields = (updateField: string) => {
+			it(`[${roleWithoutUserWrite}]. should return 400 when user updates their ${updateField}`, async () => {
+				// Arrange
+				const {token} = findUserWithRoleAndSignIn(users, roleWithoutUserWrite)
+				const updateData = {
+					[updateField]: faker.random.word(),
+				}
+
+				// Action
+				const result = await apiRequest
+					.put('/api/users/me')
+					.set('Authorization', token)
+					.send(updateData)
+
+				// Expect
+				expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+			})
+		}
+		notAllowedUpdateMeFields.forEach(testNotAllowedUpdateFields)
 	})
 
 	describe('Authentication and Authorization', () => {

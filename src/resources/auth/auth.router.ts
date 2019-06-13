@@ -1,4 +1,5 @@
 import {Router} from 'express'
+import passport from 'passport'
 import * as authController from './auth.controller'
 import {
 	validateSignIn,
@@ -6,7 +7,9 @@ import {
 	validateForgetPassword,
 	validateResetPassword,
 	validateActivateAccount,
+	validateOathUnlink,
 } from './auth.validator'
+import {checkToken} from '../../middlewares/auth'
 
 /**
  * @swagger
@@ -115,5 +118,49 @@ router
 router
 	.route('/active/:resetToken')
 	.get(validateActivateAccount(), authController.getActivateAccount)
+
+/**
+ * @swagger
+ *
+ * /auth/unlink/{provider}:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Unlink Oath provider from user account
+ *     parameters:
+ *      - $ref: '#/components/parameters/provider'
+ *     responses:
+ *       '201':
+ *         $ref: '#/components/responses/MessageResponse'
+ *       default:
+ *         $ref: '#/components/responses/ErrorResponse'
+ */
+router
+	.route('/unlink/:provider')
+	.get(checkToken(), validateOathUnlink(), authController.getOathUnLink)
+
+/**
+ * @swagger
+ *
+ * /auth/google:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Google authentication
+ *     description: Click [/auth/google](/auth/google) for Google Authentication
+ */
+router
+	.route('/google')
+	.get(
+		checkToken(true),
+		passport.authenticate('google', {scope: 'profile email'}),
+	)
+
+router
+	.route('/google/callback')
+	.get(
+		passport.authenticate('google', {session: false}),
+		authController.handleGoogleCallback,
+	)
 
 export default router

@@ -66,11 +66,26 @@ components:
               lastName:
                 type: string
                 minLength: 2
-              email:
-                type: string
-                format: email
               role:
                 $ref: '#/components/schemas/UserRole'
+
+      #-------------------------------
+      # UserUpdateMe
+
+      UserUpdateMe: # Can be referenced as '#/components/requestBodies/UserUpdateMe'
+        description: User to update
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  minLength: 2
+                lastName:
+                  type: string
+                  minLength: 2
 
 #-------------------------------
 # Reusable responses

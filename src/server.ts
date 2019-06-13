@@ -24,7 +24,7 @@ export const app = express()
  * General setup
  */
 
-if (!config.isProd && dotEnvResult.error) {
+if (config.isDev && dotEnvResult.error) {
 	logger.error('Please create .env file at root folder')
 }
 
@@ -37,11 +37,7 @@ app.use(
 	express.static(path.resolve(__dirname, '../node_modules/bootstrap/dist')),
 )
 
-console.log(
-	'PATH: ',
-	path.resolve(__dirname, '../node_modules/bootstrap/dist/css'),
-),
-	initPassport()
+initPassport()
 
 if (config.seed) {
 	app.get('/seed', (_, res) => {
@@ -79,7 +75,10 @@ export const start = async () => {
 			logger.info(
 				`App is running on port ${chalk.yellow(
 					port as string,
-				)} in ${chalk.yellow(env)} mode`,
+				)} in ${chalk.yellow(env)} mode \n
+				http://localhost:${port} \n
+				Press CTRL-C to stop
+				`,
 			)
 		})
 	} catch (e) {

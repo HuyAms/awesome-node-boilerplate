@@ -1,6 +1,5 @@
-import mongoose from 'mongoose'
-import {User} from './user.interface'
-import {Document} from 'mongoose'
+import mongoose, {Document} from 'mongoose'
+import {OathProvider, User} from './user.interface'
 import bcrypt from 'bcryptjs'
 import uuid from 'uuid/v4'
 
@@ -8,6 +7,8 @@ export interface UserDocument extends Document, User {
 	checkPassword: (password: string) => boolean
 
 	clearResetToken: () => void
+
+	unlinkOathProvider: (provider: OathProvider) => void
 
 	revokeOldToken: () => void
 }
@@ -19,11 +20,6 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			unique: true,
 			trim: true,
-		},
-		password: {
-			type: String,
-			required: true,
-			minlength: 5,
 		},
 		firstName: {
 			type: String,
@@ -47,9 +43,19 @@ const userSchema = new mongoose.Schema(
 			enum: ['initial', 'active', 'disabled'],
 			default: 'initial',
 		},
-		resetToken: String,
-		resetTokenExp: Date,
-		tokenId: String,
+
+		passport: {
+			password: {
+				type: String,
+				minlength: 5,
+			},
+
+			tokenId: String,
+			googleId: String,
+
+			resetToken: String,
+			resetTokenExp: Date,
+		},
 	},
 	{timestamps: true},
 )
@@ -63,7 +69,7 @@ userSchema.pre<UserDocument>('save', function(next) {
 	}
 
 	const salt = bcrypt.genSaltSync(10)
-	this.password = bcrypt.hashSync(this.password, salt)
+	this.passport.password = bcrypt.hashSync(this.passport.password, salt)
 
 	this.revokeOldToken()
 
@@ -76,14 +82,24 @@ userSchema.pre<UserDocument>('save', function(next) {
  * @param plainPassword
  */
 userSchema.methods.checkPassword = function(plainPassword: string) {
-	const hashPassword = this.password
+	const hashPassword = this.passport.password
 
 	return bcrypt.compareSync(plainPassword, hashPassword)
 }
 
 userSchema.methods.clearResetToken = function() {
-	this.resetToken = null
-	this.resetTokenExp = null
+	this.passport.resetToken = null
+	this.passport.resetTokenExp = null
+}
+
+userSchema.methods.unlinkOathProvider = function(provider: OathProvider) {
+	switch (provider) {
+		case OathProvider.Google:
+			this.passport.googleId = null
+			break
+		default:
+			break
+	}
 }
 
 userSchema.methods.revokeOldToken = function() {
