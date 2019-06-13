@@ -90,7 +90,9 @@ const initPassport = () => {
 						// If google account has been linked, throw error
 						const existingUser = await UserModel.findOne({
 							googleId: profile.id,
-						}).exec()
+						})
+							.lean()
+							.exec()
 
 						if (existingUser) {
 							return done(
@@ -104,14 +106,20 @@ const initPassport = () => {
 
 						// Link google account
 						const user = await UserModel.findById(req.user.id).exec()
+						const {email, firstName, lastName} = user
 
 						user.googleId = googleId
-						user.firstName = givenName
-						user.lastName = familyName
 
-						const {email} = user
 						if (!email) {
 							user.email = gmail
+						}
+
+						if (!firstName) {
+							user.firstName = givenName
+						}
+
+						if (!lastName) {
+							user.lastName = familyName
 						}
 
 						const savedUser = await user.save()
@@ -120,7 +128,9 @@ const initPassport = () => {
 						// If google account has been used to sign up, sign in user
 						const existingUser = await UserModel.findOne({
 							googleId: profile.id,
-						}).exec()
+						})
+							.lean()
+							.exec()
 
 						if (existingUser) {
 							return done(null, existingUser)
