@@ -1,7 +1,6 @@
 import mongoose, {Collection} from 'mongoose'
 import uuid from 'uuid/v1'
 import _ from 'lodash'
-import connectDb from '../services/db'
 import config from '../config'
 
 const databaseUrl = config.dbUrl
@@ -14,10 +13,6 @@ const remove = async (collection: Collection) => {
 		return Promise.reject(e)
 	}
 }
-
-beforeAll(() => {
-	return connectDb()
-})
 
 beforeEach(async done => {
 	const db = uuid()
