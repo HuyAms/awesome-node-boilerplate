@@ -72,7 +72,7 @@ components:
       #-------------------------------
       # UserUpdateMe
 
-      UserUpdate: # Can be referenced as '#/components/requestBodies/UserUpdate'
+      UserUpdateMe: # Can be referenced as '#/components/requestBodies/UserUpdateMe'
         description: User to update
         required: true
         content:

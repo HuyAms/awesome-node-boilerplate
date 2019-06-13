@@ -139,6 +139,16 @@ router
 	.route('/unlink/:provider')
 	.get(checkToken(), validateOathUnlink(), authController.getOathUnLink)
 
+/**
+ * @swagger
+ *
+ * /auth/google:
+ *   get:
+ *     tags:
+ *       - Authentication
+ *     summary: Google authentication
+ *     description: Click [/auth/google](/auth/google) for Google Authentication
+ */
 router
 	.route('/google')
 	.get(
