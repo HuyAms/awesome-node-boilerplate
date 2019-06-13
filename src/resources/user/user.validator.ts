@@ -5,10 +5,9 @@ import {enumToValues} from '../../utils/util'
 
 export const validateUpdateUser = () => {
 	return [
-		body('email', 'Invalid email')
-			.optional()
-			.isEmail()
-			.normalizeEmail(),
+		body('email', 'Not allow to update user email')
+			.not()
+			.exists(),
 		body('password', 'Not allow to update user password')
 			.not()
 			.exists(),
@@ -20,20 +19,18 @@ export const validateUpdateUser = () => {
 			.optional()
 			.isString()
 			.isLength({min: 2}),
-		body('role', 'Invalid role').isIn(enumToValues(UserRole)),
+		body('role', 'Invalid role')
+			.optional()
+			.isIn(enumToValues(UserRole)),
 		handleValidationError,
 	]
 }
 
 export const validateUpdateMe = () => {
 	return [
-		body('email', 'Not allow to update existing user email')
-			.optional()
-			.isEmail()
-			.normalizeEmail()
-			.custom((value, {req}) => {
-				return value !== req.body.email
-			}),
+		body('email', 'Not allow to update user email')
+			.not()
+			.exists(),
 		body('password', 'Not allow to update user password')
 			.not()
 			.exists(),
