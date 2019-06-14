@@ -6,16 +6,6 @@ import httpStatus from 'http-status'
 import {ApiError} from './apiError'
 import config from '../config'
 
-/**
- * Check success status code
- *
- * @param status
- * @return {boolean} whether provided status code is valid as success status code
- */
-const isSuccessStatus = (status: number) => {
-	return 200 <= status && status <= 299
-}
-
 interface SuccessResponse {
 	data: object
 	status: number
@@ -31,19 +21,10 @@ interface SuccessResponse {
 export const successResponse = (
 	data: string | object,
 	created?: boolean,
-	status?: number,
 ): SuccessResponse => {
 	const responseData = typeof data === 'string' ? {message: data} : data
 
 	let responseStatus = created ? httpStatus.CREATED : httpStatus.OK
-
-	if (status) {
-		if (isSuccessStatus(status)) {
-			responseStatus = status
-		} else {
-			throw new Error('Invalid success status')
-		}
-	}
 
 	return {
 		status: responseStatus,
