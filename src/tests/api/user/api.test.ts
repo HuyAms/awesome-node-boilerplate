@@ -4,7 +4,8 @@ import faker from 'faker'
 import {addUser} from '../../utils/db'
 import {createMockId, createMockUser} from '../../utils/mock'
 import {
-	apiRequest, filterArrayBySearchText,
+	apiRequest,
+	filterArrayBySearchText,
 	findUserWithRoleAndSignIn,
 	getRoleWithoutPermission,
 	getRoleWithPermisison,

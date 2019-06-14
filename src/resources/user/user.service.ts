@@ -30,11 +30,11 @@ export const getUserById = async (id: string): Promise<UserDocument> => {
  * Find many users with condition
  *
  */
-export const getMany = async (
-	field?: string,
-	sort: Sort = Sort.asc,
-	search?: string,
-): Promise<UserDocument[]> => {
+export const getMany = async ({
+	field = '',
+	sort = Sort.asc,
+	search = '',
+}): Promise<UserDocument[]> => {
 	const query = UserModel.find().select(excludeFields)
 
 	if (field) {
