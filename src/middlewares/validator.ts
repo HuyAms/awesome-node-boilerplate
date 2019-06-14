@@ -15,6 +15,12 @@ export const validateCommonQueries = () => {
 		query('sort', 'Invalid sort query')
 			.optional()
 			.isIn([Sort.asc, Sort.desc]),
+		query('pageNo', 'Invalid pagination page number')
+			.optional()
+			.isNumeric(),
+		query('size', 'Invalid pagination size')
+			.optional()
+			.isNumeric(),
 	]
 }
 
