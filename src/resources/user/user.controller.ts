@@ -40,9 +40,9 @@ export const updateMe: RequestHandler = async (req, res, next) => {
  */
 export const getMany: RequestHandler = async (req, res, next) => {
 	try {
-		const {field, sort} = req.query
+		const {field, sort, search} = req.query
 
-		const users = await services.getMany(field, sort)
+		const users = await services.getMany(field, sort, search)
 
 		return res.json(successResponse(users))
 	} catch (e) {

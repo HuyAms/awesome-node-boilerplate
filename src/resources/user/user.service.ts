@@ -33,11 +33,22 @@ export const getUserById = async (id: string): Promise<UserDocument> => {
 export const getMany = async (
 	field?: string,
 	sort: Sort = Sort.asc,
+	search?: string,
 ): Promise<UserDocument[]> => {
 	const query = UserModel.find().select(excludeFields)
 
 	if (field) {
 		query.sort({[field]: sort})
+	}
+
+	if (search) {
+		const searchRegex = new RegExp(`^${search}`, 'i')
+
+		query.or([
+			{firstName: {$regex: searchRegex, $options: 'i'}},
+			{lastName: {$regex: searchRegex, $options: 'i'}},
+			{email: {$regex: searchRegex, $options: 'i'}},
+		])
 	}
 
 	const users = await query.exec()
