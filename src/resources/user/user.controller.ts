@@ -40,11 +40,18 @@ export const updateMe: RequestHandler = async (req, res, next) => {
  */
 export const getMany: RequestHandler = async (req, res, next) => {
 	try {
-		const {field, sort} = req.query
+		let {field, sort, offset, limit} = req.query
+		offset = parseInt(offset)
+		limit = parseInt(limit)
 
-		const users = await services.getMany(field, sort)
+		const userPaginationRecords = await services.getMany(
+			field,
+			sort,
+			offset,
+			limit,
+		)
 
-		return res.json(successResponse(users))
+		return res.json(successResponse(userPaginationRecords))
 	} catch (e) {
 		return next(e)
 	}

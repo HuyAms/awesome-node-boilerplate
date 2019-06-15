@@ -9,6 +9,12 @@ const logger = createLogger(module)
 
 const excludeFields = '-passport'
 
+interface PaginationRecords<T> {
+	total: number
+	count: number
+	records: T[]
+}
+
 /**
  * Find user by id
  *
@@ -33,16 +39,24 @@ export const getUserById = async (id: string): Promise<UserDocument> => {
 export const getMany = async (
 	field?: string,
 	sort: Sort = Sort.asc,
-): Promise<UserDocument[]> => {
+	offset: number = 0,
+	limit: number = 20,
+): Promise<PaginationRecords<UserDocument>> => {
 	const query = UserModel.find().select(excludeFields)
 
 	if (field) {
 		query.sort({[field]: sort})
 	}
 
-	const users = await query.exec()
+	query.skip(offset).limit(limit)
 
-	return Promise.resolve(users)
+	const records = await query.exec()
+	const [count, total] = await Promise.all([
+		query.countDocuments().exec(),
+		UserModel.countDocuments(),
+	])
+
+	return Promise.resolve({count, total, records})
 }
 
 /**
