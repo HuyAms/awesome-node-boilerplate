@@ -95,6 +95,20 @@ components:
           - desc
           - asc
 
+    offset: # Can be referenced as '#/components/parameters/offset'
+      in: query
+      name: offset
+      description: offset for pagination
+      schema:
+        type: number
+
+    limit: # Can be referenced as '#/components/parameters/limit'
+      in: query
+      name: limit
+      description: limit for pagination
+      schema:
+        type: number
+
 #-------------------------------
 # Reusable responses
 #-------------------------------
