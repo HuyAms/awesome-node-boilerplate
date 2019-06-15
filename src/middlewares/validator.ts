@@ -15,12 +15,18 @@ export const validateCommonQueries = () => {
 		query('sort', 'Invalid sort query')
 			.optional()
 			.isIn([Sort.asc, Sort.desc]),
-		query('pageNo', 'Invalid pagination page number')
+		query('offset', 'Invalid pagination offset')
 			.optional()
-			.isNumeric(),
-		query('size', 'Invalid pagination size')
+			.isNumeric()
+			.custom(value => {
+				return value >= 0
+			}),
+		query('limit', 'Invalid pagination limit')
 			.optional()
-			.isNumeric(),
+			.isNumeric()
+			.custom(value => {
+				return value > 0
+			}),
 	]
 }
 
