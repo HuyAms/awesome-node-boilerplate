@@ -108,6 +108,8 @@ components:
       description: limit for pagination
       schema:
         type: number
+        min: 0
+
     search: # Can be referenced as '#/components/parameters/search'
       in: query
       name: search
