@@ -142,6 +142,7 @@ describe('[USERS API]', () => {
 		const testUsersSortedByField = async (field: string, sort: Sort) => {
 			// Arrange
 			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
+			const sortedUsers = sortArrayByField(users, field, sort)
 
 			// Action
 			const result = await apiRequest
@@ -154,8 +155,6 @@ describe('[USERS API]', () => {
 
 			const {records} = result.body.data
 			expect(records.length).toEqual(users.length)
-
-			const sortedUsers = sortArrayByField(users, field, sort)
 
 			records.forEach((user: UserDocument, index: number) => {
 				expect(user).toEqualUser(sortedUsers[index])
@@ -210,6 +209,7 @@ describe('[USERS API]', () => {
 			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
 			const offset = 0
 			const limit = 2
+			const paginatedRecords = getRecordsWithPagination(users, offset, limit)
 
 			// Action
 			const result = await apiRequest
@@ -218,7 +218,6 @@ describe('[USERS API]', () => {
 				.set('Authorization', token)
 
 			const {records} = result.body.data
-			const paginatedRecords = getRecordsWithPagination(records, offset, limit)
 
 			// Expect
 			expect(result.status).toEqual(httpStatus.OK)

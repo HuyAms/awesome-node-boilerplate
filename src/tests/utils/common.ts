@@ -94,8 +94,9 @@ export const filterArrayBySearchText = (
 
 export const getRecordsWithPagination = (
 	array: any[],
-	offset: number,
+	offset: number = 0,
 	limit: number,
 ) => {
-	return array.slice(offset, offset + limit + 1)
+	const end = offset + limit + 1
+	return array.slice(offset, end)
 }
