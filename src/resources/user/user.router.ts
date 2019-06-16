@@ -29,6 +29,8 @@ const readUser = protect([Permission.UserRead])
  *     parameters:
  *       - $ref: '#/components/parameters/field'
  *       - $ref: '#/components/parameters/sort'
+ *       - $ref: '#/components/parameters/offset'
+ *       - $ref: '#/components/parameters/limit'
  *       - $ref: '#/components/parameters/search'
  *     responses:
  *       '200':

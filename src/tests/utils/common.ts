@@ -91,3 +91,12 @@ export const filterArrayBySearchText = (
 		})
 	})
 }
+
+export const getRecordsWithPagination = (
+	array: any[],
+	offset: number = 0,
+	limit: number,
+) => {
+	const end = offset + limit + 1
+	return array.slice(offset, end)
+}

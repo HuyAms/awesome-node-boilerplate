@@ -11,6 +11,7 @@ import {
 	getRoleWithPermisison,
 	siginUser,
 	sortArrayByField,
+	getRecordsWithPagination,
 } from '../../utils/common'
 import {UserDocument} from '../../../resources/user/user.model'
 import {UserRole, UserStatus} from '../../../resources/user/user.interface'
@@ -100,11 +101,10 @@ describe('[USERS API]', () => {
 			// Expect
 			expect(result.status).toEqual(httpStatus.OK)
 
-			const {data} = result.body
+			const {records} = result.body.data
+			expect(records.length).toEqual(users.length)
 
-			expect(data.length).toEqual(users.length)
-
-			data.forEach((user: UserDocument, index: number) => {
+			records.forEach((user: UserDocument, index: number) => {
 				expect(user).toEqualUser(users[index])
 			})
 		})
@@ -131,10 +131,10 @@ describe('[USERS API]', () => {
 			// Expect
 			expect(result.status).toEqual(httpStatus.OK)
 
-			const {data} = result.body
-			expect(data.length).toEqual(expectedSearchUsers.length)
+			const {records} = result.body.data
+			expect(records.length).toEqual(expectedSearchUsers.length)
 
-			data.forEach((user: UserDocument, index: number) => {
+			records.forEach((user: UserDocument, index: number) => {
 				expect(user).toEqualUser(expectedSearchUsers[index])
 			})
 		})
@@ -142,6 +142,7 @@ describe('[USERS API]', () => {
 		const testUsersSortedByField = async (field: string, sort: Sort) => {
 			// Arrange
 			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
+			const sortedUsers = sortArrayByField(users, field, sort)
 
 			// Action
 			const result = await apiRequest
@@ -152,12 +153,10 @@ describe('[USERS API]', () => {
 			// Expect
 			expect(result.status).toEqual(httpStatus.OK)
 
-			const {data} = result.body
-			expect(data.length).toEqual(users.length)
+			const {records} = result.body.data
+			expect(records.length).toEqual(users.length)
 
-			const sortedUsers = sortArrayByField(users, field, sort)
-
-			data.forEach((user: UserDocument, index: number) => {
+			records.forEach((user: UserDocument, index: number) => {
 				expect(user).toEqualUser(sortedUsers[index])
 			})
 		}
@@ -186,6 +185,46 @@ describe('[USERS API]', () => {
 
 			// Expect
 			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+		})
+
+		it(`[${roleWithUserRead}]. should return 400 when pagination field in invalid`, async () => {
+			// Arrange
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
+			const badOffset = 'a'
+			const badLimit = 0
+
+			// Action
+			const result = await apiRequest
+				.get('/api/users')
+				.query({offset: badOffset, limit: badLimit})
+				.set('Authorization', token)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+			expect(result.body)
+		})
+
+		it(`[${roleWithUserRead}]. should return 200 with pagination offset 0 and limit 2`, async () => {
+			// Arrange
+			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
+			const offset = 0
+			const limit = 2
+			const paginatedRecords = getRecordsWithPagination(users, offset, limit)
+
+			// Action
+			const result = await apiRequest
+				.get('/api/users')
+				.query({offset, limit})
+				.set('Authorization', token)
+
+			const {records} = result.body.data
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.OK)
+			expect(records.length).toEqual(limit)
+			records.forEach((user: UserDocument, index: number) => {
+				expect(user).toEqualUser(paginatedRecords[index])
+			})
 		})
 	})
 

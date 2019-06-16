@@ -15,6 +15,17 @@ export const validateCommonQueries = () => {
 		query('sort', 'Invalid sort query')
 			.optional()
 			.isIn([Sort.asc, Sort.desc]),
+		query('offset', 'Invalid pagination offset, offset must be a number')
+			.optional()
+			.toInt()
+			.isInt({min: 0}),
+		query(
+			'limit',
+			'Invalid pagination limit, limit must be a number and greater than 0',
+		)
+			.optional()
+			.toInt()
+			.isInt({min: 1}),
 	]
 }
 
