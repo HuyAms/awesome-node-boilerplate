@@ -1,6 +1,7 @@
 import {RequestHandler} from 'express'
 import * as services from './user.service'
 import {successResponse} from '../../utils/apiResponse'
+import {toInt} from 'validator'
 
 /**
  * Get me
@@ -43,19 +44,19 @@ export const getMany: RequestHandler = async (req, res, next) => {
 		let {field, sort, search, offset, limit} = req.query
 
 		if (offset) {
-			offset = parseInt(offset, 10)
+			offset = toInt(offset, 10)
 		}
 		if (limit) {
-			limit = parseInt(limit, 10)
+			limit = toInt(limit, 10)
 		}
 
-		const userPaginationRecords = await services.getMany(
+		const userPaginationRecords = await services.getMany({
 			field,
 			sort,
 			search,
 			offset,
 			limit,
-		)
+		})
 
 		return res.json(successResponse(userPaginationRecords))
 	} catch (e) {
