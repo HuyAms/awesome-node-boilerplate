@@ -41,8 +41,13 @@ export const updateMe: RequestHandler = async (req, res, next) => {
 export const getMany: RequestHandler = async (req, res, next) => {
 	try {
 		let {field, sort, offset, limit} = req.query
-		offset = parseInt(offset)
-		limit = parseInt(limit)
+
+		if (offset) {
+			offset = parseInt(offset, 10)
+		}
+		if (limit) {
+			limit = parseInt(limit, 10)
+		}
 
 		const userPaginationRecords = await services.getMany(
 			field,
