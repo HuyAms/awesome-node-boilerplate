@@ -48,11 +48,16 @@ export const getMany = async (
 		query.sort({[field]: sort})
 	}
 
-	query.skip(offset).limit(limit)
+	query
+		.skip(offset)
+		.limit(limit)
+		.lean()
+	const CountQuery = query.toConstructor()
+	const countQuery = new CountQuery()
 
-	const records = await query.exec()
-	const [count, total] = await Promise.all([
-		query.countDocuments().exec(),
+	const [records, count, total] = await Promise.all([
+		query.exec(),
+		countQuery.countDocuments().exec(),
 		UserModel.countDocuments(),
 	])
 
