@@ -101,6 +101,7 @@ components:
       description: offset for pagination
       schema:
         type: number
+        min: 0
 
     limit: # Can be referenced as '#/components/parameters/limit'
       in: query
