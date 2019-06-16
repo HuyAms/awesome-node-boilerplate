@@ -5,6 +5,7 @@ import {addUser} from '../../utils/db'
 import {createMockId, createMockUser} from '../../utils/mock'
 import {
 	apiRequest,
+	filterArrayBySearchText,
 	findUserWithRoleAndSignIn,
 	getRoleWithoutPermission,
 	getRoleWithPermisison,
@@ -100,7 +101,42 @@ describe('[USERS API]', () => {
 			expect(result.status).toEqual(httpStatus.OK)
 
 			const {data} = result.body
+
 			expect(data.length).toEqual(users.length)
+
+			data.forEach((user: UserDocument, index: number) => {
+				expect(user).toEqualUser(users[index])
+			})
+		})
+
+		it(`[${roleWithUserRead}]. should return 200 with users matched search text`, async () => {
+			// Arrange
+			const {token, user} = findUserWithRoleAndSignIn(users, roleWithUserRead)
+
+			const searchText = user.firstName.substring(1)
+			const searchField = ['firstName', 'lastName', 'email']
+
+			const expectedSearchUsers = filterArrayBySearchText(
+				users,
+				searchField,
+				searchText,
+			)
+
+			// Action
+			const result = await apiRequest
+				.get('/api/users')
+				.query({search: searchText})
+				.set('Authorization', token)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.OK)
+
+			const {data} = result.body
+			expect(data.length).toEqual(expectedSearchUsers.length)
+
+			data.forEach((user: UserDocument, index: number) => {
+				expect(user).toEqualUser(expectedSearchUsers[index])
+			})
 		})
 
 		const testUsersSortedByField = async (field: string, sort: Sort) => {

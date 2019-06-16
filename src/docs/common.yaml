@@ -95,6 +95,13 @@ components:
           - desc
           - asc
 
+    search: # Can be referenced as '#/components/parameters/search'
+      in: query
+      name: search
+      description: Search text
+      schema:
+        type: string
+
 #-------------------------------
 # Reusable responses
 #-------------------------------

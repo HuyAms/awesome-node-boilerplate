@@ -70,3 +70,24 @@ export const getRoleWithoutPermission = (permission: Permission) => {
 export const sortArrayByField = (array: any[], field: string, sort: Sort) => {
 	return _.orderBy(array, [field], [sort])
 }
+
+/**
+ * @param array
+ * @param field
+ * @param search
+ */
+export const filterArrayBySearchText = (
+	array: any[],
+	searchFields: string[],
+	searchText: string,
+) => {
+	const searchRegex = new RegExp(`^${searchText}`, 'i')
+
+	return array.filter(element => {
+		searchFields.forEach(field => {
+			const fieldValue = element[field]
+
+			return fieldValue.match(searchRegex)
+		})
+	})
+}
