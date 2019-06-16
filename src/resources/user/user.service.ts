@@ -15,14 +15,6 @@ interface PaginationRecords<T> {
 	records: T[]
 }
 
-interface getManyParams {
-	field?: string
-	sort: Sort
-	search: string
-	offset: number
-	limit: number
-}
-
 /**
  * Find user by id
  *
@@ -45,12 +37,12 @@ export const getUserById = async (id: string): Promise<UserDocument> => {
  *
  */
 export const getMany = async ({
-	field,
+	field = '',
 	sort = Sort.asc,
 	search = '',
 	offset = 0,
 	limit = 20,
-}: getManyParams): Promise<PaginationRecords<UserDocument>> => {
+}): Promise<PaginationRecords<UserDocument>> => {
 	const query = UserModel.find().select(excludeFields)
 
 	if (field) {
