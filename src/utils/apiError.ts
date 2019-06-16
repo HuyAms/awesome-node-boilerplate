@@ -83,7 +83,7 @@ export const notFound = (message = 'Not found', errorCode?: ErrorCode) => {
  * @param errorCode
  */
 export const unsupportedMediaType = (
-	message = 'Invalid photo type',
+	message = 'Invalid media type',
 	errorCode?: ErrorCode,
 ) => {
 	return new ApiError(message, httpStatus.UNSUPPORTED_MEDIA_TYPE, errorCode)

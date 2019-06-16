@@ -43,13 +43,16 @@ export const verifyToken = (token: string) =>
  *
  * @param req
  */
-export const getTokenFromRequest = (req: Request) => {
+
+type HasAuthorization = Pick<Request, 'query' | 'headers'>
+
+export const getTokenFromRequest = (req: HasAuthorization) => {
 	let formattedToken: string
 
 	// If found token in query then place it in the header
 
-	if (req.query && req.query.hasOwnProperty('token')) {
-		formattedToken = 'Bearer ' + req.query.token
+	if (req.query && req.query.hasOwnProperty('access-token')) {
+		formattedToken = 'Bearer ' + req.query['access-token']
 		req.headers.authorization = formattedToken
 	}
 

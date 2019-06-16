@@ -31,6 +31,7 @@ const readUser = protect([Permission.UserRead])
  *       - $ref: '#/components/parameters/sort'
  *       - $ref: '#/components/parameters/offset'
  *       - $ref: '#/components/parameters/limit'
+ *       - $ref: '#/components/parameters/search'
  *     responses:
  *       '200':
  *         $ref: '#/components/responses/UsersResponse'

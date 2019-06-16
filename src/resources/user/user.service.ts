@@ -39,6 +39,7 @@ export const getUserById = async (id: string): Promise<UserDocument> => {
 export const getMany = async (
 	field?: string,
 	sort: Sort = Sort.asc,
+	search = '',
 	offset: number = 0,
 	limit: number = 20,
 ): Promise<PaginationRecords<UserDocument>> => {
@@ -52,6 +53,17 @@ export const getMany = async (
 		.skip(offset)
 		.limit(limit)
 		.lean()
+
+	if (search) {
+		const searchRegex = new RegExp(`^${search}`, 'i')
+
+		query.or([
+			{firstName: {$regex: searchRegex, $options: 'i'}},
+			{lastName: {$regex: searchRegex, $options: 'i'}},
+			{email: {$regex: searchRegex, $options: 'i'}},
+		])
+	}
+
 	const CountQuery = query.toConstructor()
 	const countQuery = new CountQuery()
 
