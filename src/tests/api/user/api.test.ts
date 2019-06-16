@@ -11,6 +11,7 @@ import {
 	getRoleWithPermisison,
 	siginUser,
 	sortArrayByField,
+	getRecordsWithPagination,
 } from '../../utils/common'
 import {UserDocument} from '../../../resources/user/user.model'
 import {UserRole, UserStatus} from '../../../resources/user/user.interface'
@@ -20,10 +21,6 @@ import {Sort} from '../../../middlewares/validator'
 
 describe('[USERS API]', () => {
 	const sortFields = ['firstName', 'lastName', 'email', 'role']
-	const paginationFields = {
-		offset: 0,
-		limit: 2,
-	}
 	const notAllowedUpdateUserFields = ['email', 'password']
 	const notAllowedUpdateMeFields = ['email', 'password', 'role']
 
@@ -208,13 +205,11 @@ describe('[USERS API]', () => {
 			expect(result.body)
 		})
 
-		it(`[${roleWithUserRead}]. should return 200 with pagination offset ${
-			paginationFields.offset
-		} and limit ${paginationFields.limit}`, async () => {
+		it(`[${roleWithUserRead}]. should return 200 with pagination offset 0 and limit 2`, async () => {
 			// Arrange
 			const {token} = findUserWithRoleAndSignIn(users, roleWithUserRead)
-			const limit = paginationFields.limit
-			const offset = paginationFields.offset
+			const offset = 0
+			const limit = 2
 
 			// Action
 			const result = await apiRequest
@@ -223,9 +218,14 @@ describe('[USERS API]', () => {
 				.set('Authorization', token)
 
 			const {records} = result.body.data
+			const paginatedRecords = getRecordsWithPagination(records, offset, limit)
+
 			// Expect
 			expect(result.status).toEqual(httpStatus.OK)
 			expect(records.length).toEqual(limit)
+			records.forEach((user: UserDocument, index: number) => {
+				expect(user).toEqualUser(paginatedRecords[index])
+			})
 		})
 	})
 
