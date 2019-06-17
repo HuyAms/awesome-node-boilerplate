@@ -35,9 +35,9 @@ describe('[USERS API]', () => {
 		// Arrange
 
 		;[dummyUser] = users = await Promise.all([
-			addUser(),
-			addUser(UserRole.User),
-			addUser(UserRole.Admin),
+			addUser(createMockUser()),
+			addUser(createMockUser(UserRole.User)),
+			addUser(createMockUser(UserRole.Admin)),
 		])
 	})
 
@@ -411,7 +411,9 @@ describe('[USERS API]', () => {
 				// Arrange
 				const mockId = createMockId()
 
-				const noAccessRightUser = await addUser(undefined, userStatus)
+				const noAccessRightUser = await addUser(
+					createMockUser(undefined, UserStatus.Initial),
+				)
 				const noAccessRightToken = siginUser(noAccessRightUser)
 
 				// Action
