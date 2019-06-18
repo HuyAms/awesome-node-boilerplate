@@ -11,7 +11,7 @@ import {Error} from 'mongoose'
 import {generateResetToken} from '../../../utils/util'
 
 describe('[User Model]', () => {
-	const requiredField = ['firstName', 'lastName', 'email']
+	const requiredFields = ['firstName', 'lastName', 'email']
 
 	let mockUser: User
 
@@ -174,5 +174,5 @@ describe('[User Model]', () => {
 		})
 	}
 
-	requiredField.forEach(testRequiredField)
+	requiredFields.forEach(testRequiredField)
 })
