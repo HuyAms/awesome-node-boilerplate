@@ -20,7 +20,7 @@ const baseConfig = {
 		jwtExp: process.env.JWT_EXP || '100d',
 		resetTokenExp: process.env.RESET_TOKEN_EXP || 3600000, // 1 hour
 
-		sendGrid: process.env.SENDGRID_API_KEY,
+		sendGridApiKey: process.env.SENDGRID_API_KEY,
 
 		googleClientId: process.env.GOOGLE_CLIENT_ID,
 		googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
