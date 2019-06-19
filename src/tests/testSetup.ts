@@ -1,3 +1,10 @@
+import dotenv from 'dotenv'
+import path from 'path'
+
+dotenv.config({
+	path: path.resolve(__dirname, '../../.test.env'),
+})
+
 import mongoose, {Collection} from 'mongoose'
 import uuid from 'uuid/v1'
 import _ from 'lodash'
