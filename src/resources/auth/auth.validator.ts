@@ -20,6 +20,9 @@ export const validateSignUp = () => {
 		body('status', 'Not allow to set user status')
 			.not()
 			.exists(),
+		body('role', 'Not allow to set user role')
+			.not()
+			.exists(),
 		handleValidationError,
 	]
 }

@@ -69,8 +69,6 @@ components:
                 type: string
                 format: password
                 minLength: 5
-              role:
-                $ref: '#/components/schemas/UserRole'
             required:
               - firstName
               - lastName
