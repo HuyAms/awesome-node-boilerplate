@@ -1,11 +1,13 @@
 import httpStatus from 'http-status'
+import faker from 'faker'
 import {addUser} from '../../utils/db'
 import {apiRequest} from '../../utils/common'
 import {createMockUser} from '../../utils/mock'
 
-import {User, UserStatus} from '../../../resources/user/user.interface'
+import {User} from '../../../resources/user/user.interface'
+import {ErrorCode} from '../../../utils/apiError'
 
-describe('[SIGNIN API]', () => {
+describe('[AUTH API]', () => {
 	let dummyUser: User
 
 	beforeEach(async () => {
@@ -28,25 +30,45 @@ describe('[SIGNIN API]', () => {
 				.send({email, password})
 
 			// Expect
+			const {token} = result.body.data
 			expect(result.status).toEqual(httpStatus.OK)
-			expect(result.body.data.token).toBeDefined()
+			expect(token).toBeDefined()
 		})
 
-		it('should return 401 when user logins with wrong credentials', async () => {
+		it('should return 401 when user logins with wrong password', async () => {
 			// Arrange
-			const user = createMockUser()
-			const {
-				email,
-				passport: {password},
-			} = user
+			const {email} = dummyUser
+
+			const wrongPassword = faker.internet.password()
 
 			// Action
-			const result = await apiRequest
-				.post('/auth/signin')
-				.send({email, password})
+			const result = await apiRequest.post('/auth/signin').send({
+				email,
+				password: wrongPassword,
+			})
 
 			// Expect
 			expect(result.status).toEqual(httpStatus.UNAUTHORIZED)
+			expect(result.body.errorCode).toEqual(ErrorCode.passwordNotCorrect)
+		})
+
+		it('should return 401 when user logins with wrong email', async () => {
+			// Arrange
+			const {
+				passport: {password},
+			} = dummyUser
+
+			const wrongEmail = faker.internet.email()
+
+			// Action
+			const result = await apiRequest.post('/auth/signin').send({
+				email: wrongEmail,
+				password,
+			})
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.UNAUTHORIZED)
+			expect(result.body.errorCode).toEqual(ErrorCode.emailNotCorrect)
 		})
 	})
 
@@ -56,13 +78,14 @@ describe('[SIGNIN API]', () => {
 			const {
 				firstName,
 				lastName,
+				email,
 				passport: {password},
 			} = createMockUser()
 
 			const newUser = {
 				firstName,
 				lastName,
-				email: 'dinhuyams@gmail.com',
+				email,
 				password,
 			}
 
@@ -70,30 +93,9 @@ describe('[SIGNIN API]', () => {
 			const result = await apiRequest.post('/auth/signup').send(newUser)
 
 			// Expect
+			const {token} = result.body.data
 			expect(result.status).toEqual(httpStatus.OK)
-			expect(result.body.data.token).toBeDefined()
+			expect(token).toBeDefined()
 		})
-	})
-
-	describe('Test authorization', () => {
-		const testAuthorization = (userStatus: UserStatus) => {
-			it(`should return 403 when user status is ${userStatus}`, async () => {
-				// Arrange
-				const noAccessRightUser = createMockUser(undefined, userStatus)
-				const {
-					email,
-					passport: {password},
-				} = noAccessRightUser
-
-				// Action
-				const result = await apiRequest
-					.post('/auth/signin')
-					.send({email, password})
-
-				// Expect
-				expect(result.status).toEqual(httpStatus.UNAUTHORIZED)
-			})
-		}
-		;[UserStatus.Initial, UserStatus.Disabled].forEach(testAuthorization)
 	})
 })

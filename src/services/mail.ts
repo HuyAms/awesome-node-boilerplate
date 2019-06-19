@@ -2,8 +2,8 @@
  * Send an email
  *
  */
+import _ from 'lodash'
 import sgMail from '@sendgrid/mail'
-import * as _ from 'lodash'
 import config from '../config/index'
 
 sgMail.setApiKey(config.secrets.sendGridApiKey)

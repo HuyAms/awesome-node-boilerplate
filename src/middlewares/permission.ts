@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import _ from 'lodash'
 import {NextFunction, Request, RequestHandler, Response} from 'express'
 import {checkToken} from './auth'
 import {UserRole, UserStatus} from '../resources/user/user.interface'

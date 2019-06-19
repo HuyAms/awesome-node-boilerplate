@@ -1,4 +1,4 @@
-import * as _ from 'lodash'
+import _ from 'lodash'
 
 import devConfig from './devConfig'
 import prodConfig from './prodConfig'
