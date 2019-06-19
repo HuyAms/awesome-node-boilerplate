@@ -15,7 +15,7 @@ describe('[SIGNIN API]', () => {
 	})
 
 	describe('POST /auth/signin', () => {
-		it('Should return 200 with token', async () => {
+		it('should return 200 with token when sign in user successfully', async () => {
 			// Arrange
 			const {
 				email,
@@ -29,10 +29,10 @@ describe('[SIGNIN API]', () => {
 
 			// Expect
 			expect(result.status).toEqual(httpStatus.OK)
-			expect(result.body.data.token)
+			expect(result.body.data.token).toBeDefined()
 		})
 
-		it('Should return 401 when user logins with wrong credentials', async () => {
+		it('should return 401 when user logins with wrong credentials', async () => {
 			// Arrange
 			const user = createMockUser()
 			const {
@@ -50,9 +50,34 @@ describe('[SIGNIN API]', () => {
 		})
 	})
 
+	describe('POST /auth/signup', () => {
+		it('should return 200 when sign up user successfully', async () => {
+			// Arrange
+			const {
+				firstName,
+				lastName,
+				passport: {password},
+			} = createMockUser()
+
+			const newUser = {
+				firstName,
+				lastName,
+				email: 'dinhuyams@gmail.com',
+				password,
+			}
+
+			// Action
+			const result = await apiRequest.post('/auth/signup').send(newUser)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.OK)
+			expect(result.body.data.token).toBeDefined()
+		})
+	})
+
 	describe('Test authorization', () => {
 		const testAuthorization = (userStatus: UserStatus) => {
-			it(`Should return 403 when user status is ${userStatus}`, async () => {
+			it(`should return 403 when user status is ${userStatus}`, async () => {
 				// Arrange
 				const noAccessRightUser = createMockUser(undefined, userStatus)
 				const {
