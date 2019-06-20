@@ -5,6 +5,7 @@ import {successResponse} from '../../utils/apiResponse'
 import * as services from './auth.service'
 import {UserDocument} from '../user/user.model'
 import config from '../../config'
+import {User} from '../user/user.interface'
 
 /**
  * Sign up new user
@@ -14,7 +15,16 @@ import config from '../../config'
  * @param next
  */
 export const signup: RequestHandler = async (req, res, next) => {
-	const newUser = req.body
+	const {firstName, lastName, email, password} = req.body
+
+	const newUser: User = {
+		firstName,
+		lastName,
+		email,
+		passport: {
+			password,
+		},
+	}
 
 	const host =
 		config.clientHost || config.isDev
