@@ -51,6 +51,7 @@ export const signup = async (
 		subject: 'Activate your account',
 		html: `<p>To active your account, please click the following link:</p>
 				<a href=${activateUserUrl}>${activateUserUrl}</a>`,
+		mail_settings: config.mailSettings,
 	}
 
 	await sendEmail(message)

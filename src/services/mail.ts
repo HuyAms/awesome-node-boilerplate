@@ -5,7 +5,8 @@
 import sgMail from '@sendgrid/mail'
 import config from '../config/index'
 
-sgMail.setApiKey(config.secrets.sendGrid)
+const key = config.secrets.sendGrid
+sgMail.setApiKey(key)
 
 export interface Message {
 	from: string
@@ -13,6 +14,7 @@ export interface Message {
 	subject: string
 	text?: string
 	html?: string
+	mail_settings?: object
 }
 
 export const sendEmail = (message: Message) => sgMail.send(message)

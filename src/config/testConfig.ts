@@ -10,6 +10,11 @@ const config = {
 	},
 	mailSender: 'test<noreply@test.com>',
 	dbUrl: `mongodb://localhost:${mongoPort}/node-boilerplate-test`,
+	mailSettings: {
+		sandbox_mode: {
+			enable: true,
+		},
+	},
 }
 
 export default config
