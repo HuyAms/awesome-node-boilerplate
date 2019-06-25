@@ -29,8 +29,6 @@ describe('[ApiResponse]', () => {
 			headers: {},
 		}
 
-		console.log('Mock quest: ', mockRequest.query.hasOwnProperty('accesstoken'))
-
 		// Action
 		const token = getTokenFromRequest(mockRequest)
 

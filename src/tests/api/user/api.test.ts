@@ -412,7 +412,7 @@ describe('[USERS API]', () => {
 				const mockId = createMockId()
 
 				const noAccessRightUser = await addUser(
-					createMockUser(undefined, UserStatus.Initial),
+					createMockUser(undefined, userStatus),
 				)
 				const noAccessRightToken = siginUser(noAccessRightUser)
 

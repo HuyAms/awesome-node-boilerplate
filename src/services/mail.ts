@@ -2,11 +2,11 @@
  * Send an email
  *
  */
+import _ from 'lodash'
 import sgMail from '@sendgrid/mail'
 import config from '../config/index'
 
-const key = config.secrets.sendGrid
-sgMail.setApiKey(key)
+sgMail.setApiKey(config.secrets.sendGridApiKey)
 
 export interface Message {
 	from: string
@@ -17,4 +17,18 @@ export interface Message {
 	mail_settings?: object
 }
 
-export const sendEmail = (message: Message) => sgMail.send(message)
+export const sendEmail = (message: Message) => {
+	let emailMessage = message
+
+	if (config.isTest) {
+		const mailSettings = {
+			sandboxMode: {
+				enabled: true,
+			},
+		}
+
+		emailMessage = _.merge(message, mailSettings)
+	}
+
+	return sgMail.send(emailMessage)
+}

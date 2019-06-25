@@ -3,7 +3,7 @@ import {StreamOptions} from 'morgan'
 import fs from 'fs'
 import path from 'path'
 import config from '../config'
-import * as _ from 'lodash'
+import _ from 'lodash'
 import chalk from 'chalk'
 
 const logDir = 'log'

@@ -103,7 +103,7 @@ userSchema.methods.unlinkOathProvider = function(provider: OathProvider) {
 }
 
 userSchema.methods.revokeOldToken = function() {
-	this.tokenId = uuid()
+	this.passport.tokenId = uuid()
 }
 
 const UserModel = mongoose.model<UserDocument>('user', userSchema)
