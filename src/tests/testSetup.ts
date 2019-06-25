@@ -1,8 +1,11 @@
+import dotenv from 'dotenv'
+import path from 'path'
+dotenv.config({path: path.resolve(process.cwd(), '.env.test')})
+
 import mongoose, {Collection} from 'mongoose'
 import uuid from 'uuid/v1'
 import _ from 'lodash'
 import config from '../config'
-
 const databaseUrl = config.dbUrl
 
 const remove = async (collection: Collection) => {
@@ -16,7 +19,6 @@ const remove = async (collection: Collection) => {
 
 beforeEach(async done => {
 	const db = uuid()
-
 	const clearDB = () => {
 		return Promise.all(_.map(mongoose.connection.collections, c => remove(c)))
 	}
