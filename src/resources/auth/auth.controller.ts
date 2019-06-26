@@ -38,6 +38,7 @@ export const signup: RequestHandler = async (req, res, next) => {
 
 		return res.json(successResponse(token))
 	} catch (err) {
+		console.log('HUY ERROR: ', err)
 		return next(err)
 	}
 }

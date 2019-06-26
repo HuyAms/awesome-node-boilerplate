@@ -1,13 +1,15 @@
 import httpStatus from 'http-status'
+import _ from 'lodash'
 import faker from 'faker'
 import {addUser} from '../../utils/db'
 import {apiRequest} from '../../utils/common'
 import {createMockUser} from '../../utils/mock'
 
-import {User} from '../../../resources/user/user.interface'
+import {User, UserStatus} from '../../../resources/user/user.interface'
 import {ErrorCode} from '../../../utils/apiError'
 
 describe('[AUTH API]', () => {
+	const signUpRequiredFields = ['firstName', 'lastName', 'email']
 	let dummyUser: User
 
 	beforeEach(async () => {
@@ -93,9 +95,67 @@ describe('[AUTH API]', () => {
 			const result = await apiRequest.post('/auth/signup').send(newUser)
 
 			// Expect
-			const {token} = result.body.data
+			// const {token} = result.body.data
+
+			console.log('RESULT: ', result.body)
+
 			expect(result.status).toEqual(httpStatus.OK)
-			expect(token).toBeDefined()
+			// expect(token).toBeDefined()
 		})
+
+		it('should return 400 when user signs up with status', async () => {
+			// Arrange
+			const {
+				lastName,
+				firstName,
+				email,
+				passport: {password},
+			} = createMockUser()
+
+			const newUser = {
+				lastName,
+				firstName,
+				email,
+				password,
+				status: UserStatus.Active,
+			}
+
+			// Action
+			const result = await apiRequest.post('/auth/signup').send(newUser)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+		})
+
+		const testSignUpRequiredFields = (field: string) => {
+			it(`'should return 400 when ${field} is missing'`, async () => {
+				// Arrange
+				const {
+					lastName,
+					firstName,
+					email,
+					passport: {password},
+				} = createMockUser()
+
+				const newUser = {
+					lastName,
+					firstName,
+					email,
+					password,
+				}
+
+				const userWithMissingField = _.omit(newUser, field)
+
+				// Action
+				const result = await apiRequest
+					.post('/auth/signup')
+					.send(userWithMissingField)
+
+				// Expect
+				expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+			})
+		}
+
+		signUpRequiredFields.forEach(testSignUpRequiredFields)
 	})
 })

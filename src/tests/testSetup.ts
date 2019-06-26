@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 import path from 'path'
-dotenv.config({path: path.resolve(process.cwd(), '.env.test')})
+dotenv.config({path: path.resolve(process.cwd(), '.test.env')})
 
 import mongoose, {Collection} from 'mongoose'
 import uuid from 'uuid/v1'

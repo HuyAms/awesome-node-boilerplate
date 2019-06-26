@@ -14,7 +14,6 @@ export interface Message {
 	subject: string
 	text?: string
 	html?: string
-	mail_settings?: object
 }
 
 export const sendEmail = (message: Message) => {
@@ -30,5 +29,9 @@ export const sendEmail = (message: Message) => {
 		emailMessage = _.merge(message, mailSettings)
 	}
 
-	return sgMail.send(emailMessage)
+	const result = sgMail.send(emailMessage)
+
+	console.log('RESULT: ', result)
+
+	return result
 }

@@ -44,4 +44,4 @@ npm-debug.log
 
 # Env
 .env
-.env.test
+.test.env
