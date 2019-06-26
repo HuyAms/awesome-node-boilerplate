@@ -148,7 +148,7 @@ describe('[AUTH API]', () => {
 		})
 
 		const testSignUpRequiredFields = (field: string) => {
-			it(`'should return 400 when ${field} is missing'`, async () => {
+			it(`should return 400 when ${field} is missing`, async () => {
 				// Arrange
 				const {
 					lastName,
