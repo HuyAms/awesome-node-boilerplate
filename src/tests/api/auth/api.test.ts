@@ -95,12 +95,32 @@ describe('[AUTH API]', () => {
 			const result = await apiRequest.post('/auth/signup').send(newUser)
 
 			// Expect
-			// const {token} = result.body.data
-
-			console.log('RESULT: ', result.body)
-
+			const {token} = result.body.data
 			expect(result.status).toEqual(httpStatus.OK)
-			// expect(token).toBeDefined()
+			expect(token).toBeDefined()
+		})
+
+		it('should return 400 when user signs up with existed email', async () => {
+			// Arrange
+			const {
+				lastName,
+				firstName,
+				passport: {password},
+			} = createMockUser()
+
+			const newUser = {
+				lastName,
+				firstName,
+				email: dummyUser.email,
+				password,
+			}
+
+			// Action
+			const result = await apiRequest.post('/auth/signup').send(newUser)
+
+			// Expect
+			expect(result.status).toEqual(httpStatus.BAD_REQUEST)
+			expect(result.body.errorCode).toEqual(ErrorCode.emailNotUnique)
 		})
 
 		it('should return 400 when user signs up with status', async () => {
