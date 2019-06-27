@@ -31,7 +31,5 @@ export const sendEmail = (message: Message) => {
 
 	const result = sgMail.send(emailMessage)
 
-	console.log('RESULT: ', result)
-
 	return result
 }
