@@ -26,9 +26,11 @@ export const checkToken = (optional: boolean = false) => {
 			payload = await verifyToken(token)
 
 			const {id, tokenId} = payload
-			const user = await UserModel.findOne({_id: id, tokenId})
 
-			req.user = user
+			const user = await UserModel.findOne({
+				_id: id,
+				'passport.tokenId': tokenId,
+			})
 
 			if (!user) {
 				return next(
@@ -37,6 +39,8 @@ export const checkToken = (optional: boolean = false) => {
 					),
 				)
 			}
+
+			req.user = user
 
 			return next()
 		} catch (e) {
