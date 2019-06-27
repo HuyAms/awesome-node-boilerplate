@@ -14,7 +14,6 @@ const baseConfig = {
 	port: process.env.PORT || 3000,
 	clientHost: process.env.CLIENT_HOST,
 	mailSender: process.env.MAIL_SENDER,
-	mailSettings: {},
 	dbUrl: process.env.DATABASE_URL,
 	secrets: {
 		jwt: process.env.JWT_SECRET,
