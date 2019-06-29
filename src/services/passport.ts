@@ -89,7 +89,7 @@ const initPassport = () => {
 					if (req.user) {
 						// If google account has been linked, throw error
 						const existingUser = await UserModel.findOne({
-							googleId: profile.id,
+							'passport.googleId': profile.id,
 						})
 							.lean()
 							.exec()
