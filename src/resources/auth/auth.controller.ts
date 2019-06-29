@@ -94,7 +94,7 @@ export const forgotPassword: RequestHandler = async (req, res, next) => {
 			? `${req.protocol}://${req.hostname}:${config.port}`
 			: `${req.protocol}://${req.hostname}`
 
-	const resetUrlPath = `${host}/auth/password/reset`
+	const resetUrlPath = `${host}/auth/reset`
 
 	try {
 		await services.forgotPassword(email, resetUrlPath)
