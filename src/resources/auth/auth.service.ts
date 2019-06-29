@@ -174,8 +174,8 @@ export const resetPassword = async (
 export const activateAccount = async (
 	resetToken: string,
 ): Promise<UserDocument> => {
-	const user = await UserModel.findOne({resetToken})
-		.where('resetTokenExp')
+	const user = await UserModel.findOne({'passport.resetToken': resetToken})
+		.where('passport.resetTokenExp')
 		.gt(Date.now())
 		.exec()
 
