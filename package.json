@@ -1,8 +1,11 @@
 {
 	"name": "awesome-node-boilerplate",
 	"version": "1.0.0",
-	"description": "",
+	"description": "Awesome NodeJS boilerplate using TypeScript and MongoDB",
 	"main": "index.js",
+	"engines": {
+		"node": "10.15.3"
+	},
 	"scripts": {
 		"build": "babel src --out-dir dist --extensions .ts",
 		"dev": "nodemon --exec ts-node --files src/index.ts",
