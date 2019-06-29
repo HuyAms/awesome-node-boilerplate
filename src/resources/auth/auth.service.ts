@@ -126,8 +126,8 @@ export const resetPassword = async (
 	resetToken: string,
 	password: string,
 ): Promise<void> => {
-	const user = await UserModel.findOne({resetToken})
-		.where('resetTokenExp')
+	const user = await UserModel.findOne({'passport.resetToken': resetToken})
+		.where('passport.resetTokenExp')
 		.gt(Date.now())
 		.exec()
 
