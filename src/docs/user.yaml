@@ -70,9 +70,9 @@ components:
                 $ref: '#/components/schemas/UserRole'
 
     #-------------------------------
-    # Me
+    # UpdateMe
 
-    Me: # Can be referenced as '#/components/requestBodies/Me'
+    UpdateMe: # Can be referenced as '#/components/requestBodies/UpdateMe'
       description: Update my profile
       required: true
       content:

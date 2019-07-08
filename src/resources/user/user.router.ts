@@ -66,7 +66,7 @@ router
 	 *       - User
 	 *     summary: Update my profile
 	 *     requestBody:
-	 *       $ref: '#/components/requestBodies/Me'
+	 *       $ref: '#/components/requestBodies/UpdateMe'
 	 *     responses:
 	 *       '201':
 	 *         $ref: '#/components/responses/UserResponse'
