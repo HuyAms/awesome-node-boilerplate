@@ -34,6 +34,9 @@ A boileplate for REST API focuses on separation of concerns and scalability
 
 - Test suites use [Jest](https://jestjs.io/docs/en/configuration) and [Supertest](https://github.com/visionmedia/supertest) out of the box.
 
+Test coverage
+![test coverage](docs/images/test_coverage.png "Test coverage")
+
 ### **Authentication and authorisation**
 
 - JWT authentication.
@@ -48,6 +51,8 @@ A boileplate for REST API focuses on separation of concerns and scalability
 ### **API documentation**
 
 - [Swagger](https://swagger.io/) makes testing routes to be no-hassle.
+
+![swagger](docs/images/swagger.png "Swagger documentation")
 
 ### **Database integration**
 
