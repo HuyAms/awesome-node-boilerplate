@@ -3,12 +3,10 @@ const dotEnvResult = dotenv.config()
 
 import path from 'path'
 import express from 'express'
-import chalk from 'chalk'
 import middlewares from './middlewares/global'
 import {errorHandler} from './middlewares/errorHandler'
 import swagger from './middlewares/swagger'
 import config from './config'
-import connectDb from './services/db'
 import initPassport from './services/passport'
 import {seed} from './utils/seeder'
 
@@ -60,28 +58,3 @@ app.get('/', (req, res) => {
 })
 
 app.use(errorHandler)
-
-/**
- * Connect database
- * Start Express server
- */
-const {port, env} = config
-
-export const start = async () => {
-	try {
-		await connectDb()
-
-		app.listen(port, () => {
-			logger.info(
-				`App is running on port ${chalk.yellow(
-					port as string,
-				)} in ${chalk.yellow(env)} mode \n
-				http://localhost:${port} \n
-				Press CTRL-C to stop
-				`,
-			)
-		})
-	} catch (e) {
-		logger.error(e.message)
-	}
-}
