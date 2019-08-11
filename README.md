@@ -9,76 +9,67 @@ A boileplate for REST API focuses on separation of concerns and scalability
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Getting started](#getting-started)
+- [Project structure](#project-structure)
 - [Testing](#testing)
 - [Deployment](#deployment)
-- [Project structure](#project-structure)
 
 ## Features
 
 ---
+## **📂 Separation of concerns & multilayer structure**
+- _Router_, _Middleware_, _Controller_ and _Service_.
+- _API response_ and _Error handling_.
 
-### **Separation of concerns with multilayer structure**
+## **🚀 Rapid development workflow**
+- _**[Nodemon](https://www.npmjs.com/package/nodemon)**_
+- _**[Winston](https://github.com/winstonjs/winston)**_
+- _**[Babel](https://babeljs.io/)**_
 
-- API concerns namely _Router_, _Middleware_, _Controller_ and _Service_ are all abstracted to their own layer. This will be clarified later in Project structure section.
-- _API response_ and _Error handling_ are also configured to be highly reusable and scalable out of the box.
+## **⚔️ Type checking**
+- _**[TypeScript](https://www.typescriptlang.org/docs/tutorial.html)**_
 
-### **Fast development environment with cutting-edge ES6 features**
+## **🛡 Testing**
 
-- [Nodemon](https://www.npmjs.com/package/nodemon) reloads server in every change which helps development faster.
-- [Winston](https://github.com/winstonjs/winston) makes logging informative and illustrative
-- ES6 new features out of the box with [Babel](https://babeljs.io/) configuration.
+- _**[Jest](https://github.com/facebook/jest)**_
+- _**[Supertest](https://github.com/visionmedia/supertest)**_
 
-### **Typechecking with [TypeScript](https://www.typescriptlang.org/docs/tutorial.html)**
+## **🔐 Authentication and authorisation**
+- _**[JSON Web Token - JWT](https://github.com/auth0/node-jsonwebtoken)**_
+- _**[Passport local strategy](http://www.passportjs.org/packages/passport-local/)**_
+- _**[Passport Google Strategy](http://www.passportjs.org/packages/passport-google-oauth/)**_
+- _**[Sendgrid](https://sendgrid.com/)**_
+- _**Account validation and activation**_
+- _**Reset password flow**_
+- _**Multi-role authorisation**_
 
-### **Testing**
-
-- Test suites use [Jest](https://jestjs.io/docs/en/configuration) and [Supertest](https://github.com/visionmedia/supertest) out of the box.
-
-Test coverage
-![test coverage](docs/images/test_coverage.png 'Test coverage')
-
-### **Authentication and authorisation**
-
-- JWT authentication.
-- Signup with email and password
-  _ Email verification with [Sendgrid](https://sendgrid.com/).
-  _ Account validation and activation.
-- Signin with email and passport with [Passport local strategy](http://www.passportjs.org/packages/passport-local/).
-- Oauth 2.0 authentication with [Passport Google Strategy](http://www.passportjs.org/packages/passport-google-oauth/).
-- Reset password.
-- Authorisation is configured for user and admin roles. This could be easily extended for more roles.
-
-### **API documentation**
-
-- [Swagger](https://swagger.io/) makes testing routes to be no-hassle.
+## **📝 API documentation**
+- _**[Swagger](https://swagger.io/)**_
 
 ![swagger](docs/images/swagger.png 'Swagger documentation')
 
-### **Database integration**
+## **🗄 Database integration**
+- _**[MongoDB](https://www.mongodb.com/)**_
+- _**[Mongoose](https://mongoosejs.com/)**_
+- _**CRUD users**_
+- _**Searching, sorting and pagination**_
 
-- The first version of this boilerplate uses [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/).
 
-### **CRUD users**
+## **🚓 Security**
+- _**[HelmetJS](https://helmetjs.github.io/)**_
+- _**[Express Rate Limit](https://github.com/nfriedly/express-rate-limit)**_
 
-### **Security**
+## **💎 Rich utilities: Git hooks and code formatting**
+- _**[Prettier](https://github.com/prettier/prettier)**_
+- _**[Husky](https://github.com/typicode/husky/)**_
+- _**[Lint-staged](https://github.com/okonet/lint-staged/)**_
+- _**[TSLint](https://github.com/palantir/tslint/)**_
 
-- [HelmetJS](https://helmetjs.github.io/) and [Express Rate Limit](https://github.com/nfriedly/express-rate-limit) are configured to add extra security layers to the API.
+## **🚀 Contious integration**
 
-### **Email sending**
+- _**[TravisCI](https://travis-ci.org/)**_
 
-- The boilerplate uses [Sendgrid](https://sendgrid.com/) for email-related jobs.
-
-### **Searching, sorting and pagination**
-
-### **Linting**
-
-- [Prettier](https://github.com/prettier/prettier) customise and commonise code format.
-- [Linstaged](https://github.com/okonet/lint-staged) and [Husky](https://github.com/typicode/husky) are configured for running formatting scripts right before commiting new changes.
-
-### **Continous integration**
-
-- Use [TravisCI](https://travis-ci.org/) for testing and managing development branches.
-
+## **🏆 Test coverage**
+![test coverage](docs/images/test_coverage.svg 'Test coverage')
 ## Prerequisites
 
 ---
@@ -111,6 +102,40 @@ Run development server
 ```bash
   npm run dev
 ```
+
+## Project structure
+
+---
+
+The boilerplate is abstracted to different layers based on the notion of concerns separation and clarity.
+
+### **Root server file: [server.ts](src/server.ts)**
+
+- Initialize Express app, environment variables, logging, global middlewares and routing.
+- Run Passport configuration
+- Connect to MongoDB
+
+### **Global middleware: [global.ts](src/middlewares/global.ts)**
+
+This is where we initalize all global middlewares. Those will be used in _any_ routes.
+
+### **Environment configurations [config](src/config/index.ts)**
+
+Configurations including API keys, environment variables and specific setups for _development_, _production_ or _test_ env. You can find those in other config files in this directory.
+
+### **Routers and resources: [user](src/resources/user/user.router.ts) and [auth](src/resources/auth/auth.router.ts)**
+
+Here is where core of the API is located. Each **resouce** is divided into different layers:
+
+- **Router** (`resource.router.ts`)
+  _ Initialise routes.
+  _ Add specific **authorisation** and **middlewares** for each route. \* Connect route with equivalent **controller**
+- **Interface** (`resource.interface.ts`) \* **Types** that are used by layers of the resource
+- **Model** (`resource.model.ts`) \* Define **model** for the resource based on database schema.
+- **Controller** (`resource.controller.ts`) \* A bridge between **router** and **service** layer. This controller layer take input from client side queries, send to service layer. Then it gets back either data that the client wants, or error in case of failure, and send back to the client.
+- **Service** (`resource.service.ts`) \* The deepest layer of the API where actual database queries and operations are performed. This is also the only layer that does this job.
+
+### **Server reponse (success or error) [apiResponse.ts](src/utils/apiResponse.ts)**
 
 ## Testing
 
@@ -163,37 +188,3 @@ Running and watching for changes in one particular test file:
 ```bash
   git push production master
 ```
-
-## Project structure
-
----
-
-The boilerplate is abstracted to different layers based on the notion of concerns separation and clarity.
-
-### **Root server file: [server.ts](src/server.ts)**
-
-- Initialize Express app, environment variables, logging, global middlewares and routing.
-- Run Passport configuration
-- Connect to MongoDB
-
-### **Global middleware: [global.ts](src/middlewares/global.ts)**
-
-This is where we initalize all global middlewares. Those will be used in _any_ routes.
-
-### **Environment configurations [config](src/config/index.ts)**
-
-Configurations including API keys, environment variables and specific setups for _development_, _production_ or _test_ env. You can find those in other config files in this directory.
-
-### **Routers and resources: [user](src/resources/user/user.router.ts) and [auth](src/resources/auth/auth.router.ts)**
-
-Here is where core of the API is located. Each **resouce** is divided into different layers:
-
-- **Router** (`resource.router.ts`)
-  _ Initialise routes.
-  _ Add specific **authorisation** and **middlewares** for each route. \* Connect route with equivalent **controller**
-- **Interface** (`resource.interface.ts`) \* **Types** that are used by layers of the resource
-- **Model** (`resource.model.ts`) \* Define **model** for the resource based on database schema.
-- **Controller** (`resource.controller.ts`) \* A bridge between **router** and **service** layer. This controller layer take input from client side queries, send to service layer. Then it gets back either data that the client wants, or error in case of failure, and send back to the client.
-- **Service** (`resource.service.ts`) \* The deepest layer of the API where actual database queries and operations are performed. This is also the only layer that does this job.
-
-### **Server reponse (success or error) [apiResponse.ts](src/utils/apiResponse.ts)**
